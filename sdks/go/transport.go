@@ -103,18 +103,6 @@ func (c *Client) newRequest(ctx context.Context, call preparedCall, file *sentFi
 	return request, nil
 }
 
-func emptyFileGrew(body *fileBody) *Error {
-	if body.sizeBytes != 0 {
-		return nil
-	}
-	probe := make([]byte, 1)
-	count, _ := body.reader.Read(probe)
-	if count > 0 {
-		return changedSize()
-	}
-	return nil
-}
-
 func (c *Client) call(ctx context.Context, operation *OperationDescription, fields map[string]any, content any, options []RequestOption) (*callResult, error) {
 	if ctx == nil {
 		return nil, invalidInput("Pass a context to the call.", "")
@@ -134,9 +122,6 @@ func (c *Client) call(ctx context.Context, operation *OperationDescription, fiel
 	var watch *idleWatch
 	var file *sentFile
 	if call.isUpload() {
-		if grew := emptyFileGrew(call.parts.fileBody); grew != nil {
-			return nil, grew
-		}
 		watch = newIdleWatch(call.timeout, cancel)
 		file = &sentFile{
 			body: call.parts.fileBody, progress: watch.touch, done: callContext.Done(),
@@ -148,6 +133,11 @@ func (c *Client) call(ctx context.Context, operation *OperationDescription, fiel
 	}
 	if watch != nil {
 		defer watch.stop()
+	}
+	if file != nil && file.body.sizeBytes == 0 {
+		if _, err := file.Read(make([]byte, 1)); err != io.EOF {
+			return nil, c.failureOf(callContext, ctx, call, file, err)
+		}
 	}
 	request, err := c.newRequest(callContext, call, file)
 	if err != nil {

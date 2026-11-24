@@ -43,6 +43,12 @@ func (stalledReader) Read([]byte) (int, error) {
 	return 0, io.EOF
 }
 
+type emptyStalledReader struct{ stalledReader }
+
+func (emptyStalledReader) Len() int {
+	return 0
+}
+
 func savedQuestionsLimit(t testing.TB) int {
 	t.Helper()
 	operation, known := himring.Operation("import_saved_questions")
@@ -125,12 +131,12 @@ func TestSendsAnUnmeasuredStreamWithinTheLimitAndRefusesAMissingFile(t *testing.
 
 func TestAnUploadThatMakesNoProgressStopsAfterTheIdleLimit(t *testing.T) {
 	client := newClient(t, himring.WithUploadIdleTimeout(timeLimit))
-	started := time.Now()
-
-	expectKind(t, importSavedQuestions(client, stalledReader{}), himring.ErrorKindTimeout)
-
-	if elapsed := time.Since(started); elapsed > promptFailure {
-		t.Fatalf("the upload took %s", elapsed)
+	for _, content := range []io.Reader{stalledReader{}, emptyStalledReader{}} {
+		started := time.Now()
+		expectKind(t, importSavedQuestions(client, content), himring.ErrorKindTimeout)
+		if elapsed := time.Since(started); elapsed > promptFailure {
+			t.Fatalf("the upload took %s", elapsed)
+		}
 	}
 }
 
