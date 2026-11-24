@@ -66,6 +66,6 @@ tmp_path_retention_policy = "none"
 [dependency-groups]
 dev = [
     "pyright==1.1.414",
-    "pytest==9.1.1",
-    "ruff==0.16.10",
+    "pytest==9.2.0",
+    "ruff==0.17.5",
 ]

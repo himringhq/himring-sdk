@@ -19,10 +19,10 @@
     "spec:sync": "nx run spec:sync"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.15",
-    "@nx/js": "23.2.1",
+    "@biomejs/biome": "2.6.8",
+    "@nx/js": "24.0.6",
     "@types/node": "24.19.1",
-    "nx": "23.2.1",
+    "nx": "24.0.6",
     "typescript": "7.0.2"
   }
 }
