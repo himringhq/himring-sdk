@@ -157,6 +157,9 @@ func (store *spool) recoverFile(path string) []spooledEvent {
 	if err != nil || !isOwnRegularFile(info) {
 		return nil
 	}
+	if store.claimIsLive(filepath.Base(path), info.ModTime()) {
+		return nil
+	}
 	owner, known := ownerOf(path)
 	if !known || owner.Destination != store.destination {
 		return nil
@@ -168,7 +171,7 @@ func (store *spool) recoverFile(path string) []spooledEvent {
 		store.warn("An answer spool file left by an earlier process is too large to send", map[string]any{"file_path": path})
 		return nil
 	}
-	claimed := filepath.Join(store.directory, spoolFilePrefix+"claimed-"+newIdentifier()+spoolFileSuffix)
+	claimed := filepath.Join(store.directory, store.claimName())
 	if err := os.Rename(path, claimed); err != nil {
 		if !errors.Is(err, fs.ErrNotExist) {
 			store.warn("An answer spool file left by an earlier process could not be read", map[string]any{"file_path": path, "error": err})

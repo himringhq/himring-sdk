@@ -229,6 +229,9 @@ func TestRecoversTheAnswersOfACrashedProcessOnlyForTheirOwnDestinationAndExactly
 	contract.stub(t, "record_answer_events", 200, map[string]any{"results": []any{}, "recorded_count": 0})
 	spool := filepath.Join(t.TempDir(), "spool")
 	drafts := answerDrafts(30)
+	for index := range drafts {
+		drafts[index].Answer = strings.Repeat(drafts[index].Answer, 30)
+	}
 	recordThenCrash(t, recorderSetup{BaseURL: contract.baseURL, ProjectID: projectID, KnowledgeBaseID: knowledgeBaseID, SpoolDirectory: spool, Drafts: drafts})
 	original := spoolFiles(t, spool)
 	if len(original) == 0 {
@@ -246,7 +249,11 @@ func TestRecoversTheAnswersOfACrashedProcessOnlyForTheirOwnDestinationAndExactly
 		}
 	}
 
-	flushAndClose(t, recorderAt(t, client, spool, projectID, knowledgeBaseID, 0), recorderAt(t, client, spool, projectID, knowledgeBaseID, 0))
+	var competitors []*answers.Recorder
+	for range 8 {
+		competitors = append(competitors, recorderAt(t, client, spool, projectID, knowledgeBaseID, 0))
+	}
+	flushAndClose(t, competitors...)
 	flushAndClose(t, recorderAt(t, client, spool, projectID, knowledgeBaseID, 0))
 
 	expectExactlyOnce(t, deliveredAnswers(t, contract.assertClean(t)), drafts)
