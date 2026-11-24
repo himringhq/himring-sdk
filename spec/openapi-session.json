@@ -1517,7 +1517,7 @@
                       {
                         "kind": "regex",
                         "expects": "/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/",
-                        "message": "Send an email address such as ama@example.com."
+                        "message": "Send an email address such as someone@example.com."
                       }
                     ]
                   },

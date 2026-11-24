@@ -3,10 +3,8 @@ name: Check the spec
 on:
   workflow_call:
     inputs:
-      base:
-        required: true
-        type: string
-      head:
+      projects:
+        description: The JSON array of affected projects that this workflow checks
         required: true
         type: string
 
@@ -44,6 +42,5 @@ jobs:
 
       - name: Validate, lint, and typecheck the spec project
         env:
-          BASE: ${{ inputs.base }}
-          HEAD: ${{ inputs.head }}
-        run: pnpm exec nx affected -t validate lint typecheck --projects=spec --base="$BASE" --head="$HEAD" --outputStyle=static
+          AFFECTED_PROJECTS: ${{ inputs.projects }}
+        run: pnpm exec nx run-many -t validate lint typecheck --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static

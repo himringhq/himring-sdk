@@ -22,8 +22,6 @@ jobs:
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 10
     outputs:
-      base: ${{ steps.range.outputs.base }}
-      head: ${{ steps.range.outputs.head }}
       spec: ${{ steps.projects.outputs.spec }}
       typescript: ${{ steps.projects.outputs.typescript }}
       python: ${{ steps.projects.outputs.python }}
@@ -93,8 +91,7 @@ jobs:
     if: ${{ needs.changes.outputs.spec != '[]' }}
     uses: ./.github/workflows/check-spec.yml
     with:
-      base: ${{ needs.changes.outputs.base }}
-      head: ${{ needs.changes.outputs.head }}
+      projects: ${{ needs.changes.outputs.spec }}
 
   typescript:
     name: TypeScript
@@ -102,8 +99,7 @@ jobs:
     if: ${{ needs.changes.outputs.typescript != '[]' }}
     uses: ./.github/workflows/check-typescript.yml
     with:
-      base: ${{ needs.changes.outputs.base }}
-      head: ${{ needs.changes.outputs.head }}
+      projects: ${{ needs.changes.outputs.typescript }}
 
   python:
     name: Python
@@ -111,8 +107,7 @@ jobs:
     if: ${{ needs.changes.outputs.python != '[]' }}
     uses: ./.github/workflows/check-python.yml
     with:
-      base: ${{ needs.changes.outputs.base }}
-      head: ${{ needs.changes.outputs.head }}
+      projects: ${{ needs.changes.outputs.python }}
 
   security:
     name: Audit workflows with zizmor and scan for secrets with gitleaks
