@@ -44,12 +44,12 @@ The exit code tells a script what happened: 0 for success, 2 for invalid input, 
 
 ## Environment
 
-| Variable | Use |
-| --- | --- |
-| `HIMRING_API_URL` | The address of the API, in place of `--api-url`. The default is the first server of the OpenAPI documents. |
-| `HIMRING_API_TIMEOUT_MS` | How long each request may take, in place of `--timeout-ms`. |
-| `HIMRING_API_KEY` | The API key of a project, in place of a session. |
-| `HIMRING_SESSION_TOKEN` | A session token, in place of the credentials file. |
-| `HIMRING_PROJECT` | The project ID, in place of `--project`. |
-| `HIMRING_PASSWORD` | The password, in place of `--password-stdin`. |
-| `HIMRING_CONFIG_DIR` | The folder of `credentials.json`. |
+| Variable                 | Use                                                                                                        |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| `HIMRING_API_URL`        | The address of the API, in place of `--api-url`. The default is the first server of the OpenAPI documents. |
+| `HIMRING_API_TIMEOUT_MS` | How long each request may take, in place of `--timeout-ms`.                                                |
+| `HIMRING_API_KEY`        | The API key of a project, in place of a session.                                                           |
+| `HIMRING_SESSION_TOKEN`  | A session token, in place of the credentials file.                                                         |
+| `HIMRING_PROJECT`        | The project ID, in place of `--project`.                                                                   |
+| `HIMRING_PASSWORD`       | The password, in place of `--password-stdin`.                                                              |
+| `HIMRING_CONFIG_DIR`     | The folder of `credentials.json`.                                                                          |

@@ -29,13 +29,13 @@ Most MCP clients take a command and an environment. This configuration runs the 
 
 The server reads these environment variables when it starts, and it refuses to start when one of them is invalid:
 
-| Variable | What it sets |
-| --- | --- |
-| `HIMRING_API_KEY` | The API key that the server sends with every request. It wins when you also set a session token. |
-| `HIMRING_SESSION_TOKEN` | The session of an account, for the tools that need a person, such as creating an API key. |
-| `HIMRING_API_URL` | The address of the API, by default `https://api.himring.ai`. |
-| `HIMRING_API_TIMEOUT_MS` | How long one request may wait for an answer, and how long a download may go without a byte, by default 30 seconds. |
-| `HIMRING_UPLOAD_DIRECTORY` | The absolute path of the only folder that the file tools read from, by default the folder where the server starts. |
+| Variable                     | What it sets                                                                                                            |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `HIMRING_API_KEY`            | The API key that the server sends with every request. It wins when you also set a session token.                        |
+| `HIMRING_SESSION_TOKEN`      | The session of an account, for the tools that need a person, such as creating an API key.                               |
+| `HIMRING_API_URL`            | The address of the API, by default `https://api.himring.ai`.                                                            |
+| `HIMRING_API_TIMEOUT_MS`     | How long one request may wait for an answer, and how long a download may go without a byte, by default 30 seconds.      |
+| `HIMRING_UPLOAD_DIRECTORY`   | The absolute path of the only folder that the file tools read from, by default the folder where the server starts.      |
 | `HIMRING_DOWNLOAD_DIRECTORY` | The absolute path of the only folder that the download tools write into, by default the folder where the server starts. |
 
 ## The tools
