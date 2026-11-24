@@ -5,7 +5,7 @@
   "description": "The OpenAPI documents of the Himring API, copied from @himring/openapi so that the SDKs generate from a reviewed copy.",
   "type": "module",
   "devDependencies": {
-    "@himring/openapi": "0.2.0",
+    "@himring/openapi": "0.2.1",
     "@readme/openapi-parser": "10.0.0",
     "@types/node": "24.19.1",
     "typescript": "7.0.2"
