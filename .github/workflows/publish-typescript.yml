@@ -16,7 +16,7 @@ on:
         required: true
         type: string
       dry-run:
-        description: Check, version, and pack the package without committing, tagging, or publishing
+        description: Check, version, and pack the package without committing, tagging, or staging it on npm
         required: false
         type: boolean
         default: true
@@ -148,18 +148,17 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_PAT }}
         run: node tools/release/src/release-typescript.ts release
 
-      - name: Publish through npm trusted publishing, with provenance once the repository is public
+      - name: Stage the package on npm for a maintainer to approve, with provenance once the repository is public
         env:
-          PROJECT: ${{ inputs.project }}
+          RELEASE_PROJECT: ${{ inputs.project }}
           DRY_RUN: ${{ inputs['dry-run'] }}
-          FIRST_RELEASE: ${{ inputs['first-release'] }}
           NPM_CONFIG_PROVENANCE: ${{ github.event.repository.visibility == 'public' }}
+          NPM_STAGED_PUBLISHING_CLI_VERSION: 11.19.1
         run: |
-          args=(pnpm exec nx release publish --projects="$PROJECT" --verbose)
-          if [[ "$DRY_RUN" == "true" ]]; then
-            args+=(--dry-run)
+          staging_npm_bin="${GITHUB_WORKSPACE}/tools/release/node_modules/.bin"
+          installed="$("${staging_npm_bin}/npm" --version)"
+          if [[ "$installed" != "$NPM_STAGED_PUBLISHING_CLI_VERSION" ]]; then
+            echo "::error::Staged publishing expects npm ${NPM_STAGED_PUBLISHING_CLI_VERSION} from the lockfile, but npm ${installed} is installed."
+            exit 1
           fi
-          if [[ "$FIRST_RELEASE" == "true" ]]; then
-            args+=(--first-release)
-          fi
-          "${args[@]}"
+          PATH="${staging_npm_bin}:${PATH}" node tools/release/src/release-typescript.ts stage
