@@ -25,6 +25,7 @@ jobs:
       spec: ${{ steps.projects.outputs.spec }}
       typescript: ${{ steps.projects.outputs.typescript }}
       python: ${{ steps.projects.outputs.python }}
+      go: ${{ steps.projects.outputs.go }}
 
     steps:
       - name: Checkout the full history with actions/checkout v7.0.1
@@ -65,24 +66,28 @@ jobs:
           echo "base=$base" >> "$GITHUB_OUTPUT"
           echo "head=$head" >> "$GITHUB_OUTPUT"
 
-      - name: List the affected spec, TypeScript, and Python projects
+      - name: List the affected spec, TypeScript, Python, and Go projects
         id: projects
         env:
           BASE: ${{ steps.range.outputs.base }}
           HEAD: ${{ steps.range.outputs.head }}
           PYTHON_PROJECTS: sdk-python,agent-hooks-python
+          GO_PROJECTS: sdk-go
         run: |
           affected=(pnpm exec nx show projects --affected --base="$BASE" --head="$HEAD" --json)
           spec="$("${affected[@]}" --projects=spec)"
-          typescript="$("${affected[@]}" --exclude="spec,$PYTHON_PROJECTS")"
+          typescript="$("${affected[@]}" --exclude="spec,$PYTHON_PROJECTS,$GO_PROJECTS")"
           python="$("${affected[@]}" --projects="$PYTHON_PROJECTS")"
+          go="$("${affected[@]}" --projects="$GO_PROJECTS")"
           echo "Affected spec: $spec"
           echo "Affected TypeScript projects: $typescript"
           echo "Affected Python projects: $python"
+          echo "Affected Go projects: $go"
           {
             echo "spec=$spec"
             echo "typescript=$typescript"
             echo "python=$python"
+            echo "go=$go"
           } >> "$GITHUB_OUTPUT"
 
   spec:
@@ -108,6 +113,14 @@ jobs:
     uses: ./.github/workflows/check-python.yml
     with:
       projects: ${{ needs.changes.outputs.python }}
+
+  go:
+    name: Go
+    needs: changes
+    if: ${{ needs.changes.outputs.go != '[]' }}
+    uses: ./.github/workflows/check-go.yml
+    with:
+      projects: ${{ needs.changes.outputs.go }}
 
   security:
     name: Audit workflows with zizmor and scan for secrets with gitleaks
