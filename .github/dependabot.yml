@@ -66,9 +66,13 @@ updates:
     directory: "/sdks/go"
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 0
     cooldown:
       default-days: 7
     groups:
+      go-sdk-security:
+        applies-to: security-updates
+        patterns: ["*"]
       go-sdk:
         patterns:
           - "*"
