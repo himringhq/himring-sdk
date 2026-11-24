@@ -1,0 +1,100 @@
+name: Publish the Go module
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: patch, minor, major, or an explicit stable version like 1.2.3. To finish a release that failed partway, run again with the explicit version.
+        required: true
+        type: string
+      dry-run:
+        description: Check the module and print the changelog entry without committing, tagging, or publishing
+        required: false
+        type: boolean
+        default: true
+      first-release:
+        description: The module has no earlier sdks/go/v tag
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-go
+  cancel-in-progress: false
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+
+jobs:
+  release:
+    name: Version, tag, and publish sdk-go
+    if: ${{ github.ref == 'refs/heads/main' || inputs['dry-run'] }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Setup Go with actions/setup-go v7.0.0
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: sdks/go/go.mod
+          cache: false
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the version input
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^(patch|minor|major|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::$VERSION is not patch, minor, major, or a stable version like 1.2.3."
+            exit 1
+          fi
+
+      - name: Validate, lint, typecheck, test, and build the module and the projects it depends on
+        run: pnpm exec nx run-many -t validate generate:check lint typecheck test build --projects=spec,contract-server,sdk-go --outputStyle=static
+
+      - name: Configure the git identity of the release commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Write the changelog, commit, tag, push, create the GitHub release, and fetch the tag through the Go module proxy
+        env:
+          RELEASE_PROJECT: sdk-go
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+          RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
+          GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: |
+          if [[ "$DRY_RUN" != "true" ]]; then
+            if [[ -z "$RELEASE_PAT" ]]; then
+              echo "::error::The RELEASE_PAT secret is required to push the release commit and tag and to create the GitHub release."
+              exit 1
+            fi
+            git remote set-url origin "https://x-access-token:${RELEASE_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+            trap 'git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"' EXIT
+          fi
+          node tools/release/src/release-go.ts

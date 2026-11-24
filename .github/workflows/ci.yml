@@ -25,6 +25,7 @@ jobs:
       spec: ${{ steps.projects.outputs.spec }}
       typescript: ${{ steps.projects.outputs.typescript }}
       python: ${{ steps.projects.outputs.python }}
+      go: ${{ steps.projects.outputs.go }}
       rust: ${{ steps.projects.outputs.rust }}
 
     steps:
@@ -35,7 +36,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup pnpm with pnpm/action-setup v6.1.0
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115
 
       - name: Setup Node.js with actions/setup-node v7.1.0
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
@@ -66,27 +67,31 @@ jobs:
           echo "base=$base" >> "$GITHUB_OUTPUT"
           echo "head=$head" >> "$GITHUB_OUTPUT"
 
-      - name: List the affected spec, TypeScript, Python, and Rust projects
+      - name: List the affected spec, TypeScript, Python, Go, and Rust projects
         id: projects
         env:
           BASE: ${{ steps.range.outputs.base }}
           HEAD: ${{ steps.range.outputs.head }}
           PYTHON_PROJECTS: sdk-python,agent-hooks-python
+          GO_PROJECTS: sdk-go
           RUST_PROJECTS: sdk-rust
         run: |
           affected=(pnpm exec nx show projects --affected --base="$BASE" --head="$HEAD" --json)
           spec="$("${affected[@]}" --projects=spec)"
-          typescript="$("${affected[@]}" --exclude="spec,$PYTHON_PROJECTS,$RUST_PROJECTS")"
+          typescript="$("${affected[@]}" --exclude="spec,$PYTHON_PROJECTS,$GO_PROJECTS,$RUST_PROJECTS")"
           python="$("${affected[@]}" --projects="$PYTHON_PROJECTS")"
+          go="$("${affected[@]}" --projects="$GO_PROJECTS")"
           rust="$("${affected[@]}" --projects="$RUST_PROJECTS")"
           echo "Affected spec: $spec"
           echo "Affected TypeScript projects: $typescript"
           echo "Affected Python projects: $python"
+          echo "Affected Go projects: $go"
           echo "Affected Rust projects: $rust"
           {
             echo "spec=$spec"
             echo "typescript=$typescript"
             echo "python=$python"
+            echo "go=$go"
             echo "rust=$rust"
           } >> "$GITHUB_OUTPUT"
 
@@ -114,6 +119,14 @@ jobs:
     with:
       projects: ${{ needs.changes.outputs.python }}
 
+  go:
+    name: Go
+    needs: changes
+    if: ${{ needs.changes.outputs.go != '[]' }}
+    uses: ./.github/workflows/check-go.yml
+    with:
+      projects: ${{ needs.changes.outputs.go }}
+
   rust:
     name: Rust
     needs: changes
@@ -135,7 +148,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup uv with astral-sh/setup-uv v10.2.0
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
         with:
           version: 0.12.21
 

@@ -2,7 +2,7 @@
   "name": "@himring/release",
   "private": true,
   "version": "0.0.0",
-  "description": "Writes the changelogs, versions, tags, and GitHub releases of the npm and Python packages of this repository.",
+  "description": "Writes the changelogs, versions, tags, and GitHub releases of the npm packages, Python packages, Go modules, and Rust crate of this repository.",
   "type": "module",
   "devDependencies": {
     "@types/node": "24.19.1",

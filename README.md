@@ -1,11 +1,12 @@
 # Himring SDKs
 
-This repository holds the clients of the [Himring](https://himring.ai) API, which lets AI agents answer from what a business knows. Every client is generated from the same OpenAPI documents, so the TypeScript SDK, the Python SDK, the Rust SDK, the CLI, and the MCP server accept the same fields and enforce the same limits as the API.
+This repository holds the clients of the [Himring](https://himring.ai) API, which lets AI agents answer from what a business knows. Every client is generated from the same OpenAPI documents, so the TypeScript SDK, the Python SDK, the Go SDK, the Rust SDK, the CLI, and the MCP server accept the same fields and enforce the same limits as the API.
 
 | Package | Install | Source |
 | --- | --- | --- |
 | TypeScript SDK | `npm install @himring/sdk` | [`sdks/typescript`](./sdks/typescript) |
 | Python SDK | `pip install himring` | [`sdks/python`](./sdks/python) |
+| Go SDK | `go get github.com/himringhq/himring-sdk/sdks/go` | [`sdks/go`](./sdks/go) |
 | Rust SDK | `cargo add himring` | [`sdks/rust`](./sdks/rust) |
 | Command-line interface | `npm install --global @himring/cli` | [`packages/cli`](./packages/cli) |
 | MCP server | `npx @himring/mcp-server` | [`packages/mcp-server`](./packages/mcp-server) |
@@ -21,7 +22,7 @@ The documents carry values that a client needs beyond the JSON Schema, under `x-
 
 ## Work on the code
 
-You need Node.js 24, pnpm 11, [uv](https://docs.astral.sh/uv/), and [rustup](https://rustup.rs). Install the Node packages from the root:
+You need Node.js 24, pnpm 11, [uv](https://docs.astral.sh/uv/), Go 1.26 or later, and [rustup](https://rustup.rs). Install the Node packages from the root:
 
 ```bash
 pnpm install

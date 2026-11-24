@@ -4,11 +4,20 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 0
     cooldown:
       default-days: 7
     ignore:
       - dependency-name: "@himring/openapi"
+      - dependency-name: "npm"
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
+      npm-security:
+        applies-to: security-updates
+        patterns: ["*"]
       production:
         dependency-type: "production"
       dev-dependencies:
@@ -21,9 +30,13 @@ updates:
     directory: "/sdks/python"
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 0
     cooldown:
       default-days: 7
     groups:
+      python-sdk-security:
+        applies-to: security-updates
+        patterns: ["*"]
       python-sdk:
         patterns:
           - "*"
@@ -34,16 +47,37 @@ updates:
     directory: "/packages/agent-hooks-python"
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 0
     cooldown:
       default-days: 7
     ignore:
       - dependency-name: "himring"
     groups:
+      agent-hooks-security:
+        applies-to: security-updates
+        patterns: ["*"]
       agent-hooks:
         patterns:
           - "*"
     commit-message:
       prefix: "deps(agent-hooks)"
+
+  - package-ecosystem: "gomod"
+    directory: "/sdks/go"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 0
+    cooldown:
+      default-days: 7
+    groups:
+      go-sdk-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      go-sdk:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps(go)"
 
   - package-ecosystem: "cargo"
     directories:
@@ -51,9 +85,13 @@ updates:
       - "/sdks/rust/codegen"
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 0
     cooldown:
       default-days: 7
     groups:
+      rust-sdk-security:
+        applies-to: security-updates
+        patterns: ["*"]
       rust-sdk:
         patterns:
           - "*"
@@ -64,7 +102,12 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 0
     cooldown:
       default-days: 7
+    groups:
+      github-actions-security:
+        applies-to: security-updates
+        patterns: ["*"]
     commit-message:
       prefix: "ci"
