@@ -1,7 +1,27 @@
 use crate::input_schema::{FieldLocation, input_fields_of};
 use crate::names::variant_name_of;
 use crate::render_types::RenderedTypes;
-use crate::spec_model::{BodyKind, OperationModel, SpecModel, SpecResult, spec_error};
+use crate::spec_model::{
+    BodyKind, OperationModel, SpecModel, SpecResult, optional_record, spec_error,
+};
+
+fn upload_part_maximum(model: &SpecModel) -> SpecResult<u64> {
+    let mut schema = model
+        .operations
+        .iter()
+        .find(|operation| operation.id == "sign_upload_parts")
+        .and_then(|operation| operation.body.schema.as_ref());
+    for key in ["properties", "parts", "items", "properties", "part_number"] {
+        schema = schema.and_then(|record| optional_record(record.get(key)));
+    }
+    match schema
+        .and_then(|record| record.get("maximum"))
+        .and_then(serde_json::Value::as_u64)
+    {
+        Some(maximum) if maximum > 0 => Ok(maximum),
+        _ => spec_error("sign_upload_parts has no positive whole maximum for part_number."),
+    }
+}
 
 fn texts(values: &[String]) -> String {
     let quoted: Vec<String> = values.iter().map(|value| format!("{value:?}")).collect();
@@ -87,6 +107,7 @@ pub fn render_operations(model: &SpecModel, rendered: &RenderedTypes) -> SpecRes
         "use crate::operation_description::{BodyKind, HttpMethod, OperationDescription, ResponseDescription, ResponseKind};".to_owned(),
         String::new(),
         format!("pub const SPEC_API_URL: &str = {:?};", model.server_url),
+        format!("pub const SIGNABLE_PART_NUMBER_MAXIMUM: u64 = {};", upload_part_maximum(model)?),
         String::new(),
         "#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]".to_owned(),
         "#[non_exhaustive]".to_owned(),

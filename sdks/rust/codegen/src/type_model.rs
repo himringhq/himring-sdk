@@ -64,6 +64,7 @@ pub struct StructField {
     pub identifier: String,
     pub value_type: RustType,
     pub required: bool,
+    pub constant: Option<serde_json::Value>,
 }
 
 impl StructField {

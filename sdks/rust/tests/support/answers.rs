@@ -144,6 +144,8 @@ pub async fn record_then_crash(
         "spool_directory": spool,
         "answers": answers,
     });
+    let setup_path = std::env::temp_dir().join(identifier("himring-recorder-setup"));
+    std::fs::write(&setup_path, setup.to_string()).expect("the crash setup is written");
     let mut child =
         tokio::process::Command::new(std::env::current_exe().expect("the test binary has a path"))
             .args([
@@ -153,7 +155,7 @@ pub async fn record_then_crash(
                 "--nocapture",
                 "--test-threads=1",
             ])
-            .env(CRASH_SETUP_VARIABLE, setup.to_string())
+            .env(CRASH_SETUP_VARIABLE, setup_path)
             .stdin(Stdio::null())
             .stdout(Stdio::piped())
             .kill_on_drop(true)
@@ -179,9 +181,10 @@ pub async fn record_then_crash(
 }
 
 pub fn act_as_crashing_recorder() {
-    let Ok(setup) = std::env::var(CRASH_SETUP_VARIABLE) else {
+    let Ok(setup_path) = std::env::var(CRASH_SETUP_VARIABLE) else {
         return;
     };
+    let setup = std::fs::read_to_string(setup_path).expect("the crash setup is readable");
     let setup: Value = serde_json::from_str(&setup).expect("the setup is JSON");
     let text = |name: &str| {
         setup[name]

@@ -35,7 +35,7 @@ pub(super) struct RecorderState {
     last_drop_warning_at: Option<Instant>,
     pub(super) closed: bool,
     background_queued: bool,
-    close_deadline: Option<Instant>,
+    pub(super) close_deadline: Option<Instant>,
 }
 
 pub(crate) struct RecorderShared {
@@ -45,10 +45,11 @@ pub(crate) struct RecorderShared {
     logger: Arc<dyn AnswerRecorderLogger>,
     maximum_buffered: usize,
     maximum_attempts: u32,
-    close_timeout: Duration,
+    pub(super) close_timeout: Duration,
     state: Mutex<RecorderState>,
-    drain_lock: tokio::sync::Mutex<()>,
-    closing: watch::Sender<bool>,
+    pub(super) drain_lock: tokio::sync::Mutex<()>,
+    pub(super) closing: watch::Sender<bool>,
+    pub(super) close_finished: watch::Sender<bool>,
 }
 
 #[derive(Clone)]
@@ -203,7 +204,9 @@ impl RecorderShared {
     }
 
     async fn drained(&self, deadline: Instant) {
-        let _guard = self.drain_lock.lock().await;
+        let Ok(_guard) = tokio::time::timeout_at(deadline, self.drain_lock.lock()).await else {
+            return;
+        };
         self.drain(deadline).await;
     }
 
@@ -213,7 +216,7 @@ impl RecorderShared {
             .map_or(deadline, |close| close.min(deadline))
     }
 
-    async fn drain(&self, deadline: Instant) {
+    pub(super) async fn drain(&self, deadline: Instant) {
         self.recover();
         let target = DeliveryTarget {
             client: &self.client,
@@ -295,6 +298,17 @@ impl RecorderShared {
 
 impl AnswerRecorder {
     pub fn new(options: AnswerRecorderOptions) -> Result<Self, HimringApiError> {
+        for (name, duration) in [
+            ("close_timeout", options.close_timeout),
+            ("flush_interval", options.flush_interval),
+        ] {
+            if Instant::now().checked_add(duration).is_none() {
+                return Err(invalid_input(
+                    format!("Set {name} to a shorter duration."),
+                    None,
+                ));
+            }
+        }
         if tokio::runtime::Handle::try_current().is_err() {
             return Err(invalid_input(
                 "Create the answer recorder inside a Tokio runtime.",
@@ -305,6 +319,7 @@ impl AnswerRecorder {
             .logger
             .unwrap_or_else(|| Arc::new(StandardErrorLogger));
         let (closing, _) = watch::channel(false);
+        let (close_finished, _) = watch::channel(false);
         let shared = Arc::new(RecorderShared {
             client: options.client,
             project_id: options.project_id,
@@ -316,6 +331,7 @@ impl AnswerRecorder {
             state: Mutex::new(RecorderState::default()),
             drain_lock: tokio::sync::Mutex::new(()),
             closing,
+            close_finished,
         });
         let directory = match options.spool_directory {
             SpoolDirectory::Disabled => None,
@@ -363,27 +379,6 @@ impl AnswerRecorder {
     }
 
     pub async fn close(&self) {
-        let deadline = {
-            let mut state = self.shared.state();
-            if state.closed {
-                None
-            } else {
-                state.closed = true;
-                let deadline = Instant::now() + self.shared.close_timeout;
-                state.close_deadline = Some(deadline);
-                Some(deadline)
-            }
-        };
-        let Some(deadline) = deadline else {
-            let _guard = self.shared.drain_lock.lock().await;
-            return;
-        };
-        self.shared.closing.send_replace(true);
-        self.shared.drained(deadline).await;
-        let mut state = self.shared.state();
-        let RecorderState { pending, spool, .. } = &mut *state;
-        if let Some(spool) = spool {
-            spool.close(true, pending);
-        }
+        self.shared.close().await;
     }
 }

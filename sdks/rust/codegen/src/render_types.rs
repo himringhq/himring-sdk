@@ -75,14 +75,38 @@ fn field_attributes(field: &StructField, direction: TypeDirection) -> Vec<String
     if bare_identifier(&field.identifier) != field.json_name {
         attributes.push(format!("#[serde(rename = {:?})]", field.json_name));
     }
+    let constant_parser = match &field.constant {
+        Some(serde_json::Value::Bool(value)) => Some(format!("boolean_constant::<_, _, {value}>")),
+        Some(serde_json::Value::Number(value)) => {
+            Some(format!("integer_constant::<_, _, {value}>"))
+        }
+        _ => None,
+    };
+    if let Some(parser) = constant_parser {
+        if !field.required {
+            attributes
+                .push("#[serde(default, skip_serializing_if = \"Option::is_none\")]".to_owned());
+        }
+        attributes.push(format!(
+            "#[serde(deserialize_with = \"crate::serde_fields::{parser}\")]"
+        ));
+        return attributes;
+    }
     let declared = field.declared_type(direction);
-    if field.is_double_option(direction) {
+    if field.required && field.nullable() {
+        attributes
+            .push("#[serde(deserialize_with = \"crate::serde_fields::required\")]".to_owned());
+    } else if field.is_double_option(direction) {
         attributes.push(
             "#[serde(default, skip_serializing_if = \"Option::is_none\", deserialize_with = \"crate::serde_fields::double_option\")]".to_owned(),
         );
     } else if !field.required && declared == RustType::Json {
         attributes.push(
             "#[serde(default, skip_serializing_if = \"serde_json::Value::is_null\")]".to_owned(),
+        );
+    } else if !field.required && !field.nullable() {
+        attributes.push(
+            "#[serde(default, skip_serializing_if = \"Option::is_none\", deserialize_with = \"crate::serde_fields::present\")]".to_owned(),
         );
     } else if !field.required {
         attributes.push("#[serde(default, skip_serializing_if = \"Option::is_none\")]".to_owned());

@@ -2,6 +2,7 @@ mod conversation;
 mod delivery;
 mod event_rules;
 mod recorder;
+mod recorder_lifecycle;
 mod recorder_options;
 mod recorder_timers;
 mod spool;

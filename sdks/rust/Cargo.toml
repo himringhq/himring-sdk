@@ -21,6 +21,7 @@ native-tls = ["reqwest/native-tls"]
 [dependencies]
 bytes = "1.10.1"
 fastrand = "2.3.0"
+fs4 = { version = "1.1.0", default-features = false, features = ["sync"] }
 futures-util = { version = "0.3.31", default-features = false, features = ["std"] }
 hmac = "0.13.0"
 httpdate = "1.0.3"

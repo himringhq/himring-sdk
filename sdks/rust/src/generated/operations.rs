@@ -3,6 +3,7 @@ use crate::operation_description::{
 };
 
 pub const SPEC_API_URL: &str = "https://api.himring.ai";
+pub const SIGNABLE_PART_NUMBER_MAXIMUM: u64 = 10000;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[non_exhaustive]

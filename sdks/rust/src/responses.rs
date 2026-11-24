@@ -68,7 +68,7 @@ fn missing_permission_of(value: &Value) -> Option<HimringMissingPermission> {
 pub(crate) fn retry_after_seconds_of(header: Option<&str>) -> Option<u64> {
     let text = header?.trim();
     if !text.is_empty() && text.bytes().all(|byte| byte.is_ascii_digit()) {
-        return text.parse().ok();
+        return Some(text.parse().unwrap_or(u64::MAX));
     }
     let moment = httpdate::parse_http_date(text).ok()?;
     let remaining = moment

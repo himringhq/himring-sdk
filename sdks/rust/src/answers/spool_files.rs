@@ -108,7 +108,7 @@ pub(crate) fn unsent_events(text: &str) -> Vec<SpooledAnswerEvent> {
 }
 
 #[cfg(unix)]
-fn opened_without_following(path: &Path) -> std::io::Result<File> {
+pub(crate) fn opened_without_following(path: &Path) -> std::io::Result<File> {
     use std::os::unix::fs::OpenOptionsExt;
     fs::OpenOptions::new()
         .read(true)
@@ -117,12 +117,11 @@ fn opened_without_following(path: &Path) -> std::io::Result<File> {
 }
 
 #[cfg(not(unix))]
-fn opened_without_following(path: &Path) -> std::io::Result<File> {
+pub(crate) fn opened_without_following(path: &Path) -> std::io::Result<File> {
     File::open(path)
 }
 
-pub(crate) fn owner_of(path: &Path) -> Option<SpoolOwner> {
-    let file = opened_without_following(path).ok()?;
+pub(crate) fn owner_of(file: &mut File) -> Option<SpoolOwner> {
     let mut header = String::new();
     let mut limited = file.take(SPOOL_HEADER_READ_BYTES);
     let mut bytes = Vec::new();

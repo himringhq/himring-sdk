@@ -1,5 +1,6 @@
 use std::time::{Duration, SystemTime};
 
+use crate::generated_operations::SIGNABLE_PART_NUMBER_MAXIMUM;
 use reqwest::Url;
 use time::OffsetDateTime;
 use time::format_description::well_known::Rfc3339;
@@ -20,7 +21,6 @@ pub(crate) const HTTP_FORBIDDEN: u16 = 403;
 pub(crate) const CHECK_POLL_FIRST: Duration = Duration::from_millis(200);
 pub(crate) const CHECK_POLL_MAXIMUM: Duration = Duration::from_secs(2);
 const CHECK_WAIT_PAST_DEADLINE: Duration = Duration::from_secs(30 * 60);
-const SIGNABLE_PART_NUMBER_MAXIMUM: u64 = 10_000;
 const MINIMUM_SEND_BYTES_PER_SECOND: u64 = 64 * 1024;
 const STORAGE_URL_SCHEMES: [&str; 2] = ["http", "https"];
 const LARGEST_EXACT_WHOLE_NUMBER: f64 = 9_007_199_254_740_992.0;

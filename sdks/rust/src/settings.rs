@@ -46,6 +46,9 @@ pub(crate) fn positive_duration(
         Some(duration) if duration.is_zero() => Err(setting_error(format!(
             "Set {option} to a duration above zero."
         ))),
+        Some(duration) if std::time::Instant::now().checked_add(duration).is_none() => Err(
+            setting_error(format!("Set {option} to a shorter duration.")),
+        ),
         Some(duration) => Ok(duration),
     }
 }

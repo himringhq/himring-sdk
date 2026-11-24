@@ -1,5 +1,5 @@
 use std::fs::{self, File, OpenOptions};
-use std::io::{self, Write};
+use std::io::{self, Read, Seek, Write};
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
@@ -9,7 +9,8 @@ use crate::answers::delivery::PendingAnswerEvent;
 use crate::answers::spool_files::{
     ANSWER_SPOOL_FILE_PREFIX, ANSWER_SPOOL_FILE_SUFFIX, SpoolOwner, SpooledAnswerEvent,
     current_pid, done_line, event_line, host_name, is_orphaned, is_own_regular_file,
-    is_private_directory, is_spool_file_name, live_instances, owner_line, owner_of, unsent_events,
+    is_private_directory, is_spool_file_name, live_instances, opened_without_following, owner_line,
+    owner_of, unsent_events,
 };
 
 const SPOOL_COMPACT_AFTER_BYTES: u64 = 16 * 1024 * 1024;
@@ -221,7 +222,17 @@ impl AnswerSpool {
         if !is_own_regular_file(&metadata) {
             return Ok(Vec::new());
         }
-        let owner = owner_of(path);
+        let mut file = opened_without_following(path)?;
+        match fs4::FileExt::try_lock(&file) {
+            Ok(()) => {}
+            Err(fs4::TryLockError::WouldBlock) => return Ok(Vec::new()),
+            Err(fs4::TryLockError::Error(error)) => return Err(error),
+        }
+        let metadata = file.metadata()?;
+        if !is_own_regular_file(&metadata) {
+            return Ok(Vec::new());
+        }
+        let owner = owner_of(&mut file);
         if owner.as_ref().map(|owner| owner.destination.as_str()) != Some(self.destination.as_str())
         {
             return Ok(Vec::new());
@@ -255,7 +266,14 @@ impl AnswerSpool {
             fs::remove_file(&claimed)?;
             return Ok(Vec::new());
         }
-        let bytes = fs::read(&claimed)?;
+        file.rewind()?;
+        let mut bytes = Vec::new();
+        (&mut file)
+            .take(RECOVERED_FILE_MAXIMUM_BYTES + 1)
+            .read_to_end(&mut bytes)?;
+        if bytes.len() as u64 > RECOVERED_FILE_MAXIMUM_BYTES {
+            return Ok(Vec::new());
+        }
         let events = unsent_events(&String::from_utf8_lossy(&bytes));
         if !self.append(&events, warnings) {
             return Ok(Vec::new());

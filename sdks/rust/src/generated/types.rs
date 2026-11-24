@@ -39,9 +39,12 @@ pub struct AcceptInvitationOutput {
     pub id: String,
     pub name: String,
     pub region: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub role: Option<AcceptInvitationOutputRole>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub sirannon_url: String,
     pub narsil_url: String,
@@ -77,7 +80,11 @@ pub struct AddDatabaseMigrationInput {
     pub database_id: String,
     pub name: String,
     pub sql: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub expected_migration_version: Option<IntegerOrText>,
 }
 impl AddDatabaseMigrationInput {
@@ -156,14 +163,30 @@ impl AddMessagesInputItemsItemConversationTurnsItemSpeakerKind {
 #[non_exhaustive]
 pub struct AddMessagesInputItemsItemConversationTurnsItem {
     pub speaker: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub speaker_kind: Option<AddMessagesInputItemsItemConversationTurnsItemSpeakerKind>,
     pub text: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub start_second: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_second: Option<f64>,
 }
 impl AddMessagesInputItemsItemConversationTurnsItem {
@@ -209,17 +232,41 @@ pub struct AddMessagesInputItemsItemConversation {
     pub kind: AddMessagesInputItemsItemConversationKind,
     pub external_id: String,
     pub version: i64,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub title: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub address: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub occurred_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub private: Option<bool>,
     pub turns: Vec<AddMessagesInputItemsItemConversationTurnsItem>,
 }
@@ -323,24 +370,56 @@ pub struct AddMessagesInputItemsItemMessage {
     pub external_id: String,
     pub version: i64,
     pub conversation_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub conversation_title: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub address: Option<String>,
     pub author: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub author_kind: Option<AddMessagesInputItemsItemMessageAuthorKind>,
     pub text: String,
     pub sent_at: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub reply_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub reactions: Option<i64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub private: Option<bool>,
 }
 impl AddMessagesInputItemsItemMessage {
@@ -465,11 +544,23 @@ pub struct AddMessagesInputItemsItemRecord {
     pub kind: AddMessagesInputItemsItemRecordKind,
     pub external_id: String,
     pub version: i64,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub title: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub address: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
     pub fields: BTreeMap<String, Option<NumberOrBooleanOrText>>,
 }
@@ -668,15 +759,35 @@ pub struct AnswerQuestionInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub question: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub folder: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub metadata: Option<BTreeMap<String, AnswerQuestionInputMetadataValue>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub call_id: Option<String>,
 }
 impl AnswerQuestionInput {
@@ -823,6 +934,7 @@ impl AnswerQuestionOutputPassagesItemCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct AnswerQuestionOutputPassagesItemCitationSpreadsheet {
     pub kind: AnswerQuestionOutputPassagesItemCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -871,7 +983,9 @@ impl AnswerQuestionOutputPassagesItemCitationWebPageKind {
 #[non_exhaustive]
 pub struct AnswerQuestionOutputPassagesItemCitationWebPage {
     pub kind: AnswerQuestionOutputPassagesItemCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -940,6 +1054,7 @@ pub struct AnswerQuestionOutputPassagesItemCitationRecording {
     pub kind: AnswerQuestionOutputPassagesItemCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -1060,6 +1175,7 @@ impl AnswerQuestionOutputPassagesItemMatchCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct AnswerQuestionOutputPassagesItemMatchCitationSpreadsheet {
     pub kind: AnswerQuestionOutputPassagesItemMatchCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -1108,7 +1224,9 @@ impl AnswerQuestionOutputPassagesItemMatchCitationWebPageKind {
 #[non_exhaustive]
 pub struct AnswerQuestionOutputPassagesItemMatchCitationWebPage {
     pub kind: AnswerQuestionOutputPassagesItemMatchCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -1177,6 +1295,7 @@ pub struct AnswerQuestionOutputPassagesItemMatchCitationRecording {
     pub kind: AnswerQuestionOutputPassagesItemMatchCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -1264,6 +1383,7 @@ pub struct AnswerQuestionOutputPassagesItem {
     pub file_path: String,
     pub file_kind: AnswerQuestionOutputPassagesItemFileKind,
     pub version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub text: String,
     pub truncated: bool,
@@ -1614,9 +1734,17 @@ impl ApplyTableImportInputNewTableColumnsItemReferencesOnUpdate {
 pub struct ApplyTableImportInputNewTableColumnsItemReferences {
     pub table: String,
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_delete: Option<ApplyTableImportInputNewTableColumnsItemReferencesOnDelete>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_update: Option<ApplyTableImportInputNewTableColumnsItemReferencesOnUpdate>,
 }
 impl ApplyTableImportInputNewTableColumnsItemReferences {
@@ -1652,7 +1780,11 @@ impl ApplyTableImportInputNewTableColumnsItemReferences {
 pub struct ApplyTableImportInputNewTableColumnsItem {
     pub name: String,
     pub r#type: ApplyTableImportInputNewTableColumnsItemType,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -1660,9 +1792,17 @@ pub struct ApplyTableImportInputNewTableColumnsItem {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub default: Option<Option<ApplyTableImportInputNewTableColumnsItemDefault>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub primary_key: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub unique: Option<bool>,
     #[serde(
         default,
@@ -1783,6 +1923,7 @@ pub struct ApplyTableImportOutputImportedMigration {
 pub struct ApplyTableImportOutputImported {
     pub table_name: String,
     pub inserted: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub migration: Option<ApplyTableImportOutputImportedMigration>,
 }
 
@@ -1975,9 +2116,13 @@ pub struct CancelUploadOutputFileUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CancelUploadOutputFileUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: CancelUploadOutputFileUnreadPartsItemFailure,
 }
@@ -1989,18 +2134,23 @@ pub struct CancelUploadOutputFile {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: CancelUploadOutputFileKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: CancelUploadOutputFileStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<CancelUploadOutputFileFailure>,
     pub unread_parts: Vec<CancelUploadOutputFileUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -2017,6 +2167,7 @@ pub struct CancelUploadOutput {
     pub id: String,
     pub knowledge_base_id: String,
     pub path: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub size_bytes: f64,
     pub content_sha256: String,
@@ -2024,8 +2175,11 @@ pub struct CancelUploadOutput {
     pub part_bytes: f64,
     pub part_count: f64,
     pub state: CancelUploadOutputState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub outcome: Option<CancelUploadOutputOutcome>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file: Option<CancelUploadOutputFile>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<CancelUploadOutputFailure>,
     pub created_at: String,
     pub deadline_at: String,
@@ -2341,7 +2495,11 @@ pub struct ChangeTableColumnsInputChangesItemAdd {
     pub kind: ChangeTableColumnsInputChangesItemAddKind,
     pub name: String,
     pub r#type: ChangeTableColumnsInputChangesItemAddType,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -2349,7 +2507,11 @@ pub struct ChangeTableColumnsInputChangesItemAdd {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub default: Option<Option<ChangeTableColumnsInputChangesItemAddDefault>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub position: Option<ChangeTableColumnsInputChangesItemAddPosition>,
 }
 impl ChangeTableColumnsInputChangesItemAdd {
@@ -2643,9 +2805,17 @@ impl From<ChangeTableColumnsInputChangesItemAlterDefaultCurrentTime>
 pub struct ChangeTableColumnsInputChangesItemAlter {
     pub kind: ChangeTableColumnsInputChangesItemAlterKind,
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub r#type: Option<ChangeTableColumnsInputChangesItemAlterType>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -3124,9 +3294,17 @@ impl CheckTableImportInputNewTableColumnsItemReferencesOnUpdate {
 pub struct CheckTableImportInputNewTableColumnsItemReferences {
     pub table: String,
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_delete: Option<CheckTableImportInputNewTableColumnsItemReferencesOnDelete>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_update: Option<CheckTableImportInputNewTableColumnsItemReferencesOnUpdate>,
 }
 impl CheckTableImportInputNewTableColumnsItemReferences {
@@ -3162,7 +3340,11 @@ impl CheckTableImportInputNewTableColumnsItemReferences {
 pub struct CheckTableImportInputNewTableColumnsItem {
     pub name: String,
     pub r#type: CheckTableImportInputNewTableColumnsItemType,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -3170,9 +3352,17 @@ pub struct CheckTableImportInputNewTableColumnsItem {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub default: Option<Option<CheckTableImportInputNewTableColumnsItemDefault>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub primary_key: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub unique: Option<bool>,
     #[serde(
         default,
@@ -3291,6 +3481,7 @@ pub struct CheckTableImportOutputCheck {
     pub failures_capped: bool,
     pub failures: Vec<CheckTableImportOutputCheckFailuresItem>,
     pub base_migration_version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub table_sql: Option<String>,
 }
 
@@ -3423,9 +3614,12 @@ impl CompactDatabaseOutputCompactionFailureCode {
 pub struct CompactDatabaseOutputCompaction {
     pub state: CompactDatabaseOutputCompactionState,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub file_bytes_before: i64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_bytes_after: Option<i64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<CompactDatabaseOutputCompactionFailureCode>,
 }
 
@@ -3437,11 +3631,15 @@ pub struct CompactDatabaseOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: CompactDatabaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub migration_version: f64,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub size: Option<CompactDatabaseOutputSize>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compaction: Option<CompactDatabaseOutputCompaction>,
     pub sql_write_preview: bool,
 }
@@ -3534,9 +3732,17 @@ impl CompareIndexSearchInputFusion {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompareIndexSearchInputBm25 {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub k1: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub b: Option<f64>,
 }
 impl CompareIndexSearchInputBm25 {
@@ -3562,43 +3768,119 @@ pub struct CompareIndexSearchInput {
     pub project_id: String,
     pub index_id: String,
     pub query: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub filters: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub mode: Option<CompareIndexSearchInputMode>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_field: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fields: Option<CompareIndexSearchInputFields>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub boosts: Option<CompareIndexSearchInputBoosts>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub term_match: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub tolerance: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix_length: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub exact: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub partial_words: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_score: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion: Option<CompareIndexSearchInputFusion>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion_constant: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_weight: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_similarity: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_candidates: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub bm25: Option<CompareIndexSearchInputBm25>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<IntegerOrText>,
 }
 impl CompareIndexSearchInput {
@@ -3860,33 +4142,89 @@ impl CompareIndexSearchOutputSavedPreviewTuningFusion {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputSavedPreviewTuning {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fields: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub boosts: Option<BTreeMap<String, f64>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub term_match: Option<CompareIndexSearchOutputSavedPreviewTuningTermMatch>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub tolerance: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix_length: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub exact: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub partial_words: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_score: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion: Option<CompareIndexSearchOutputSavedPreviewTuningFusion>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion_constant: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_weight: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_similarity: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_candidates: Option<f64>,
 }
 
@@ -3913,7 +4251,9 @@ impl CompareIndexSearchOutputSavedPreviewFacetsItemCounted {
 pub struct CompareIndexSearchOutputSavedPreviewFacetsItemValuesItem {
     pub value: String,
     pub count: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub from: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub to: Option<f64>,
 }
 
@@ -3930,6 +4270,7 @@ pub struct CompareIndexSearchOutputSavedPreviewFacetsItem {
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputSavedPreviewGroupsItem {
     pub values: serde_json::Map<String, serde_json::Value>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub count: Option<f64>,
 }
 
@@ -3959,9 +4300,12 @@ pub struct CompareIndexSearchOutputSavedPreviewResultsItemKeywordFieldScoresItem
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputSavedPreviewResultsItemKeyword {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
     pub terms: Vec<CompareIndexSearchOutputSavedPreviewResultsItemKeywordTermsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub field_scores:
         Option<Vec<CompareIndexSearchOutputSavedPreviewResultsItemKeywordFieldScoresItem>>,
 }
@@ -3969,7 +4313,9 @@ pub struct CompareIndexSearchOutputSavedPreviewResultsItemKeyword {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputSavedPreviewResultsItemVector {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub similarity: Option<f64>,
 }
 
@@ -3995,9 +4341,11 @@ pub struct CompareIndexSearchOutputSavedPreviewResultsItem {
     pub score: f64,
     pub record: serde_json::Map<String, serde_json::Value>,
     pub keyword: CompareIndexSearchOutputSavedPreviewResultsItemKeyword,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector: Option<CompareIndexSearchOutputSavedPreviewResultsItemVector>,
     pub highlights: Vec<CompareIndexSearchOutputSavedPreviewResultsItemHighlightsItem>,
     pub pinned: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub group: Option<f64>,
 }
 
@@ -4005,18 +4353,26 @@ pub struct CompareIndexSearchOutputSavedPreviewResultsItem {
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputSavedPreview {
     pub mode: CompareIndexSearchOutputSavedPreviewMode,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector_field: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub fusion: Option<CompareIndexSearchOutputSavedPreviewFusion>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub fusion_constant: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector_weight: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sort: Option<CompareIndexSearchOutputSavedPreviewSort>,
     pub tuning: CompareIndexSearchOutputSavedPreviewTuning,
     pub facets: Vec<CompareIndexSearchOutputSavedPreviewFacetsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub groups: Option<Vec<CompareIndexSearchOutputSavedPreviewGroupsItem>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub group_count: Option<f64>,
     pub total_count: f64,
     pub total_is_exact: bool,
     pub offset: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_offset: Option<f64>,
     pub duration_ms: f64,
     pub results: Vec<CompareIndexSearchOutputSavedPreviewResultsItem>,
@@ -4159,33 +4515,89 @@ impl CompareIndexSearchOutputTunedPreviewTuningFusion {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputTunedPreviewTuning {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fields: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub boosts: Option<BTreeMap<String, f64>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub term_match: Option<CompareIndexSearchOutputTunedPreviewTuningTermMatch>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub tolerance: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix_length: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub exact: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub partial_words: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_score: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion: Option<CompareIndexSearchOutputTunedPreviewTuningFusion>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion_constant: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_weight: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_similarity: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_candidates: Option<f64>,
 }
 
@@ -4212,7 +4624,9 @@ impl CompareIndexSearchOutputTunedPreviewFacetsItemCounted {
 pub struct CompareIndexSearchOutputTunedPreviewFacetsItemValuesItem {
     pub value: String,
     pub count: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub from: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub to: Option<f64>,
 }
 
@@ -4229,6 +4643,7 @@ pub struct CompareIndexSearchOutputTunedPreviewFacetsItem {
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputTunedPreviewGroupsItem {
     pub values: serde_json::Map<String, serde_json::Value>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub count: Option<f64>,
 }
 
@@ -4258,9 +4673,12 @@ pub struct CompareIndexSearchOutputTunedPreviewResultsItemKeywordFieldScoresItem
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputTunedPreviewResultsItemKeyword {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
     pub terms: Vec<CompareIndexSearchOutputTunedPreviewResultsItemKeywordTermsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub field_scores:
         Option<Vec<CompareIndexSearchOutputTunedPreviewResultsItemKeywordFieldScoresItem>>,
 }
@@ -4268,7 +4686,9 @@ pub struct CompareIndexSearchOutputTunedPreviewResultsItemKeyword {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputTunedPreviewResultsItemVector {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub similarity: Option<f64>,
 }
 
@@ -4294,9 +4714,11 @@ pub struct CompareIndexSearchOutputTunedPreviewResultsItem {
     pub score: f64,
     pub record: serde_json::Map<String, serde_json::Value>,
     pub keyword: CompareIndexSearchOutputTunedPreviewResultsItemKeyword,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector: Option<CompareIndexSearchOutputTunedPreviewResultsItemVector>,
     pub highlights: Vec<CompareIndexSearchOutputTunedPreviewResultsItemHighlightsItem>,
     pub pinned: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub group: Option<f64>,
 }
 
@@ -4304,18 +4726,26 @@ pub struct CompareIndexSearchOutputTunedPreviewResultsItem {
 #[non_exhaustive]
 pub struct CompareIndexSearchOutputTunedPreview {
     pub mode: CompareIndexSearchOutputTunedPreviewMode,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector_field: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub fusion: Option<CompareIndexSearchOutputTunedPreviewFusion>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub fusion_constant: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector_weight: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sort: Option<CompareIndexSearchOutputTunedPreviewSort>,
     pub tuning: CompareIndexSearchOutputTunedPreviewTuning,
     pub facets: Vec<CompareIndexSearchOutputTunedPreviewFacetsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub groups: Option<Vec<CompareIndexSearchOutputTunedPreviewGroupsItem>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub group_count: Option<f64>,
     pub total_count: f64,
     pub total_is_exact: bool,
     pub offset: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_offset: Option<f64>,
     pub duration_ms: f64,
     pub results: Vec<CompareIndexSearchOutputTunedPreviewResultsItem>,
@@ -4497,9 +4927,13 @@ pub struct CompleteUploadOutputFileUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CompleteUploadOutputFileUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: CompleteUploadOutputFileUnreadPartsItemFailure,
 }
@@ -4511,18 +4945,23 @@ pub struct CompleteUploadOutputFile {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: CompleteUploadOutputFileKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: CompleteUploadOutputFileStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<CompleteUploadOutputFileFailure>,
     pub unread_parts: Vec<CompleteUploadOutputFileUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -4539,6 +4978,7 @@ pub struct CompleteUploadOutput {
     pub id: String,
     pub knowledge_base_id: String,
     pub path: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub size_bytes: f64,
     pub content_sha256: String,
@@ -4546,8 +4986,11 @@ pub struct CompleteUploadOutput {
     pub part_bytes: f64,
     pub part_count: f64,
     pub state: CompleteUploadOutputState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub outcome: Option<CompleteUploadOutputOutcome>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file: Option<CompleteUploadOutputFile>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<CompleteUploadOutputFailure>,
     pub created_at: String,
     pub deadline_at: String,
@@ -4594,6 +5037,7 @@ pub struct ConfirmSecondFactorSetupOutputSessionAccount {
     pub name: String,
     pub status: ConfirmSecondFactorSetupOutputSessionAccountStatus,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
     pub is_operator: bool,
 }
@@ -4835,13 +5279,29 @@ impl CreateApiKeyInputPermissionsRestrictedMemory {
 #[non_exhaustive]
 pub struct CreateApiKeyInputPermissionsRestricted {
     pub access: CreateApiKeyInputPermissionsRestrictedAccess,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub databases: Option<CreateApiKeyInputPermissionsRestrictedDatabases>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub indexes: Option<CreateApiKeyInputPermissionsRestrictedIndexes>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub knowledge_bases: Option<CreateApiKeyInputPermissionsRestrictedKnowledgeBases>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub memory: Option<CreateApiKeyInputPermissionsRestrictedMemory>,
 }
 impl CreateApiKeyInputPermissionsRestricted {
@@ -4975,6 +5435,7 @@ impl CreateApiKeyOutputApiKeyPermissionsDatabasesLevel {
 #[non_exhaustive]
 pub struct CreateApiKeyOutputApiKeyPermissionsDatabases {
     pub level: CreateApiKeyOutputApiKeyPermissionsDatabasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -5003,6 +5464,7 @@ impl CreateApiKeyOutputApiKeyPermissionsIndexesLevel {
 #[non_exhaustive]
 pub struct CreateApiKeyOutputApiKeyPermissionsIndexes {
     pub level: CreateApiKeyOutputApiKeyPermissionsIndexesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -5031,6 +5493,7 @@ impl CreateApiKeyOutputApiKeyPermissionsKnowledgeBasesLevel {
 #[non_exhaustive]
 pub struct CreateApiKeyOutputApiKeyPermissionsKnowledgeBases {
     pub level: CreateApiKeyOutputApiKeyPermissionsKnowledgeBasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -5079,13 +5542,18 @@ pub struct CreateApiKeyOutputApiKey {
     pub name: String,
     pub display_prefix: String,
     pub permissions: CreateApiKeyOutputApiKeyPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_by_name: Option<String>,
     pub created_by: String,
     pub created_by_name: String,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_used_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub revoked_at: Option<String>,
 }
 
@@ -5930,7 +6398,11 @@ pub struct CreateCorrectionInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub setting: CreateCorrectionInputSetting,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub target_ids: Option<Vec<String>>,
 }
 impl CreateCorrectionInput {
@@ -6818,6 +7290,7 @@ pub struct CreateCorrectionOutputEstimate {
     pub second_index: bool,
     pub chunks_to_index: f64,
     pub questions_to_score: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub price_usd: Option<f64>,
 }
 
@@ -6826,6 +7299,7 @@ pub struct CreateCorrectionOutputEstimate {
 pub struct CreateCorrectionOutputBeforeTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -6834,12 +7308,14 @@ pub struct CreateCorrectionOutputBeforeTuning {
 pub struct CreateCorrectionOutputBeforeHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CreateCorrectionOutputBefore {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: CreateCorrectionOutputBeforeTuning,
     pub held_back: CreateCorrectionOutputBeforeHeldBack,
@@ -6850,6 +7326,7 @@ pub struct CreateCorrectionOutputBefore {
 pub struct CreateCorrectionOutputAfterTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -6858,12 +7335,14 @@ pub struct CreateCorrectionOutputAfterTuning {
 pub struct CreateCorrectionOutputAfterHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CreateCorrectionOutputAfter {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: CreateCorrectionOutputAfterTuning,
     pub held_back: CreateCorrectionOutputAfterHeldBack,
@@ -6940,25 +7419,36 @@ impl CreateCorrectionOutputDecidedBy {
 pub struct CreateCorrectionOutput {
     pub id: String,
     pub origin: CreateCorrectionOutputOrigin,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause: Option<CreateCorrectionOutputCause>,
     pub kind: CreateCorrectionOutputKind,
     pub setting: CreateCorrectionOutputSetting,
     pub target_ids: Vec<String>,
     pub file_kinds: Vec<CreateCorrectionOutputFileKindsItem>,
     pub status: CreateCorrectionOutputStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub estimate: CreateCorrectionOutputEstimate,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before: Option<CreateCorrectionOutputBefore>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after: Option<CreateCorrectionOutputAfter>,
     pub verdict: CreateCorrectionOutputVerdict,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_changes: Option<CreateCorrectionOutputQuestionChanges>,
     pub waits_for_click: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub wait_reason: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_by: Option<CreateCorrectionOutputDecidedBy>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decision_note: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tried_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
 }
 
@@ -6983,9 +7473,17 @@ impl CreateDatabaseInputMigrationsItem {
 pub struct CreateDatabaseInput {
     pub project_id: String,
     pub name: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub migrations: Option<Vec<CreateDatabaseInputMigrationsItem>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sql_write_preview: Option<bool>,
 }
 impl CreateDatabaseInput {
@@ -7117,9 +7615,12 @@ impl CreateDatabaseOutputCompactionFailureCode {
 pub struct CreateDatabaseOutputCompaction {
     pub state: CreateDatabaseOutputCompactionState,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub file_bytes_before: i64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_bytes_after: Option<i64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<CreateDatabaseOutputCompactionFailureCode>,
 }
 
@@ -7131,11 +7632,15 @@ pub struct CreateDatabaseOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: CreateDatabaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub migration_version: f64,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub size: Option<CreateDatabaseOutputSize>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compaction: Option<CreateDatabaseOutputCompaction>,
     pub sql_write_preview: bool,
 }
@@ -7605,9 +8110,17 @@ impl CreateIndexInputConfigDefaultScoring {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CreateIndexInputConfigBm25 {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub k1: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub b: Option<f64>,
 }
 impl CreateIndexInputConfigBm25 {
@@ -7677,26 +8190,62 @@ impl From<CreateIndexInputConfigSynonymsItemOption2> for CreateIndexInputConfigS
 #[non_exhaustive]
 pub struct CreateIndexInputConfig {
     pub schema: BTreeMap<String, CreateIndexInputConfigSchemaValue>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub language: Option<CreateIndexInputConfigLanguage>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub embedding: Option<CreateIndexInputConfigEmbedding>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub required: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub strict: Option<bool>,
     #[serde(rename = "trackPositions")]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub track_positions: Option<bool>,
     #[serde(rename = "defaultScoring")]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub default_scoring: Option<CreateIndexInputConfigDefaultScoring>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub bm25: Option<CreateIndexInputConfigBm25>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub synonyms: Option<Vec<CreateIndexInputConfigSynonymsItem>>,
     #[serde(rename = "stopWords")]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub stop_words: Option<Vec<String>>,
 }
 impl CreateIndexInputConfig {
@@ -7818,7 +8367,9 @@ pub struct CreateIndexOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: CreateIndexOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub config: serde_json::Map<String, serde_json::Value>,
     pub narsil_url: String,
@@ -8162,9 +8713,17 @@ impl CreateKnowledgeBaseInputLanguage {
 pub struct CreateKnowledgeBaseInput {
     pub project_id: String,
     pub name: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub language: Option<CreateKnowledgeBaseInputLanguage>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub chunk_tokens: Option<IntegerOrText>,
     #[serde(
         default,
@@ -8235,14 +8794,18 @@ pub struct CreateKnowledgeBaseOutput {
     pub name: String,
     pub language: String,
     pub chunk_tokens: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_retention_days: Option<f64>,
     pub created_at: String,
     pub created_by: CreateKnowledgeBaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub database_id: String,
     pub live_index_id: String,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub search_pending_since: Option<String>,
 }
 
@@ -8325,11 +8888,23 @@ pub struct CreateMemorySourceInput {
     pub memory_id: String,
     pub name: String,
     pub kind: CreateMemorySourceInputKind,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sorting: Option<CreateMemorySourceInputSorting>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub settings: Option<serde_json::Map<String, serde_json::Value>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub credentials: Option<serde_json::Map<String, serde_json::Value>>,
 }
 impl CreateMemorySourceInput {
@@ -8485,6 +9060,7 @@ impl CreateMemorySourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct CreateMemorySourceOutputSignIn {
     pub status: CreateMemorySourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -8527,21 +9103,30 @@ pub struct CreateMemorySourceOutputLastError {
 pub struct CreateMemorySourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: CreateMemorySourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<CreateMemorySourceOutputSorting>,
     pub status: CreateMemorySourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<CreateMemorySourceOutputSignIn>,
     pub created_at: String,
     pub created_by: CreateMemorySourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<CreateMemorySourceOutputLastError>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_secret: Option<String>,
 }
 
@@ -8581,9 +9166,12 @@ pub struct CreateProjectOutput {
     pub id: String,
     pub name: String,
     pub region: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub role: Option<CreateProjectOutputRole>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub sirannon_url: String,
     pub narsil_url: String,
@@ -8647,9 +9235,17 @@ pub struct CreateSourceInput {
     pub knowledge_base_id: String,
     pub name: String,
     pub kind: CreateSourceInputKind,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub settings: Option<serde_json::Map<String, serde_json::Value>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub credentials: Option<serde_json::Map<String, serde_json::Value>>,
 }
 impl CreateSourceInput {
@@ -8799,6 +9395,7 @@ impl CreateSourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct CreateSourceOutputSignIn {
     pub status: CreateSourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -8841,21 +9438,30 @@ pub struct CreateSourceOutputLastError {
 pub struct CreateSourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: CreateSourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<CreateSourceOutputSorting>,
     pub status: CreateSourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<CreateSourceOutputSignIn>,
     pub created_at: String,
     pub created_by: CreateSourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<CreateSourceOutputLastError>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_secret: Option<String>,
 }
 
@@ -9108,9 +9714,17 @@ impl CreateTableInputColumnsItemReferencesOnUpdate {
 pub struct CreateTableInputColumnsItemReferences {
     pub table: String,
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_delete: Option<CreateTableInputColumnsItemReferencesOnDelete>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_update: Option<CreateTableInputColumnsItemReferencesOnUpdate>,
 }
 impl CreateTableInputColumnsItemReferences {
@@ -9140,7 +9754,11 @@ impl CreateTableInputColumnsItemReferences {
 pub struct CreateTableInputColumnsItem {
     pub name: String,
     pub r#type: CreateTableInputColumnsItemType,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -9148,9 +9766,17 @@ pub struct CreateTableInputColumnsItem {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub default: Option<Option<CreateTableInputColumnsItemDefault>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub primary_key: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub unique: Option<bool>,
     #[serde(
         default,
@@ -9281,11 +9907,19 @@ pub struct CreateUploadInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub path: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub address: Option<String>,
     pub size_bytes: i64,
     pub content_sha256: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub metadata: Option<CreateUploadInputMetadata>,
 }
 impl CreateUploadInput {
@@ -9459,9 +10093,13 @@ pub struct CreateUploadOutputUploadFileUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CreateUploadOutputUploadFileUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: CreateUploadOutputUploadFileUnreadPartsItemFailure,
 }
@@ -9473,18 +10111,23 @@ pub struct CreateUploadOutputUploadFile {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: CreateUploadOutputUploadFileKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: CreateUploadOutputUploadFileStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<CreateUploadOutputUploadFileFailure>,
     pub unread_parts: Vec<CreateUploadOutputUploadFileUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -9501,6 +10144,7 @@ pub struct CreateUploadOutputUpload {
     pub id: String,
     pub knowledge_base_id: String,
     pub path: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub size_bytes: f64,
     pub content_sha256: String,
@@ -9508,8 +10152,11 @@ pub struct CreateUploadOutputUpload {
     pub part_bytes: f64,
     pub part_count: f64,
     pub state: CreateUploadOutputUploadState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub outcome: Option<CreateUploadOutputUploadOutcome>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file: Option<CreateUploadOutputUploadFile>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<CreateUploadOutputUploadFailure>,
     pub created_at: String,
     pub deadline_at: String,
@@ -9672,9 +10319,12 @@ impl DeleteDatabaseOutputCompactionFailureCode {
 pub struct DeleteDatabaseOutputCompaction {
     pub state: DeleteDatabaseOutputCompactionState,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub file_bytes_before: i64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_bytes_after: Option<i64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<DeleteDatabaseOutputCompactionFailureCode>,
 }
 
@@ -9686,11 +10336,15 @@ pub struct DeleteDatabaseOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: DeleteDatabaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub migration_version: f64,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub size: Option<DeleteDatabaseOutputSize>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compaction: Option<DeleteDatabaseOutputCompaction>,
     pub sql_write_preview: bool,
 }
@@ -9794,9 +10448,13 @@ pub struct DeleteFileOutputUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct DeleteFileOutputUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: DeleteFileOutputUnreadPartsItemFailure,
 }
@@ -9808,18 +10466,23 @@ pub struct DeleteFileOutput {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: DeleteFileOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: DeleteFileOutputStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<DeleteFileOutputFailure>,
     pub unread_parts: Vec<DeleteFileOutputUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -9873,7 +10536,9 @@ pub struct DeleteIndexOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: DeleteIndexOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub config: serde_json::Map<String, serde_json::Value>,
     pub narsil_url: String,
@@ -9957,14 +10622,18 @@ pub struct DeleteKnowledgeBaseOutput {
     pub name: String,
     pub language: String,
     pub chunk_tokens: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_retention_days: Option<f64>,
     pub created_at: String,
     pub created_by: DeleteKnowledgeBaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub database_id: String,
     pub live_index_id: String,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub search_pending_since: Option<String>,
 }
 
@@ -10006,6 +10675,7 @@ impl DeleteMemoryOutputSettingsKnowledgeBaseChoice {
 #[non_exhaustive]
 pub struct DeleteMemoryOutputSettingsSubjectsItem {
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub sensitive: bool,
 }
@@ -10121,14 +10791,20 @@ pub struct DeleteMemoryOutputSettings {
     pub first_pack_tokens: f64,
     pub recall_fade_days: f64,
     pub knowledge_base_choice: DeleteMemoryOutputSettingsKnowledgeBaseChoice,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub checked_knowledge_base_ids: Option<Vec<String>>,
     pub subjects: Vec<DeleteMemoryOutputSettingsSubjectsItem>,
     pub sources_for_likely: f64,
     pub agent_permissions: DeleteMemoryOutputSettingsAgentPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub dropped_list_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub message_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub personal_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_log_retention_days: Option<f64>,
     pub ready_set_size: f64,
     pub recall_depth: f64,
@@ -10215,8 +10891,11 @@ pub struct DeleteMemoryOutput {
     pub checked_knowledge_bases: DeleteMemoryOutputCheckedKnowledgeBases,
     pub created_at: String,
     pub created_by: DeleteMemoryOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_pending_since: Option<String>,
 }
 
@@ -10266,11 +10945,17 @@ pub struct DeleteMemorySavedQuestionOutput {
     pub id: String,
     pub question: String,
     pub stored_memory_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_text: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub team_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub flag: Option<DeleteMemorySavedQuestionOutputFlag>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
     pub created_at: String,
 }
@@ -10415,6 +11100,7 @@ impl DeleteMemorySourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct DeleteMemorySourceOutputSignIn {
     pub status: DeleteMemorySourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -10457,20 +11143,28 @@ pub struct DeleteMemorySourceOutputLastError {
 pub struct DeleteMemorySourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: DeleteMemorySourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<DeleteMemorySourceOutputSorting>,
     pub status: DeleteMemorySourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<DeleteMemorySourceOutputSignIn>,
     pub created_at: String,
     pub created_by: DeleteMemorySourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<DeleteMemorySourceOutputLastError>,
 }
 
@@ -10512,9 +11206,12 @@ pub struct DeleteProjectOutput {
     pub id: String,
     pub name: String,
     pub region: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub role: Option<DeleteProjectOutputRole>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub sirannon_url: String,
     pub narsil_url: String,
@@ -10545,6 +11242,7 @@ impl DeleteSavedQueryInput {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct DeleteSavedQueryOutput {
+    #[serde(deserialize_with = "crate::serde_fields::boolean_constant::<_, _, true>")]
     pub deleted: bool,
 }
 
@@ -10729,6 +11427,7 @@ impl DeleteSavedQuestionOutputPassageCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct DeleteSavedQuestionOutputPassageCitationSpreadsheet {
     pub kind: DeleteSavedQuestionOutputPassageCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -10777,7 +11476,9 @@ impl DeleteSavedQuestionOutputPassageCitationWebPageKind {
 #[non_exhaustive]
 pub struct DeleteSavedQuestionOutputPassageCitationWebPage {
     pub kind: DeleteSavedQuestionOutputPassageCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -10846,6 +11547,7 @@ pub struct DeleteSavedQuestionOutputPassageCitationRecording {
     pub kind: DeleteSavedQuestionOutputPassageCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -10907,13 +11609,17 @@ impl From<DeleteSavedQuestionOutputPassageCitationRecording>
 #[non_exhaustive]
 pub struct DeleteSavedQuestionOutputPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<DeleteSavedQuestionOutputPassageFileKind>,
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub state: DeleteSavedQuestionOutputPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<DeleteSavedQuestionOutputPassageCitation>,
 }
 
@@ -10950,8 +11656,10 @@ pub struct DeleteSavedQuestionOutputBrokenPrevious {
 #[non_exhaustive]
 pub struct DeleteSavedQuestionOutputBroken {
     pub change: DeleteSavedQuestionOutputBrokenChange,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub version: Option<f64>,
     pub detected_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub previous: Option<DeleteSavedQuestionOutputBrokenPrevious>,
 }
 
@@ -10962,9 +11670,12 @@ pub struct DeleteSavedQuestionOutput {
     pub question: String,
     pub split: DeleteSavedQuestionOutputSplit,
     pub source: DeleteSavedQuestionOutputSource,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub passage: DeleteSavedQuestionOutputPassage,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub broken: Option<DeleteSavedQuestionOutputBroken>,
     pub created_at: String,
     pub updated_at: String,
@@ -11110,6 +11821,7 @@ impl DeleteSourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct DeleteSourceOutputSignIn {
     pub status: DeleteSourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -11152,20 +11864,28 @@ pub struct DeleteSourceOutputLastError {
 pub struct DeleteSourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: DeleteSourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<DeleteSourceOutputSorting>,
     pub status: DeleteSourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<DeleteSourceOutputSignIn>,
     pub created_at: String,
     pub created_by: DeleteSourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<DeleteSourceOutputLastError>,
 }
 
@@ -11308,7 +12028,11 @@ pub struct DiscardCorrectionInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub correction_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub note: Option<String>,
 }
 impl DiscardCorrectionInput {
@@ -12196,6 +12920,7 @@ pub struct DiscardCorrectionOutputEstimate {
     pub second_index: bool,
     pub chunks_to_index: f64,
     pub questions_to_score: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub price_usd: Option<f64>,
 }
 
@@ -12204,6 +12929,7 @@ pub struct DiscardCorrectionOutputEstimate {
 pub struct DiscardCorrectionOutputBeforeTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -12212,12 +12938,14 @@ pub struct DiscardCorrectionOutputBeforeTuning {
 pub struct DiscardCorrectionOutputBeforeHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct DiscardCorrectionOutputBefore {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: DiscardCorrectionOutputBeforeTuning,
     pub held_back: DiscardCorrectionOutputBeforeHeldBack,
@@ -12228,6 +12956,7 @@ pub struct DiscardCorrectionOutputBefore {
 pub struct DiscardCorrectionOutputAfterTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -12236,12 +12965,14 @@ pub struct DiscardCorrectionOutputAfterTuning {
 pub struct DiscardCorrectionOutputAfterHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct DiscardCorrectionOutputAfter {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: DiscardCorrectionOutputAfterTuning,
     pub held_back: DiscardCorrectionOutputAfterHeldBack,
@@ -12318,25 +13049,36 @@ impl DiscardCorrectionOutputDecidedBy {
 pub struct DiscardCorrectionOutput {
     pub id: String,
     pub origin: DiscardCorrectionOutputOrigin,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause: Option<DiscardCorrectionOutputCause>,
     pub kind: DiscardCorrectionOutputKind,
     pub setting: DiscardCorrectionOutputSetting,
     pub target_ids: Vec<String>,
     pub file_kinds: Vec<DiscardCorrectionOutputFileKindsItem>,
     pub status: DiscardCorrectionOutputStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub estimate: DiscardCorrectionOutputEstimate,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before: Option<DiscardCorrectionOutputBefore>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after: Option<DiscardCorrectionOutputAfter>,
     pub verdict: DiscardCorrectionOutputVerdict,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_changes: Option<DiscardCorrectionOutputQuestionChanges>,
     pub waits_for_click: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub wait_reason: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_by: Option<DiscardCorrectionOutputDecidedBy>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decision_note: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tried_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
 }
 
@@ -12365,6 +13107,7 @@ impl DiscardTableImportInput {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct DiscardTableImportOutput {
+    #[serde(deserialize_with = "crate::serde_fields::boolean_constant::<_, _, true>")]
     pub discarded: bool,
 }
 
@@ -12473,14 +13216,20 @@ impl DismissFlaggedQuestionOutputSettledBy {
 pub struct DismissFlaggedQuestionOutput {
     pub question_id: String,
     pub question: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub status: DismissFlaggedQuestionOutputStatus,
     pub signals: Vec<DismissFlaggedQuestionOutputSignalsItem>,
     pub flagged_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub judged_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub probability: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub chosen_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub saved_question_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_by: Option<DismissFlaggedQuestionOutputSettledBy>,
 }
 
@@ -12861,7 +13610,11 @@ pub struct EnableMemoryInputSubjectsItem {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub owner_id: Option<Option<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sensitive: Option<bool>,
 }
 impl EnableMemoryInputSubjectsItem {
@@ -12951,11 +13704,23 @@ impl EnableMemoryInputAgentPermissionsDisputed {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct EnableMemoryInputAgentPermissions {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub confirmed: Option<EnableMemoryInputAgentPermissionsConfirmed>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub likely: Option<EnableMemoryInputAgentPermissionsLikely>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub disputed: Option<EnableMemoryInputAgentPermissionsDisputed>,
 }
 impl EnableMemoryInputAgentPermissions {
@@ -12987,15 +13752,35 @@ impl EnableMemoryInputAgentPermissions {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct EnableMemoryInputCueWeightsStatementKind {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub statement: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub event: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub promise: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub procedure: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub instruction: Option<NumberOrText>,
 }
 impl EnableMemoryInputCueWeightsStatementKind {
@@ -13039,17 +13824,41 @@ impl EnableMemoryInputCueWeightsStatementKind {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct EnableMemoryInputCueWeightsAuthorKind {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub staff: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub outsider: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub records: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub code: Option<NumberOrText>,
 }
 impl EnableMemoryInputCueWeightsAuthorKind {
@@ -13099,15 +13908,35 @@ impl EnableMemoryInputCueWeightsAuthorKind {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct EnableMemoryInputCueWeights {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub statement_kind: Option<EnableMemoryInputCueWeightsStatementKind>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub author_kind: Option<EnableMemoryInputCueWeightsAuthorKind>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub subject_owner: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub private_channel: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub reactions_for_second_voice: Option<IntegerOrText>,
 }
 impl EnableMemoryInputCueWeights {
@@ -13152,27 +13981,71 @@ impl EnableMemoryInputCueWeights {
 #[non_exhaustive]
 pub struct EnableMemoryInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub language: Option<EnableMemoryInputLanguage>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub knowledge_base_choice: Option<EnableMemoryInputKnowledgeBaseChoice>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub checked_knowledge_base_ids: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub duplicate_threshold: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub confidence_threshold: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agreeing_authors_for_confirmed: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub first_pack_tokens: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub recall_fade_days: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub subjects: Option<Vec<EnableMemoryInputSubjectsItem>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sources_for_likely: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent_permissions: Option<EnableMemoryInputAgentPermissions>,
     #[serde(
         default,
@@ -13204,11 +14077,23 @@ pub struct EnableMemoryInput {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub recall_log_retention_days: Option<Option<IntegerOrText>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub ready_set_size: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub recall_depth: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub cue_weights: Option<EnableMemoryInputCueWeights>,
 }
 impl EnableMemoryInput {
@@ -13356,6 +14241,7 @@ impl EnableMemoryOutputSettingsKnowledgeBaseChoice {
 #[non_exhaustive]
 pub struct EnableMemoryOutputSettingsSubjectsItem {
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub sensitive: bool,
 }
@@ -13471,14 +14357,20 @@ pub struct EnableMemoryOutputSettings {
     pub first_pack_tokens: f64,
     pub recall_fade_days: f64,
     pub knowledge_base_choice: EnableMemoryOutputSettingsKnowledgeBaseChoice,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub checked_knowledge_base_ids: Option<Vec<String>>,
     pub subjects: Vec<EnableMemoryOutputSettingsSubjectsItem>,
     pub sources_for_likely: f64,
     pub agent_permissions: EnableMemoryOutputSettingsAgentPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub dropped_list_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub message_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub personal_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_log_retention_days: Option<f64>,
     pub ready_set_size: f64,
     pub recall_depth: f64,
@@ -13565,8 +14457,11 @@ pub struct EnableMemoryOutput {
     pub checked_knowledge_bases: EnableMemoryOutputCheckedKnowledgeBases,
     pub created_at: String,
     pub created_by: EnableMemoryOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_pending_since: Option<String>,
 }
 
@@ -13617,9 +14512,17 @@ impl ExportIndexRecordsInput {
 pub struct ExportMemoriesInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub after: Option<String>,
 }
 impl ExportMemoriesInput {
@@ -13985,7 +14888,11 @@ impl ExportTableRowsInputSortsItemDirection {
 #[non_exhaustive]
 pub struct ExportTableRowsInputSortsItem {
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ExportTableRowsInputSortsItemDirection>,
 }
 impl ExportTableRowsInputSortsItem {
@@ -14010,9 +14917,17 @@ pub struct ExportTableRowsInput {
     pub database_id: String,
     pub table_name: String,
     pub format: ExportTableRowsInputFormat,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub filters: Option<Vec<ExportTableRowsInputFiltersItem>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sorts: Option<Vec<ExportTableRowsInputSortsItem>>,
 }
 impl ExportTableRowsInput {
@@ -14178,6 +15093,7 @@ impl FinishSourceSignInOutputSignInStatus {
 #[non_exhaustive]
 pub struct FinishSourceSignInOutputSignIn {
     pub status: FinishSourceSignInOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -14220,20 +15136,28 @@ pub struct FinishSourceSignInOutputLastError {
 pub struct FinishSourceSignInOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: FinishSourceSignInOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<FinishSourceSignInOutputSorting>,
     pub status: FinishSourceSignInOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<FinishSourceSignInOutputSignIn>,
     pub created_at: String,
     pub created_by: FinishSourceSignInOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<FinishSourceSignInOutputLastError>,
 }
 
@@ -14355,6 +15279,7 @@ impl ForgetMemoryOutputPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ForgetMemoryOutputPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: ForgetMemoryOutputPlanState,
 }
@@ -14429,12 +15354,14 @@ pub struct ForgetMemoryOutput {
     pub memory_id: String,
     pub r#type: ForgetMemoryOutputType,
     pub scope: ForgetMemoryOutputScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: ForgetMemoryOutputTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<ForgetMemoryOutputPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -14442,11 +15369,17 @@ pub struct ForgetMemoryOutput {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<ForgetMemoryOutputSourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -15339,6 +16272,7 @@ pub struct GetCorrectionOutputEstimate {
     pub second_index: bool,
     pub chunks_to_index: f64,
     pub questions_to_score: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub price_usd: Option<f64>,
 }
 
@@ -15347,6 +16281,7 @@ pub struct GetCorrectionOutputEstimate {
 pub struct GetCorrectionOutputBeforeTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -15355,12 +16290,14 @@ pub struct GetCorrectionOutputBeforeTuning {
 pub struct GetCorrectionOutputBeforeHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetCorrectionOutputBefore {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: GetCorrectionOutputBeforeTuning,
     pub held_back: GetCorrectionOutputBeforeHeldBack,
@@ -15371,6 +16308,7 @@ pub struct GetCorrectionOutputBefore {
 pub struct GetCorrectionOutputAfterTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -15379,12 +16317,14 @@ pub struct GetCorrectionOutputAfterTuning {
 pub struct GetCorrectionOutputAfterHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetCorrectionOutputAfter {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: GetCorrectionOutputAfterTuning,
     pub held_back: GetCorrectionOutputAfterHeldBack,
@@ -15461,25 +16401,36 @@ impl GetCorrectionOutputDecidedBy {
 pub struct GetCorrectionOutput {
     pub id: String,
     pub origin: GetCorrectionOutputOrigin,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause: Option<GetCorrectionOutputCause>,
     pub kind: GetCorrectionOutputKind,
     pub setting: GetCorrectionOutputSetting,
     pub target_ids: Vec<String>,
     pub file_kinds: Vec<GetCorrectionOutputFileKindsItem>,
     pub status: GetCorrectionOutputStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub estimate: GetCorrectionOutputEstimate,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before: Option<GetCorrectionOutputBefore>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after: Option<GetCorrectionOutputAfter>,
     pub verdict: GetCorrectionOutputVerdict,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_changes: Option<GetCorrectionOutputQuestionChanges>,
     pub waits_for_click: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub wait_reason: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_by: Option<GetCorrectionOutputDecidedBy>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decision_note: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tried_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
 }
 
@@ -15573,12 +16524,17 @@ pub struct GetCorrectionPassOutput {
     pub mode: GetCorrectionPassOutputMode,
     pub status: GetCorrectionPassOutputStatus,
     pub complete_index: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before_scorecard_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after_scorecard_id: Option<String>,
     pub correction_ids: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -15705,9 +16661,12 @@ impl GetDatabaseOutputCompactionFailureCode {
 pub struct GetDatabaseOutputCompaction {
     pub state: GetDatabaseOutputCompactionState,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub file_bytes_before: i64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_bytes_after: Option<i64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<GetDatabaseOutputCompactionFailureCode>,
 }
 
@@ -15719,11 +16678,15 @@ pub struct GetDatabaseOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: GetDatabaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub migration_version: f64,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub size: Option<GetDatabaseOutputSize>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compaction: Option<GetDatabaseOutputCompaction>,
     pub sql_write_preview: bool,
 }
@@ -15769,9 +16732,17 @@ pub struct GetDownloadLinkInput {
     pub knowledge_base_id: String,
     pub file_id: String,
     pub version: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub rendition: Option<GetDownloadLinkInputRendition>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub disposition: Option<GetDownloadLinkInputDisposition>,
 }
 impl GetDownloadLinkInput {
@@ -15932,9 +16903,13 @@ pub struct GetFileOutputUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetFileOutputUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: GetFileOutputUnreadPartsItemFailure,
 }
@@ -15983,9 +16958,13 @@ pub struct GetFileOutputVersionsItemUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetFileOutputVersionsItemUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: GetFileOutputVersionsItemUnreadPartsItemFailure,
 }
@@ -15997,12 +16976,18 @@ pub struct GetFileOutputVersionsItem {
     pub content_sha256: String,
     pub size_bytes: f64,
     pub status: GetFileOutputVersionsItemStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<GetFileOutputVersionsItemFailure>,
     pub received_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub processed_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub page_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub duration_seconds: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub conversion_seconds: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub ocr_page_count: Option<f64>,
     pub unread_parts: Vec<GetFileOutputVersionsItemUnreadPartsItem>,
     pub block_count: f64,
@@ -16016,18 +17001,23 @@ pub struct GetFileOutput {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: GetFileOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: GetFileOutputStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<GetFileOutputFailure>,
     pub unread_parts: Vec<GetFileOutputUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub versions: Vec<GetFileOutputVersionsItem>,
     pub version_count: f64,
@@ -16204,7 +17194,9 @@ impl GetFlaggedQuestionOutputAnswerAnsweredBy {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetFlaggedQuestionOutputAnswer {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub answer: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub follow_up: Option<String>,
     pub cited_chunk_ids: Vec<String>,
     pub answered_by: GetFlaggedQuestionOutputAnswerAnsweredBy,
@@ -16310,6 +17302,7 @@ impl GetFlaggedQuestionOutputReturnedPassagesItemCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct GetFlaggedQuestionOutputReturnedPassagesItemCitationSpreadsheet {
     pub kind: GetFlaggedQuestionOutputReturnedPassagesItemCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -16358,7 +17351,9 @@ impl GetFlaggedQuestionOutputReturnedPassagesItemCitationWebPageKind {
 #[non_exhaustive]
 pub struct GetFlaggedQuestionOutputReturnedPassagesItemCitationWebPage {
     pub kind: GetFlaggedQuestionOutputReturnedPassagesItemCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -16427,6 +17422,7 @@ pub struct GetFlaggedQuestionOutputReturnedPassagesItemCitationRecording {
     pub kind: GetFlaggedQuestionOutputReturnedPassagesItemCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -16490,10 +17486,14 @@ pub struct GetFlaggedQuestionOutputReturnedPassagesItem {
     pub rank: f64,
     pub chunk_id: String,
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<GetFlaggedQuestionOutputReturnedPassagesItemFileKind>,
     pub version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<GetFlaggedQuestionOutputReturnedPassagesItemCitation>,
 }
 
@@ -16596,6 +17596,7 @@ impl GetFlaggedQuestionOutputCandidatesItemCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct GetFlaggedQuestionOutputCandidatesItemCitationSpreadsheet {
     pub kind: GetFlaggedQuestionOutputCandidatesItemCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -16644,7 +17645,9 @@ impl GetFlaggedQuestionOutputCandidatesItemCitationWebPageKind {
 #[non_exhaustive]
 pub struct GetFlaggedQuestionOutputCandidatesItemCitationWebPage {
     pub kind: GetFlaggedQuestionOutputCandidatesItemCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -16713,6 +17716,7 @@ pub struct GetFlaggedQuestionOutputCandidatesItemCitationRecording {
     pub kind: GetFlaggedQuestionOutputCandidatesItemCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -16779,11 +17783,16 @@ pub struct GetFlaggedQuestionOutputCandidatesItem {
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub probability: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<GetFlaggedQuestionOutputCandidatesItemFileKind>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub latest_version: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<GetFlaggedQuestionOutputCandidatesItemCitation>,
 }
 
@@ -16792,19 +17801,27 @@ pub struct GetFlaggedQuestionOutputCandidatesItem {
 pub struct GetFlaggedQuestionOutput {
     pub question_id: String,
     pub question: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub status: GetFlaggedQuestionOutputStatus,
     pub signals: Vec<GetFlaggedQuestionOutputSignalsItem>,
     pub flagged_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub judged_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub probability: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub chosen_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub saved_question_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_by: Option<GetFlaggedQuestionOutputSettledBy>,
     pub signal_details: Vec<GetFlaggedQuestionOutputSignalDetailsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub answer: Option<GetFlaggedQuestionOutputAnswer>,
     pub returned_passages: Vec<GetFlaggedQuestionOutputReturnedPassagesItem>,
     pub candidates: Vec<GetFlaggedQuestionOutputCandidatesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub none_probability: Option<f64>,
     pub answer_read: bool,
 }
@@ -16859,7 +17876,9 @@ pub struct GetIndexOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: GetIndexOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub config: serde_json::Map<String, serde_json::Value>,
     pub narsil_url: String,
@@ -16922,6 +17941,7 @@ pub struct GetIndexStatsOutputFieldsItem {
 pub struct GetIndexStatsOutputVectorFieldsItem {
     pub path: String,
     pub dimensions: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub embedding_model: Option<String>,
     pub source_fields: Vec<String>,
 }
@@ -16931,8 +17951,10 @@ pub struct GetIndexStatsOutputVectorFieldsItem {
 pub struct GetIndexStatsOutput {
     pub record_count: f64,
     pub partition_count: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub estimated_memory_bytes: Option<f64>,
     pub language: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub stop_words: Option<Vec<String>>,
     pub fields: Vec<GetIndexStatsOutputFieldsItem>,
     pub vector_fields: Vec<GetIndexStatsOutputVectorFieldsItem>,
@@ -16988,6 +18010,7 @@ pub struct GetKnowledgeBaseOutputFileProgress {
     pub processing_count: f64,
     pub ready_count: f64,
     pub failed_count: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_read_at: Option<String>,
 }
 
@@ -16999,15 +18022,20 @@ pub struct GetKnowledgeBaseOutput {
     pub name: String,
     pub language: String,
     pub chunk_tokens: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_retention_days: Option<f64>,
     pub created_at: String,
     pub created_by: GetKnowledgeBaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub database_id: String,
     pub live_index_id: String,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub search_pending_since: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_progress: Option<GetKnowledgeBaseOutputFileProgress>,
 }
 
@@ -17033,7 +18061,11 @@ impl GetMemoryInputState {
 #[non_exhaustive]
 pub struct GetMemoryInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<GetMemoryInputState>,
 }
 impl GetMemoryInput {
@@ -17073,6 +18105,7 @@ impl GetMemoryOutputSettingsKnowledgeBaseChoice {
 #[non_exhaustive]
 pub struct GetMemoryOutputSettingsSubjectsItem {
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub sensitive: bool,
 }
@@ -17188,14 +18221,20 @@ pub struct GetMemoryOutputSettings {
     pub first_pack_tokens: f64,
     pub recall_fade_days: f64,
     pub knowledge_base_choice: GetMemoryOutputSettingsKnowledgeBaseChoice,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub checked_knowledge_base_ids: Option<Vec<String>>,
     pub subjects: Vec<GetMemoryOutputSettingsSubjectsItem>,
     pub sources_for_likely: f64,
     pub agent_permissions: GetMemoryOutputSettingsAgentPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub dropped_list_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub message_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub personal_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_log_retention_days: Option<f64>,
     pub ready_set_size: f64,
     pub recall_depth: f64,
@@ -17292,9 +18331,13 @@ pub struct GetMemoryOutput {
     pub checked_knowledge_bases: GetMemoryOutputCheckedKnowledgeBases,
     pub created_at: String,
     pub created_by: GetMemoryOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_pending_since: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub progress: Option<GetMemoryOutputProgress>,
 }
 
@@ -17303,13 +18346,29 @@ pub struct GetMemoryOutput {
 pub struct GetMemoryContextInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub as_of: Option<String>,
 }
 impl GetMemoryContextInput {
@@ -17418,6 +18477,7 @@ impl GetMemoryContextOutputMemoriesItemPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetMemoryContextOutputMemoriesItemPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: GetMemoryContextOutputMemoriesItemPlanState,
 }
@@ -17582,7 +18642,9 @@ pub struct GetMemoryContextOutputMemoriesItemSourcesItem {
 #[non_exhaustive]
 pub struct GetMemoryContextOutputMemoriesItemHolds {
     pub from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
 }
 
@@ -17617,6 +18679,7 @@ pub struct GetMemoryContextOutputMemoriesItemReplacesItem {
     pub text: String,
     pub trust_level: GetMemoryContextOutputMemoriesItemReplacesItemTrustLevel,
     pub held_from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
 }
 
@@ -17651,6 +18714,7 @@ pub struct GetMemoryContextOutputMemoriesItemReplacedBy {
     pub text: String,
     pub trust_level: GetMemoryContextOutputMemoriesItemReplacedByTrustLevel,
     pub held_from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
 }
 
@@ -17787,8 +18851,11 @@ pub struct GetMemoryContextOutputMemoriesItemConflictsWithItemFile {
     pub kind: GetMemoryContextOutputMemoriesItemConflictsWithItemFileKind,
     pub text: String,
     pub recorded_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
     pub resolution: GetMemoryContextOutputMemoriesItemConflictsWithItemFileResolution,
 }
@@ -17927,12 +18994,15 @@ pub struct GetMemoryContextOutputMemoriesItem {
     pub memory_id: String,
     pub r#type: GetMemoryContextOutputMemoriesItemType,
     pub scope: GetMemoryContextOutputMemoriesItemScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub subject_owner_id: Option<String>,
     pub text: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<GetMemoryContextOutputMemoriesItemPlan>,
     pub trust_level: GetMemoryContextOutputMemoriesItemTrustLevel,
     pub trust_reasons: Vec<GetMemoryContextOutputMemoriesItemTrustReasonsItem>,
@@ -17940,19 +19010,23 @@ pub struct GetMemoryContextOutputMemoriesItem {
     pub sources: Vec<GetMemoryContextOutputMemoriesItemSourcesItem>,
     pub holds: GetMemoryContextOutputMemoriesItemHolds,
     pub replaces: Vec<GetMemoryContextOutputMemoriesItemReplacesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<GetMemoryContextOutputMemoriesItemReplacedBy>,
     pub conflicts_with: Vec<GetMemoryContextOutputMemoriesItemConflictsWithItem>,
     pub connection_strength: f64,
     pub recall_strength: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
     pub check: GetMemoryContextOutputMemoriesItemCheck,
     pub sorted_by: GetMemoryContextOutputMemoriesItemSortedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_probability: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetMemoryContextOutput {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_id: Option<String>,
     pub duration_ms: f64,
     pub memories: Vec<GetMemoryContextOutputMemoriesItem>,
@@ -18031,15 +19105,20 @@ pub struct GetMemoryScoresOutputTuning {
     pub labelled_decisions_since_tuning: f64,
     pub labelled_decisions_per_tuning: f64,
     pub saved_questions_changed: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_changes_since_scoring: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tuned_at: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetMemoryScoresOutput {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall: Option<GetMemoryScoresOutputRecall>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub judgement: Option<GetMemoryScoresOutputJudgement>,
     pub labelled_decisions: GetMemoryScoresOutputLabelledDecisions,
     pub flagged_question_count: f64,
@@ -18187,6 +19266,7 @@ impl GetMemorySourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct GetMemorySourceOutputSignIn {
     pub status: GetMemorySourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -18229,20 +19309,28 @@ pub struct GetMemorySourceOutputLastError {
 pub struct GetMemorySourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: GetMemorySourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<GetMemorySourceOutputSorting>,
     pub status: GetMemorySourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<GetMemorySourceOutputSignIn>,
     pub created_at: String,
     pub created_by: GetMemorySourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<GetMemorySourceOutputLastError>,
 }
 
@@ -18277,7 +19365,11 @@ pub struct GetMessageInput {
     pub memory_id: String,
     pub source_id: String,
     pub external_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub version: Option<String>,
 }
 impl GetMessageInput {
@@ -18382,8 +19474,10 @@ impl GetMessageOutputTurnsItemAuthorKind {
 #[non_exhaustive]
 pub struct GetMessageOutputTurnsItem {
     pub author: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub author_kind: Option<GetMessageOutputTurnsItemAuthorKind>,
     pub text: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sent_at: Option<String>,
 }
 
@@ -18442,6 +19536,7 @@ pub struct GetMessageOutputMemoriesItem {
     pub r#type: GetMessageOutputMemoriesItemType,
     pub text: String,
     pub trust_level: GetMessageOutputMemoriesItemTrustLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
 }
 
@@ -18456,13 +19551,18 @@ pub struct GetMessageOutput {
     pub state: GetMessageOutputState,
     pub attempts: f64,
     pub memories_written: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<String>,
     pub received_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub kind: GetMessageOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub title: Option<String>,
     pub turns: Vec<GetMessageOutputTurnsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub team_id: Option<String>,
     pub private: bool,
     pub memories: Vec<GetMessageOutputMemoriesItem>,
@@ -18507,9 +19607,12 @@ pub struct GetProjectOutput {
     pub id: String,
     pub name: String,
     pub region: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub role: Option<GetProjectOutputRole>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub sirannon_url: String,
     pub narsil_url: String,
@@ -18722,8 +19825,11 @@ impl GetQuestionSetOutputLatestScorecardStatus {
 pub struct GetQuestionSetOutputLatestScorecardTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -18732,8 +19838,11 @@ pub struct GetQuestionSetOutputLatestScorecardTuning {
 pub struct GetQuestionSetOutputLatestScorecardHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -18891,19 +20000,31 @@ pub struct GetQuestionSetOutputLatestScorecard {
     pub purpose: GetQuestionSetOutputLatestScorecardPurpose,
     pub status: GetQuestionSetOutputLatestScorecardStatus,
     pub waiting_for_search: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub depth: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub passed_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tuning: Option<GetQuestionSetOutputLatestScorecardTuning>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_back: Option<GetQuestionSetOutputLatestScorecardHeldBack>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub configuration: Option<GetQuestionSetOutputLatestScorecardConfiguration>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -18975,12 +20096,17 @@ pub struct GetQuestionSetOutputOpenPass {
     pub mode: GetQuestionSetOutputOpenPassMode,
     pub status: GetQuestionSetOutputOpenPassStatus,
     pub complete_index: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before_scorecard_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after_scorecard_id: Option<String>,
     pub correction_ids: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -19052,12 +20178,17 @@ pub struct GetQuestionSetOutputLatestPass {
     pub mode: GetQuestionSetOutputLatestPassMode,
     pub status: GetQuestionSetOutputLatestPassStatus,
     pub complete_index: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before_scorecard_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after_scorecard_id: Option<String>,
     pub correction_ids: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -19069,6 +20200,7 @@ pub struct GetQuestionSetOutput {
     pub held_back: f64,
     pub broken: f64,
     pub unconfirmed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub split_seed: Option<String>,
     pub held_back_percent: f64,
     pub agent_depth: f64,
@@ -19077,8 +20209,11 @@ pub struct GetQuestionSetOutput {
     pub judge_threshold: f64,
     pub flagged: GetQuestionSetOutputFlagged,
     pub settings: GetQuestionSetOutputSettings,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub latest_scorecard: Option<GetQuestionSetOutputLatestScorecard>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub open_pass: Option<GetQuestionSetOutputOpenPass>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub latest_pass: Option<GetQuestionSetOutputLatestPass>,
 }
 
@@ -19263,6 +20398,7 @@ impl GetSavedQuestionOutputPassageCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct GetSavedQuestionOutputPassageCitationSpreadsheet {
     pub kind: GetSavedQuestionOutputPassageCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -19311,7 +20447,9 @@ impl GetSavedQuestionOutputPassageCitationWebPageKind {
 #[non_exhaustive]
 pub struct GetSavedQuestionOutputPassageCitationWebPage {
     pub kind: GetSavedQuestionOutputPassageCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -19380,6 +20518,7 @@ pub struct GetSavedQuestionOutputPassageCitationRecording {
     pub kind: GetSavedQuestionOutputPassageCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -19433,13 +20572,17 @@ impl From<GetSavedQuestionOutputPassageCitationRecording>
 #[non_exhaustive]
 pub struct GetSavedQuestionOutputPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<GetSavedQuestionOutputPassageFileKind>,
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub state: GetSavedQuestionOutputPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<GetSavedQuestionOutputPassageCitation>,
 }
 
@@ -19476,8 +20619,10 @@ pub struct GetSavedQuestionOutputBrokenPrevious {
 #[non_exhaustive]
 pub struct GetSavedQuestionOutputBroken {
     pub change: GetSavedQuestionOutputBrokenChange,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub version: Option<f64>,
     pub detected_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub previous: Option<GetSavedQuestionOutputBrokenPrevious>,
 }
 
@@ -19488,9 +20633,12 @@ pub struct GetSavedQuestionOutput {
     pub question: String,
     pub split: GetSavedQuestionOutputSplit,
     pub source: GetSavedQuestionOutputSource,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub passage: GetSavedQuestionOutputPassage,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub broken: Option<GetSavedQuestionOutputBroken>,
     pub created_at: String,
     pub updated_at: String,
@@ -19568,8 +20716,11 @@ impl GetScorecardOutputStatus {
 pub struct GetScorecardOutputTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -19578,8 +20729,11 @@ pub struct GetScorecardOutputTuning {
 pub struct GetScorecardOutputHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -19733,19 +20887,31 @@ pub struct GetScorecardOutput {
     pub purpose: GetScorecardOutputPurpose,
     pub status: GetScorecardOutputStatus,
     pub waiting_for_search: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub depth: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub passed_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tuning: Option<GetScorecardOutputTuning>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_back: Option<GetScorecardOutputHeldBack>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub configuration: Option<GetScorecardOutputConfiguration>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -19788,6 +20954,7 @@ pub struct GetSessionOutputAccount {
     pub name: String,
     pub status: GetSessionOutputAccountStatus,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
     pub is_operator: bool,
 }
@@ -19940,6 +21107,7 @@ impl GetSourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct GetSourceOutputSignIn {
     pub status: GetSourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -19982,20 +21150,28 @@ pub struct GetSourceOutputLastError {
 pub struct GetSourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: GetSourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<GetSourceOutputSorting>,
     pub status: GetSourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<GetSourceOutputSignIn>,
     pub created_at: String,
     pub created_by: GetSourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<GetSourceOutputLastError>,
 }
 
@@ -20269,6 +21445,7 @@ impl From<&str> for GetTableRowOutputRowCellsItem {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetTableRowOutputRow {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub key: Option<Vec<Option<GetTableRowOutputRowKeyItem>>>,
     pub cells: Vec<Option<GetTableRowOutputRowCellsItem>>,
 }
@@ -20441,9 +21618,13 @@ pub struct GetUploadOutputFileUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetUploadOutputFileUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: GetUploadOutputFileUnreadPartsItemFailure,
 }
@@ -20455,18 +21636,23 @@ pub struct GetUploadOutputFile {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: GetUploadOutputFileKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: GetUploadOutputFileStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<GetUploadOutputFileFailure>,
     pub unread_parts: Vec<GetUploadOutputFileUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -20483,6 +21669,7 @@ pub struct GetUploadOutput {
     pub id: String,
     pub knowledge_base_id: String,
     pub path: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub size_bytes: f64,
     pub content_sha256: String,
@@ -20490,8 +21677,11 @@ pub struct GetUploadOutput {
     pub part_bytes: f64,
     pub part_count: f64,
     pub state: GetUploadOutputState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub outcome: Option<GetUploadOutputOutcome>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file: Option<GetUploadOutputFile>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<GetUploadOutputFailure>,
     pub created_at: String,
     pub deadline_at: String,
@@ -20517,6 +21707,7 @@ impl ImportAnswerLogInput {
 #[non_exhaustive]
 pub struct ImportAnswerLogOutputRefusedItem {
     pub line: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_id: Option<String>,
     pub reason: String,
 }
@@ -20575,7 +21766,9 @@ impl ImportIndexRecordsInput {
 #[non_exhaustive]
 pub struct ImportIndexRecordsOutputFailuresItem {
     pub position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub line: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub record_id: Option<String>,
     pub reason: String,
 }
@@ -20614,7 +21807,11 @@ impl ImportSavedQuestionsInputFormat {
 pub struct ImportSavedQuestionsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub format: Option<ImportSavedQuestionsInputFormat>,
 }
 impl ImportSavedQuestionsInput {
@@ -20800,6 +21997,7 @@ impl ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationSpreadsheetKind 
 #[non_exhaustive]
 pub struct ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationSpreadsheet {
     pub kind: ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -20848,7 +22046,9 @@ impl ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationWebPageKind {
 #[non_exhaustive]
 pub struct ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationWebPage {
     pub kind: ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -20918,6 +22118,7 @@ pub struct ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationRecording 
     pub kind: ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -20979,13 +22180,17 @@ impl From<ImportSavedQuestionsOutputSavedQuestionsItemPassageCitationRecording>
 #[non_exhaustive]
 pub struct ImportSavedQuestionsOutputSavedQuestionsItemPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<ImportSavedQuestionsOutputSavedQuestionsItemPassageFileKind>,
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub state: ImportSavedQuestionsOutputSavedQuestionsItemPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<ImportSavedQuestionsOutputSavedQuestionsItemPassageCitation>,
 }
 
@@ -21022,8 +22227,10 @@ pub struct ImportSavedQuestionsOutputSavedQuestionsItemBrokenPrevious {
 #[non_exhaustive]
 pub struct ImportSavedQuestionsOutputSavedQuestionsItemBroken {
     pub change: ImportSavedQuestionsOutputSavedQuestionsItemBrokenChange,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub version: Option<f64>,
     pub detected_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub previous: Option<ImportSavedQuestionsOutputSavedQuestionsItemBrokenPrevious>,
 }
 
@@ -21034,9 +22241,12 @@ pub struct ImportSavedQuestionsOutputSavedQuestionsItem {
     pub question: String,
     pub split: ImportSavedQuestionsOutputSavedQuestionsItemSplit,
     pub source: ImportSavedQuestionsOutputSavedQuestionsItemSource,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub passage: ImportSavedQuestionsOutputSavedQuestionsItemPassage,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub broken: Option<ImportSavedQuestionsOutputSavedQuestionsItemBroken>,
     pub created_at: String,
     pub updated_at: String,
@@ -21095,14 +22305,30 @@ impl IngestItemsInputItemsItemConversationTurnsItemSpeakerKind {
 #[non_exhaustive]
 pub struct IngestItemsInputItemsItemConversationTurnsItem {
     pub speaker: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub speaker_kind: Option<IngestItemsInputItemsItemConversationTurnsItemSpeakerKind>,
     pub text: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub start_second: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_second: Option<f64>,
 }
 impl IngestItemsInputItemsItemConversationTurnsItem {
@@ -21148,17 +22374,41 @@ pub struct IngestItemsInputItemsItemConversation {
     pub kind: IngestItemsInputItemsItemConversationKind,
     pub external_id: String,
     pub version: i64,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub title: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub address: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub occurred_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub private: Option<bool>,
     pub turns: Vec<IngestItemsInputItemsItemConversationTurnsItem>,
 }
@@ -21262,24 +22512,56 @@ pub struct IngestItemsInputItemsItemMessage {
     pub external_id: String,
     pub version: i64,
     pub conversation_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub conversation_title: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub address: Option<String>,
     pub author: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub author_kind: Option<IngestItemsInputItemsItemMessageAuthorKind>,
     pub text: String,
     pub sent_at: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub reply_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub reactions: Option<i64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub private: Option<bool>,
 }
 impl IngestItemsInputItemsItemMessage {
@@ -21375,11 +22657,23 @@ pub struct IngestItemsInputItemsItemRecord {
     pub kind: IngestItemsInputItemsItemRecordKind,
     pub external_id: String,
     pub version: i64,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub title: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub address: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
     pub fields: BTreeMap<String, Option<NumberOrBooleanOrText>>,
 }
@@ -21819,6 +23113,7 @@ impl From<&str> for InsertTableRowOutputRowCellsItem {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct InsertTableRowOutputRow {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub key: Option<Vec<Option<InsertTableRowOutputRowKeyItem>>>,
     pub cells: Vec<Option<InsertTableRowOutputRowCellsItem>>,
 }
@@ -21907,7 +23202,9 @@ impl From<&str> for InsertTableRowOutputReturnedKeyItem {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct InsertTableRowOutput {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub row: Option<InsertTableRowOutputRow>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub returned_key: Option<Vec<Option<InsertTableRowOutputReturnedKeyItem>>>,
 }
 
@@ -22029,6 +23326,7 @@ impl InspectMemoryOutputPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct InspectMemoryOutputPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: InspectMemoryOutputPlanState,
 }
@@ -22242,7 +23540,9 @@ pub struct InspectMemoryOutputDecisionsItem {
     pub step: String,
     pub decided_by: InspectMemoryOutputDecisionsItemDecidedBy,
     pub choice: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub probability: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory: Option<InspectMemoryOutputDecisionsItemMemory>,
     pub created_at: String,
 }
@@ -22328,9 +23628,12 @@ pub struct InspectMemoryOutputReviewsItem {
     pub reason: InspectMemoryOutputReviewsItemReason,
     pub state: InspectMemoryOutputReviewsItemState,
     pub evidence: serde_json::Map<String, serde_json::Value>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_trust_level: Option<InspectMemoryOutputReviewsItemSettledTrustLevel>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_by: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_at: Option<String>,
 }
 
@@ -22341,12 +23644,14 @@ pub struct InspectMemoryOutput {
     pub memory_id: String,
     pub r#type: InspectMemoryOutputType,
     pub scope: InspectMemoryOutputScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: InspectMemoryOutputTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<InspectMemoryOutputPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -22354,11 +23659,17 @@ pub struct InspectMemoryOutput {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<InspectMemoryOutputSourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -22392,7 +23703,11 @@ impl InviteMemberInputRole {
 pub struct InviteMemberInput {
     pub project_id: String,
     pub email: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub role: Option<InviteMemberInputRole>,
 }
 impl InviteMemberInput {
@@ -22439,7 +23754,9 @@ pub struct InviteMemberOutputInvitation {
     pub role: InviteMemberOutputInvitationRole,
     pub created_at: String,
     pub expires_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub accepted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub revoked_at: Option<String>,
 }
 
@@ -22454,9 +23771,17 @@ pub struct InviteMemberOutput {
 pub struct ListApiKeyPermissionChangesInput {
     pub project_id: String,
     pub key_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListApiKeyPermissionChangesInput {
@@ -22524,6 +23849,7 @@ impl ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeDatabasesLevel
 #[non_exhaustive]
 pub struct ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeDatabases {
     pub level: ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeDatabasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22552,6 +23878,7 @@ impl ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeIndexesLevel {
 #[non_exhaustive]
 pub struct ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeIndexes {
     pub level: ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeIndexesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22580,6 +23907,7 @@ impl ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeKnowledgeBases
 #[non_exhaustive]
 pub struct ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeKnowledgeBases {
     pub level: ListApiKeyPermissionChangesOutputChangesItemPermissionsBeforeKnowledgeBasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22664,6 +23992,7 @@ impl ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterDatabasesLevel 
 #[non_exhaustive]
 pub struct ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterDatabases {
     pub level: ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterDatabasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22692,6 +24021,7 @@ impl ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterIndexesLevel {
 #[non_exhaustive]
 pub struct ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterIndexes {
     pub level: ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterIndexesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22720,6 +24050,7 @@ impl ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterKnowledgeBasesL
 #[non_exhaustive]
 pub struct ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterKnowledgeBases {
     pub level: ListApiKeyPermissionChangesOutputChangesItemPermissionsAfterKnowledgeBasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22768,6 +24099,7 @@ pub struct ListApiKeyPermissionChangesOutputChangesItem {
     pub changed_by: String,
     pub changed_by_name: String,
     pub changed_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_before: Option<ListApiKeyPermissionChangesOutputChangesItemPermissionsBefore>,
     pub permissions_after: ListApiKeyPermissionChangesOutputChangesItemPermissionsAfter,
 }
@@ -22821,21 +24153,53 @@ impl ListApiKeysInputDirection {
 #[non_exhaustive]
 pub struct ListApiKeysInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub status: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_from: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListApiKeysInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListApiKeysInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListApiKeysInput {
@@ -22938,6 +24302,7 @@ impl ListApiKeysOutputApiKeysItemPermissionsDatabasesLevel {
 #[non_exhaustive]
 pub struct ListApiKeysOutputApiKeysItemPermissionsDatabases {
     pub level: ListApiKeysOutputApiKeysItemPermissionsDatabasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22966,6 +24331,7 @@ impl ListApiKeysOutputApiKeysItemPermissionsIndexesLevel {
 #[non_exhaustive]
 pub struct ListApiKeysOutputApiKeysItemPermissionsIndexes {
     pub level: ListApiKeysOutputApiKeysItemPermissionsIndexesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -22994,6 +24360,7 @@ impl ListApiKeysOutputApiKeysItemPermissionsKnowledgeBasesLevel {
 #[non_exhaustive]
 pub struct ListApiKeysOutputApiKeysItemPermissionsKnowledgeBases {
     pub level: ListApiKeysOutputApiKeysItemPermissionsKnowledgeBasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -23042,13 +24409,18 @@ pub struct ListApiKeysOutputApiKeysItem {
     pub name: String,
     pub display_prefix: String,
     pub permissions: ListApiKeysOutputApiKeysItemPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_by_name: Option<String>,
     pub created_by: String,
     pub created_by_name: String,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_used_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub revoked_at: Option<String>,
 }
 
@@ -23084,11 +24456,23 @@ impl ListCorrectionPassesInputDirection {
 pub struct ListCorrectionPassesInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListCorrectionPassesInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListCorrectionPassesInput {
@@ -23187,12 +24571,17 @@ pub struct ListCorrectionPassesOutputPassesItem {
     pub mode: ListCorrectionPassesOutputPassesItemMode,
     pub status: ListCorrectionPassesOutputPassesItemStatus,
     pub complete_index: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before_scorecard_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after_scorecard_id: Option<String>,
     pub correction_ids: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -23228,17 +24617,41 @@ impl ListCorrectionsInputDirection {
 pub struct ListCorrectionsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub pass_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub status: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub kind: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListCorrectionsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListCorrectionsInput {
@@ -24171,6 +25584,7 @@ pub struct ListCorrectionsOutputCorrectionsItemEstimate {
     pub second_index: bool,
     pub chunks_to_index: f64,
     pub questions_to_score: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub price_usd: Option<f64>,
 }
 
@@ -24179,6 +25593,7 @@ pub struct ListCorrectionsOutputCorrectionsItemEstimate {
 pub struct ListCorrectionsOutputCorrectionsItemBeforeTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -24187,12 +25602,14 @@ pub struct ListCorrectionsOutputCorrectionsItemBeforeTuning {
 pub struct ListCorrectionsOutputCorrectionsItemBeforeHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListCorrectionsOutputCorrectionsItemBefore {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: ListCorrectionsOutputCorrectionsItemBeforeTuning,
     pub held_back: ListCorrectionsOutputCorrectionsItemBeforeHeldBack,
@@ -24203,6 +25620,7 @@ pub struct ListCorrectionsOutputCorrectionsItemBefore {
 pub struct ListCorrectionsOutputCorrectionsItemAfterTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -24211,12 +25629,14 @@ pub struct ListCorrectionsOutputCorrectionsItemAfterTuning {
 pub struct ListCorrectionsOutputCorrectionsItemAfterHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListCorrectionsOutputCorrectionsItemAfter {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: ListCorrectionsOutputCorrectionsItemAfterTuning,
     pub held_back: ListCorrectionsOutputCorrectionsItemAfterHeldBack,
@@ -24293,25 +25713,36 @@ impl ListCorrectionsOutputCorrectionsItemDecidedBy {
 pub struct ListCorrectionsOutputCorrectionsItem {
     pub id: String,
     pub origin: ListCorrectionsOutputCorrectionsItemOrigin,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause: Option<ListCorrectionsOutputCorrectionsItemCause>,
     pub kind: ListCorrectionsOutputCorrectionsItemKind,
     pub setting: ListCorrectionsOutputCorrectionsItemSetting,
     pub target_ids: Vec<String>,
     pub file_kinds: Vec<ListCorrectionsOutputCorrectionsItemFileKindsItem>,
     pub status: ListCorrectionsOutputCorrectionsItemStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub estimate: ListCorrectionsOutputCorrectionsItemEstimate,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before: Option<ListCorrectionsOutputCorrectionsItemBefore>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after: Option<ListCorrectionsOutputCorrectionsItemAfter>,
     pub verdict: ListCorrectionsOutputCorrectionsItemVerdict,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_changes: Option<ListCorrectionsOutputCorrectionsItemQuestionChanges>,
     pub waits_for_click: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub wait_reason: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_by: Option<ListCorrectionsOutputCorrectionsItemDecidedBy>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decision_note: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tried_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
 }
 
@@ -24395,6 +25826,7 @@ pub struct ListDatabaseTablesOutputTablesItemColumnsItem {
     pub name: String,
     pub declared_type: String,
     pub not_null: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub default_sql: Option<String>,
     pub primary_key_position: f64,
     pub generated: bool,
@@ -24423,8 +25855,10 @@ pub struct ListDatabaseTablesOutputTablesItemIndexesItem {
 pub struct ListDatabaseTablesOutputTablesItem {
     pub name: String,
     pub kind: ListDatabaseTablesOutputTablesItemKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sql: Option<String>,
     pub columns: Vec<ListDatabaseTablesOutputTablesItemColumnsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub row_key: Option<Vec<String>>,
     pub foreign_keys: Vec<ListDatabaseTablesOutputTablesItemForeignKeysItem>,
     pub indexes: Vec<ListDatabaseTablesOutputTablesItemIndexesItem>,
@@ -24497,23 +25931,59 @@ impl ListDatabasesInputDirection {
 #[non_exhaustive]
 pub struct ListDatabasesInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<ListDatabasesInputState>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub creator: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_from: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListDatabasesInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListDatabasesInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListDatabasesInput {
@@ -24686,9 +26156,12 @@ impl ListDatabasesOutputDatabasesItemCompactionFailureCode {
 pub struct ListDatabasesOutputDatabasesItemCompaction {
     pub state: ListDatabasesOutputDatabasesItemCompactionState,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub file_bytes_before: i64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_bytes_after: Option<i64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<ListDatabasesOutputDatabasesItemCompactionFailureCode>,
 }
 
@@ -24700,11 +26173,15 @@ pub struct ListDatabasesOutputDatabasesItem {
     pub name: String,
     pub created_at: String,
     pub created_by: ListDatabasesOutputDatabasesItemCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub migration_version: f64,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub size: Option<ListDatabasesOutputDatabasesItemSize>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compaction: Option<ListDatabasesOutputDatabasesItemCompaction>,
     pub sql_write_preview: bool,
 }
@@ -24742,11 +26219,23 @@ pub struct ListFileVersionsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub file_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListFileVersionsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListFileVersionsInput {
@@ -24826,9 +26315,13 @@ pub struct ListFileVersionsOutputVersionsItemUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListFileVersionsOutputVersionsItemUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: ListFileVersionsOutputVersionsItemUnreadPartsItemFailure,
 }
@@ -24840,12 +26333,18 @@ pub struct ListFileVersionsOutputVersionsItem {
     pub content_sha256: String,
     pub size_bytes: f64,
     pub status: ListFileVersionsOutputVersionsItemStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<ListFileVersionsOutputVersionsItemFailure>,
     pub received_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub processed_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub page_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub duration_seconds: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub conversion_seconds: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub ocr_page_count: Option<f64>,
     pub unread_parts: Vec<ListFileVersionsOutputVersionsItemUnreadPartsItem>,
     pub block_count: f64,
@@ -24929,21 +26428,53 @@ impl ListFilesInputDirection {
 pub struct ListFilesInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<ListFilesInputState>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub kind: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub status: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListFilesInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListFilesInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListFilesInput {
@@ -25081,9 +26612,13 @@ pub struct ListFilesOutputFilesItemUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListFilesOutputFilesItemUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: ListFilesOutputFilesItemUnreadPartsItemFailure,
 }
@@ -25095,18 +26630,23 @@ pub struct ListFilesOutputFilesItem {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: ListFilesOutputFilesItemKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: ListFilesOutputFilesItemStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<ListFilesOutputFilesItemFailure>,
     pub unread_parts: Vec<ListFilesOutputFilesItemUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -25142,13 +26682,29 @@ impl ListFlaggedQuestionsInputDirection {
 pub struct ListFlaggedQuestionsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub status: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListFlaggedQuestionsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListFlaggedQuestionsInput {
@@ -25268,14 +26824,20 @@ impl ListFlaggedQuestionsOutputFlaggedQuestionsItemSettledBy {
 pub struct ListFlaggedQuestionsOutputFlaggedQuestionsItem {
     pub question_id: String,
     pub question: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub status: ListFlaggedQuestionsOutputFlaggedQuestionsItemStatus,
     pub signals: Vec<ListFlaggedQuestionsOutputFlaggedQuestionsItemSignalsItem>,
     pub flagged_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub judged_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub probability: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub chosen_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub saved_question_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_by: Option<ListFlaggedQuestionsOutputFlaggedQuestionsItemSettledBy>,
 }
 
@@ -25332,15 +26894,35 @@ impl ListFolderInputDirection {
 pub struct ListFolderInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub folder: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListFolderInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListFolderInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListFolderInput {
@@ -25507,9 +27089,13 @@ pub struct ListFolderOutputEntriesItemFileFileUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListFolderOutputEntriesItemFileFileUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: ListFolderOutputEntriesItemFileFileUnreadPartsItemFailure,
 }
@@ -25521,18 +27107,23 @@ pub struct ListFolderOutputEntriesItemFileFile {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: ListFolderOutputEntriesItemFileFileKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: ListFolderOutputEntriesItemFileFileStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<ListFolderOutputEntriesItemFileFileFailure>,
     pub unread_parts: Vec<ListFolderOutputEntriesItemFileFileUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -25542,6 +27133,7 @@ pub struct ListFolderOutputEntriesItemFile {
     pub r#type: ListFolderOutputEntriesItemFileType,
     pub name: String,
     pub path: String,
+    #[serde(deserialize_with = "crate::serde_fields::integer_constant::<_, _, 1>")]
     pub file_count: i64,
     pub size_bytes: f64,
     pub updated_at: String,
@@ -25581,9 +27173,17 @@ pub struct ListFolderOutput {
 pub struct ListForgettingSuggestionsInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListForgettingSuggestionsInput {
@@ -25704,6 +27304,7 @@ impl ListForgettingSuggestionsOutputMemoriesItemPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListForgettingSuggestionsOutputMemoriesItemPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: ListForgettingSuggestionsOutputMemoriesItemPlanState,
 }
@@ -25778,12 +27379,14 @@ pub struct ListForgettingSuggestionsOutputMemoriesItem {
     pub memory_id: String,
     pub r#type: ListForgettingSuggestionsOutputMemoriesItemType,
     pub scope: ListForgettingSuggestionsOutputMemoriesItemScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: ListForgettingSuggestionsOutputMemoriesItemTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<ListForgettingSuggestionsOutputMemoriesItemPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -25791,11 +27394,17 @@ pub struct ListForgettingSuggestionsOutputMemoriesItem {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<ListForgettingSuggestionsOutputMemoriesItemSourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -25816,15 +27425,35 @@ pub struct ListForgettingSuggestionsOutput {
 pub struct ListIndexRecordsInput {
     pub project_id: String,
     pub index_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub filters: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub cursor: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
 }
 impl ListIndexRecordsInput {
@@ -25880,6 +27509,7 @@ pub struct ListIndexRecordsOutput {
     pub records: Vec<ListIndexRecordsOutputRecordsItem>,
     pub total_count: f64,
     pub total_is_exact: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_cursor: Option<String>,
 }
 
@@ -25944,23 +27574,59 @@ impl ListIndexesInputDirection {
 #[non_exhaustive]
 pub struct ListIndexesInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<ListIndexesInputState>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub creator: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_from: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListIndexesInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListIndexesInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListIndexesInput {
@@ -26060,7 +27726,9 @@ pub struct ListIndexesOutputIndexesItem {
     pub name: String,
     pub created_at: String,
     pub created_by: ListIndexesOutputIndexesItemCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub config: serde_json::Map<String, serde_json::Value>,
     pub narsil_url: String,
@@ -26118,23 +27786,59 @@ impl ListInvitationsInputDirection {
 #[non_exhaustive]
 pub struct ListInvitationsInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub role: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub status: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_from: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListInvitationsInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListInvitationsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListInvitationsInput {
@@ -26228,7 +27932,9 @@ pub struct ListInvitationsOutputInvitationsItem {
     pub role: ListInvitationsOutputInvitationsItemRole,
     pub created_at: String,
     pub expires_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub accepted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub revoked_at: Option<String>,
 }
 
@@ -26302,23 +28008,59 @@ impl ListKnowledgeBasesInputDirection {
 #[non_exhaustive]
 pub struct ListKnowledgeBasesInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<ListKnowledgeBasesInputState>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub creator: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_from: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListKnowledgeBasesInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListKnowledgeBasesInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListKnowledgeBasesInput {
@@ -26418,14 +28160,18 @@ pub struct ListKnowledgeBasesOutputKnowledgeBasesItem {
     pub name: String,
     pub language: String,
     pub chunk_tokens: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_retention_days: Option<f64>,
     pub created_at: String,
     pub created_by: ListKnowledgeBasesOutputKnowledgeBasesItemCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub database_id: String,
     pub live_index_id: String,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub search_pending_since: Option<String>,
 }
 
@@ -26443,9 +28189,17 @@ pub struct ListKnowledgeBasesOutput {
 pub struct ListLearnedChangesInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListLearnedChangesInput {
@@ -26482,6 +28236,7 @@ pub struct ListLearnedChangesOutputLearnedChangesItem {
     pub held_back_right_before: f64,
     pub held_back_right_after: f64,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub undone_at: Option<String>,
 }
 
@@ -26540,21 +28295,53 @@ impl ListMembersInputDirection {
 #[non_exhaustive]
 pub struct ListMembersInput {
     pub project_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub role: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub added_from: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub added_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListMembersInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListMembersInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMembersInput {
@@ -26692,29 +28479,77 @@ impl ListMemoriesInputForgotten {
 pub struct ListMemoriesInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub query: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub owner_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub scope: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub r#type: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub trust_level: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub plan_state: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub include_replaced: Option<ListMemoriesInputIncludeReplaced>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub forgotten: Option<ListMemoriesInputForgotten>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMemoriesInput {
@@ -26895,6 +28730,7 @@ impl ListMemoriesOutputMemoriesItemPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListMemoriesOutputMemoriesItemPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: ListMemoriesOutputMemoriesItemPlanState,
 }
@@ -26969,12 +28805,14 @@ pub struct ListMemoriesOutputMemoriesItem {
     pub memory_id: String,
     pub r#type: ListMemoriesOutputMemoriesItemType,
     pub scope: ListMemoriesOutputMemoriesItemScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: ListMemoriesOutputMemoriesItemTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<ListMemoriesOutputMemoriesItemPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -26982,11 +28820,17 @@ pub struct ListMemoriesOutputMemoriesItem {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<ListMemoriesOutputMemoriesItemSourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -27025,17 +28869,41 @@ impl ListMemoryDecisionsInputByPerson {
 pub struct ListMemoryDecisionsInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub kind: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub stored_memory_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub subject_owner_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub by_person: Option<ListMemoryDecisionsInputByPerson>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMemoryDecisionsInput {
@@ -27276,6 +29144,7 @@ impl ListMemoryDecisionsOutputDecisionsItemMemoryPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListMemoryDecisionsOutputDecisionsItemMemoryPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: ListMemoryDecisionsOutputDecisionsItemMemoryPlanState,
 }
@@ -27350,12 +29219,14 @@ pub struct ListMemoryDecisionsOutputDecisionsItemMemory {
     pub memory_id: String,
     pub r#type: ListMemoryDecisionsOutputDecisionsItemMemoryType,
     pub scope: ListMemoryDecisionsOutputDecisionsItemMemoryScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: ListMemoryDecisionsOutputDecisionsItemMemoryTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<ListMemoryDecisionsOutputDecisionsItemMemoryPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -27363,11 +29234,17 @@ pub struct ListMemoryDecisionsOutputDecisionsItemMemory {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<ListMemoryDecisionsOutputDecisionsItemMemorySourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -27405,6 +29282,7 @@ pub struct ListMemoryDecisionsOutputDecisionsItemOtherMemory {
     pub text: String,
     pub trust_level: ListMemoryDecisionsOutputDecisionsItemOtherMemoryTrustLevel,
     pub held_from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
 }
 
@@ -27413,8 +29291,11 @@ pub struct ListMemoryDecisionsOutputDecisionsItemOtherMemory {
 pub struct ListMemoryDecisionsOutputDecisionsItemFile {
     pub text: String,
     pub recorded_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
 }
 
@@ -27427,13 +29308,19 @@ pub struct ListMemoryDecisionsOutputDecisionsItem {
     pub kind: ListMemoryDecisionsOutputDecisionsItemKind,
     pub decided_by: ListMemoryDecisionsOutputDecisionsItemDecidedBy,
     pub trust_level: ListMemoryDecisionsOutputDecisionsItemTrustLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub probability: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub reason: Option<String>,
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub subject_owner_id: Option<String>,
     pub memory: ListMemoryDecisionsOutputDecisionsItemMemory,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub other_memory: Option<ListMemoryDecisionsOutputDecisionsItemOtherMemory>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file: Option<ListMemoryDecisionsOutputDecisionsItemFile>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub overridden_at: Option<String>,
     pub created_at: String,
 }
@@ -27452,13 +29339,29 @@ pub struct ListMemoryDecisionsOutput {
 pub struct ListMemoryOwnersInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub query: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub scope: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMemoryOwnersInput {
@@ -27554,13 +29457,29 @@ impl ListMemoryReviewsInputState {
 pub struct ListMemoryReviewsInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<ListMemoryReviewsInputState>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub reason: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMemoryReviewsInput {
@@ -27650,8 +29569,11 @@ impl ListMemoryReviewsOutputReviewsItemState {
 pub struct ListMemoryReviewsOutputReviewsItemContradictingRecordsItem {
     pub text: String,
     pub recorded_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_id: Option<String>,
 }
 
@@ -27808,6 +29730,7 @@ impl ListMemoryReviewsOutputReviewsItemMemoryPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListMemoryReviewsOutputReviewsItemMemoryPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: ListMemoryReviewsOutputReviewsItemMemoryPlanState,
 }
@@ -27882,12 +29805,14 @@ pub struct ListMemoryReviewsOutputReviewsItemMemory {
     pub memory_id: String,
     pub r#type: ListMemoryReviewsOutputReviewsItemMemoryType,
     pub scope: ListMemoryReviewsOutputReviewsItemMemoryScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: ListMemoryReviewsOutputReviewsItemMemoryTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<ListMemoryReviewsOutputReviewsItemMemoryPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -27895,11 +29820,17 @@ pub struct ListMemoryReviewsOutputReviewsItemMemory {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<ListMemoryReviewsOutputReviewsItemMemorySourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -27917,9 +29848,12 @@ pub struct ListMemoryReviewsOutputReviewsItem {
     pub evidence: serde_json::Map<String, serde_json::Value>,
     pub contradicting_records: Vec<ListMemoryReviewsOutputReviewsItemContradictingRecordsItem>,
     pub contradicted_memories: Vec<ListMemoryReviewsOutputReviewsItemContradictedMemoriesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_trust_level: Option<ListMemoryReviewsOutputReviewsItemSettledTrustLevel>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_by: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_at: Option<String>,
     pub memory: ListMemoryReviewsOutputReviewsItemMemory,
 }
@@ -27956,11 +29890,23 @@ impl ListMemorySavedQuestionsInputFlagged {
 pub struct ListMemorySavedQuestionsInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub flagged: Option<ListMemorySavedQuestionsInputFlagged>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMemorySavedQuestionsInput {
@@ -28015,11 +29961,17 @@ pub struct ListMemorySavedQuestionsOutputSavedQuestionsItem {
     pub id: String,
     pub question: String,
     pub stored_memory_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_text: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub team_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub flag: Option<ListMemorySavedQuestionsOutputSavedQuestionsItemFlag>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
     pub created_at: String,
 }
@@ -28038,11 +29990,23 @@ pub struct ListMemorySavedQuestionsOutput {
 pub struct ListMemorySourcesInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub kind: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMemorySourcesInput {
@@ -28191,6 +30155,7 @@ impl ListMemorySourcesOutputSourcesItemSignInStatus {
 #[non_exhaustive]
 pub struct ListMemorySourcesOutputSourcesItemSignIn {
     pub status: ListMemorySourcesOutputSourcesItemSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -28233,20 +30198,28 @@ pub struct ListMemorySourcesOutputSourcesItemLastError {
 pub struct ListMemorySourcesOutputSourcesItem {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: ListMemorySourcesOutputSourcesItemKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<ListMemorySourcesOutputSourcesItemSorting>,
     pub status: ListMemorySourcesOutputSourcesItemStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<ListMemorySourcesOutputSourcesItemSignIn>,
     pub created_at: String,
     pub created_by: ListMemorySourcesOutputSourcesItemCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<ListMemorySourcesOutputSourcesItemLastError>,
 }
 
@@ -28264,11 +30237,23 @@ pub struct ListMemorySourcesOutput {
 pub struct ListMemoryWebhookDeliveriesInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMemoryWebhookDeliveriesInput {
@@ -28344,10 +30329,14 @@ pub struct ListMemoryWebhookDeliveriesOutputDeliveriesItem {
     pub decision_id: String,
     pub state: ListMemoryWebhookDeliveriesOutputDeliveriesItemState,
     pub attempts: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub response_status: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_attempt_at: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub delivered_at: Option<String>,
 }
 
@@ -28365,15 +30354,35 @@ pub struct ListMemoryWebhookDeliveriesOutput {
 pub struct ListMessagesInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub source_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub conversation_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMessagesInput {
@@ -28454,8 +30463,10 @@ pub struct ListMessagesOutputMessagesItem {
     pub state: ListMessagesOutputMessagesItemState,
     pub attempts: f64,
     pub memories_written: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<String>,
     pub received_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -28473,11 +30484,23 @@ pub struct ListMessagesOutput {
 pub struct ListMetadataKeysInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListMetadataKeysInput {
@@ -28529,11 +30552,23 @@ pub struct ListMetadataKeysOutput {
 pub struct ListMetadataValuesInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
     pub key: String,
 }
@@ -28708,8 +30743,10 @@ pub struct ListOperationsOutputOperationsItemKeyPermissionsItem {
     pub resource_kind: ListOperationsOutputOperationsItemKeyPermissionsItemResourceKind,
     pub level: ListOperationsOutputOperationsItemKeyPermissionsItemLevel,
     pub target: ListOperationsOutputOperationsItemKeyPermissionsItemTarget,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_id_field:
         Option<ListOperationsOutputOperationsItemKeyPermissionsItemResourceIdField>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub only_with_field: Option<String>,
 }
 
@@ -28720,6 +30757,7 @@ pub struct ListOperationsOutputOperationsItem {
     pub method: ListOperationsOutputOperationsItemMethod,
     pub path: String,
     pub access: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub key_permissions: Option<Vec<ListOperationsOutputOperationsItemKeyPermissionsItem>>,
     pub summary: String,
 }
@@ -28793,23 +30831,59 @@ impl ListProjectsInputDirection {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListProjectsInput {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<ListProjectsInputState>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub role: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_from: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub created_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListProjectsInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListProjectsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListProjectsInput {
@@ -28898,9 +30972,12 @@ pub struct ListProjectsOutputProjectsItem {
     pub id: String,
     pub name: String,
     pub region: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub role: Option<ListProjectsOutputProjectsItemRole>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub sirannon_url: String,
     pub narsil_url: String,
@@ -28960,17 +31037,41 @@ impl ListQuestionsInputDirection {
 pub struct ListQuestionsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListQuestionsInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListQuestionsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListQuestionsInput {
@@ -29118,6 +31219,7 @@ impl ListQuestionsOutputQuestionsItemPassagesItemCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemPassagesItemCitationSpreadsheet {
     pub kind: ListQuestionsOutputQuestionsItemPassagesItemCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -29166,7 +31268,9 @@ impl ListQuestionsOutputQuestionsItemPassagesItemCitationWebPageKind {
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemPassagesItemCitationWebPage {
     pub kind: ListQuestionsOutputQuestionsItemPassagesItemCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -29235,6 +31339,7 @@ pub struct ListQuestionsOutputQuestionsItemPassagesItemCitationRecording {
     pub kind: ListQuestionsOutputQuestionsItemPassagesItemCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -29356,6 +31461,7 @@ impl ListQuestionsOutputQuestionsItemPassagesItemMatchCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemPassagesItemMatchCitationSpreadsheet {
     pub kind: ListQuestionsOutputQuestionsItemPassagesItemMatchCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -29404,7 +31510,9 @@ impl ListQuestionsOutputQuestionsItemPassagesItemMatchCitationWebPageKind {
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemPassagesItemMatchCitationWebPage {
     pub kind: ListQuestionsOutputQuestionsItemPassagesItemMatchCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -29474,6 +31582,7 @@ pub struct ListQuestionsOutputQuestionsItemPassagesItemMatchCitationRecording {
     pub kind: ListQuestionsOutputQuestionsItemPassagesItemMatchCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -29538,10 +31647,14 @@ pub struct ListQuestionsOutputQuestionsItemPassagesItem {
     pub file_id: String,
     pub file_path: String,
     pub version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<ListQuestionsOutputQuestionsItemPassagesItemFileKind>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub score: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<ListQuestionsOutputQuestionsItemPassagesItemCitation>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub match_citation: Option<ListQuestionsOutputQuestionsItemPassagesItemMatchCitation>,
 }
 
@@ -29663,6 +31776,7 @@ impl ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationSpreadsheet {
     pub kind: ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -29711,7 +31825,9 @@ impl ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationWebPageKind {
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationWebPage {
     pub kind: ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -29781,6 +31897,7 @@ pub struct ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationRecording {
     pub kind: ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -29842,13 +31959,17 @@ impl From<ListQuestionsOutputQuestionsItemSavedAnswerPassageCitationRecording>
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemSavedAnswerPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<ListQuestionsOutputQuestionsItemSavedAnswerPassageFileKind>,
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub state: ListQuestionsOutputQuestionsItemSavedAnswerPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<ListQuestionsOutputQuestionsItemSavedAnswerPassageCitation>,
 }
 
@@ -29856,6 +31977,7 @@ pub struct ListQuestionsOutputQuestionsItemSavedAnswerPassage {
 #[non_exhaustive]
 pub struct ListQuestionsOutputQuestionsItemSavedAnswer {
     pub saved_question_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub passage_index: Option<f64>,
     pub passage: ListQuestionsOutputQuestionsItemSavedAnswerPassage,
 }
@@ -29866,10 +31988,12 @@ pub struct ListQuestionsOutputQuestionsItem {
     pub id: String,
     pub asked_at: String,
     pub question: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub live_index_id: String,
     pub duration_ms: f64,
     pub passages: Vec<ListQuestionsOutputQuestionsItemPassagesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub saved_answer: Option<ListQuestionsOutputQuestionsItemSavedAnswer>,
 }
 
@@ -29964,19 +32088,47 @@ impl ListSavedQuestionsInputDirection {
 pub struct ListSavedQuestionsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub split: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<ListSavedQuestionsInputSort>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListSavedQuestionsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListSavedQuestionsInput {
@@ -30191,6 +32343,7 @@ impl ListSavedQuestionsOutputSavedQuestionsItemPassageCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct ListSavedQuestionsOutputSavedQuestionsItemPassageCitationSpreadsheet {
     pub kind: ListSavedQuestionsOutputSavedQuestionsItemPassageCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -30239,7 +32392,9 @@ impl ListSavedQuestionsOutputSavedQuestionsItemPassageCitationWebPageKind {
 #[non_exhaustive]
 pub struct ListSavedQuestionsOutputSavedQuestionsItemPassageCitationWebPage {
     pub kind: ListSavedQuestionsOutputSavedQuestionsItemPassageCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -30309,6 +32464,7 @@ pub struct ListSavedQuestionsOutputSavedQuestionsItemPassageCitationRecording {
     pub kind: ListSavedQuestionsOutputSavedQuestionsItemPassageCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -30370,13 +32526,17 @@ impl From<ListSavedQuestionsOutputSavedQuestionsItemPassageCitationRecording>
 #[non_exhaustive]
 pub struct ListSavedQuestionsOutputSavedQuestionsItemPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<ListSavedQuestionsOutputSavedQuestionsItemPassageFileKind>,
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub state: ListSavedQuestionsOutputSavedQuestionsItemPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<ListSavedQuestionsOutputSavedQuestionsItemPassageCitation>,
 }
 
@@ -30413,8 +32573,10 @@ pub struct ListSavedQuestionsOutputSavedQuestionsItemBrokenPrevious {
 #[non_exhaustive]
 pub struct ListSavedQuestionsOutputSavedQuestionsItemBroken {
     pub change: ListSavedQuestionsOutputSavedQuestionsItemBrokenChange,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub version: Option<f64>,
     pub detected_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub previous: Option<ListSavedQuestionsOutputSavedQuestionsItemBrokenPrevious>,
 }
 
@@ -30425,9 +32587,12 @@ pub struct ListSavedQuestionsOutputSavedQuestionsItem {
     pub question: String,
     pub split: ListSavedQuestionsOutputSavedQuestionsItemSplit,
     pub source: ListSavedQuestionsOutputSavedQuestionsItemSource,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub passage: ListSavedQuestionsOutputSavedQuestionsItemPassage,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub broken: Option<ListSavedQuestionsOutputSavedQuestionsItemBroken>,
     pub created_at: String,
     pub updated_at: String,
@@ -30448,19 +32613,47 @@ pub struct ListScorecardResultsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub scorecard_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub compare_to: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub outcome: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub change: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub split: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub cause: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListScorecardResultsInput {
@@ -30590,12 +32783,19 @@ impl ListScorecardResultsOutputResultsItemCause {
 #[non_exhaustive]
 pub struct ListScorecardResultsOutputResultsItemCauseDetail {
     pub explanation: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deep_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub keyword_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_language: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub passage_language: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub chunks_in_passage: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub missing_terms: Option<Vec<String>>,
 }
 
@@ -30603,8 +32803,10 @@ pub struct ListScorecardResultsOutputResultsItemCauseDetail {
 #[non_exhaustive]
 pub struct ListScorecardResultsOutputResultsItemPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
     pub version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -30614,8 +32816,10 @@ pub struct ListScorecardResultsOutputResultsItemReturnedItem {
     pub rank: f64,
     pub chunk_id: String,
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
     pub version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -30652,8 +32856,10 @@ impl ListScorecardResultsOutputResultsItemComparedCause {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListScorecardResultsOutputResultsItemCompared {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
     pub passed: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause: Option<ListScorecardResultsOutputResultsItemComparedCause>,
 }
 
@@ -30664,12 +32870,16 @@ pub struct ListScorecardResultsOutputResultsItem {
     pub question: String,
     pub split: ListScorecardResultsOutputResultsItemSplit,
     pub passage_state: ListScorecardResultsOutputResultsItemPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
     pub passed: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause: Option<ListScorecardResultsOutputResultsItemCause>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause_detail: Option<ListScorecardResultsOutputResultsItemCauseDetail>,
     pub passage: ListScorecardResultsOutputResultsItemPassage,
     pub returned: Vec<ListScorecardResultsOutputResultsItemReturnedItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compared: Option<ListScorecardResultsOutputResultsItemCompared>,
 }
 
@@ -30705,11 +32915,23 @@ impl ListScorecardsInputDirection {
 pub struct ListScorecardsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListScorecardsInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListScorecardsInput {
@@ -30790,8 +33012,11 @@ impl ListScorecardsOutputScorecardsItemStatus {
 pub struct ListScorecardsOutputScorecardsItemTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -30800,8 +33025,11 @@ pub struct ListScorecardsOutputScorecardsItemTuning {
 pub struct ListScorecardsOutputScorecardsItemHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -30959,19 +33187,31 @@ pub struct ListScorecardsOutputScorecardsItem {
     pub purpose: ListScorecardsOutputScorecardsItemPurpose,
     pub status: ListScorecardsOutputScorecardsItemStatus,
     pub waiting_for_search: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub depth: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub passed_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tuning: Option<ListScorecardsOutputScorecardsItemTuning>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_back: Option<ListScorecardsOutputScorecardsItemHeldBack>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub configuration: Option<ListScorecardsOutputScorecardsItemConfiguration>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -30990,13 +33230,29 @@ pub struct ListSourceItemsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub source_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub external_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub state: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListSourceItemsInput {
@@ -31092,6 +33348,7 @@ pub struct ListSourceItemsOutputItemsItem {
     pub document_id: String,
     pub state: ListSourceItemsOutputItemsItemState,
     pub received_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_id: Option<String>,
 }
 
@@ -31110,9 +33367,17 @@ pub struct ListSourceSyncsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub source_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListSourceSyncsInput {
@@ -31176,10 +33441,12 @@ pub struct ListSourceSyncsOutputSyncsItem {
     pub id: String,
     pub status: ListSourceSyncsOutputSyncsItemStatus,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub files_added: f64,
     pub files_changed: f64,
     pub files_removed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub error: Option<ListSourceSyncsOutputSyncsItemError>,
 }
 
@@ -31197,11 +33464,23 @@ pub struct ListSourceSyncsOutput {
 pub struct ListSourcesInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub kind: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListSourcesInput {
@@ -31350,6 +33629,7 @@ impl ListSourcesOutputSourcesItemSignInStatus {
 #[non_exhaustive]
 pub struct ListSourcesOutputSourcesItemSignIn {
     pub status: ListSourcesOutputSourcesItemSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -31392,20 +33672,28 @@ pub struct ListSourcesOutputSourcesItemLastError {
 pub struct ListSourcesOutputSourcesItem {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: ListSourcesOutputSourcesItemKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<ListSourcesOutputSourcesItemSorting>,
     pub status: ListSourcesOutputSourcesItemStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<ListSourcesOutputSourcesItemSignIn>,
     pub created_at: String,
     pub created_by: ListSourcesOutputSourcesItemCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<ListSourcesOutputSourcesItemLastError>,
 }
 
@@ -31730,7 +34018,11 @@ impl ListTableRowsInputSortsItemDirection {
 #[non_exhaustive]
 pub struct ListTableRowsInputSortsItem {
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<ListTableRowsInputSortsItemDirection>,
 }
 impl ListTableRowsInputSortsItem {
@@ -31952,19 +34244,47 @@ pub struct ListTableRowsInput {
     pub project_id: String,
     pub database_id: String,
     pub table_name: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub filters: Option<Vec<ListTableRowsInputFiltersItem>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sorts: Option<Vec<ListTableRowsInputSortsItem>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub page_size: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub after: Option<Vec<Option<ListTableRowsInputAfterItem>>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub before: Option<Vec<Option<ListTableRowsInputBeforeItem>>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub last_page: Option<bool>,
 }
 impl ListTableRowsInput {
@@ -32048,6 +34368,7 @@ pub struct ListTableRowsOutputTableColumnsItem {
     pub name: String,
     pub declared_type: String,
     pub not_null: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub default_sql: Option<String>,
     pub primary_key_position: f64,
     pub generated: bool,
@@ -32076,8 +34397,10 @@ pub struct ListTableRowsOutputTableIndexesItem {
 pub struct ListTableRowsOutputTable {
     pub name: String,
     pub kind: ListTableRowsOutputTableKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sql: Option<String>,
     pub columns: Vec<ListTableRowsOutputTableColumnsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub row_key: Option<Vec<String>>,
     pub foreign_keys: Vec<ListTableRowsOutputTableForeignKeysItem>,
     pub indexes: Vec<ListTableRowsOutputTableIndexesItem>,
@@ -32229,6 +34552,7 @@ impl From<&str> for ListTableRowsOutputRowsItemCellsItem {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListTableRowsOutputRowsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub key: Option<Vec<Option<ListTableRowsOutputRowsItemKeyItem>>>,
     pub cells: Vec<Option<ListTableRowsOutputRowsItemCellsItem>>,
 }
@@ -32253,13 +34577,29 @@ pub struct ListVersionBlocksInput {
     pub knowledge_base_id: String,
     pub file_id: String,
     pub version: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sheet: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub from_row: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl ListVersionBlocksInput {
@@ -32348,11 +34688,17 @@ impl ListVersionBlocksOutputBlocksItemKind {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ListVersionBlocksOutputBlocksItemPlace {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub row: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub slide: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
 }
 
@@ -32361,6 +34707,7 @@ pub struct ListVersionBlocksOutputBlocksItemPlace {
 pub struct ListVersionBlocksOutputBlocksItem {
     pub position: f64,
     pub kind: ListVersionBlocksOutputBlocksItemKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading_level: Option<f64>,
     pub text: String,
     pub place: ListVersionBlocksOutputBlocksItemPlace,
@@ -32630,9 +34977,17 @@ impl PreviewCreateTableInputColumnsItemReferencesOnUpdate {
 pub struct PreviewCreateTableInputColumnsItemReferences {
     pub table: String,
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_delete: Option<PreviewCreateTableInputColumnsItemReferencesOnDelete>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub on_update: Option<PreviewCreateTableInputColumnsItemReferencesOnUpdate>,
 }
 impl PreviewCreateTableInputColumnsItemReferences {
@@ -32668,7 +35023,11 @@ impl PreviewCreateTableInputColumnsItemReferences {
 pub struct PreviewCreateTableInputColumnsItem {
     pub name: String,
     pub r#type: PreviewCreateTableInputColumnsItemType,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -32676,9 +35035,17 @@ pub struct PreviewCreateTableInputColumnsItem {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub default: Option<Option<PreviewCreateTableInputColumnsItemDefault>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub primary_key: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub unique: Option<bool>,
     #[serde(
         default,
@@ -32954,61 +35321,173 @@ pub struct PreviewIndexSearchInput {
     pub project_id: String,
     pub index_id: String,
     pub query: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub filters: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub mode: Option<PreviewIndexSearchInputMode>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_field: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fields: Option<PreviewIndexSearchInputFields>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub boosts: Option<PreviewIndexSearchInputBoosts>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub term_match: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub tolerance: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix_length: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub exact: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub partial_words: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_score: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion: Option<PreviewIndexSearchInputFusion>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion_constant: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_weight: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_similarity: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_candidates: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sort: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub direction: Option<PreviewIndexSearchInputDirection>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub pinned: Option<Vec<PreviewIndexSearchInputPinnedItem>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub group_by: Option<PreviewIndexSearchInputGroupBy>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub group_size: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub facets: Option<PreviewIndexSearchInputFacets>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub facet_limit: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub facet_filters: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub facet_ranges: Option<BTreeMap<String, Vec<PreviewIndexSearchInputFacetRangesValueItem>>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<IntegerOrText>,
 }
 impl PreviewIndexSearchInput {
@@ -33320,33 +35799,89 @@ impl PreviewIndexSearchOutputTuningFusion {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct PreviewIndexSearchOutputTuning {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fields: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub boosts: Option<BTreeMap<String, f64>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub term_match: Option<PreviewIndexSearchOutputTuningTermMatch>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub tolerance: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix_length: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub exact: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub partial_words: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_score: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion: Option<PreviewIndexSearchOutputTuningFusion>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion_constant: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_weight: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_similarity: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_candidates: Option<f64>,
 }
 
@@ -33373,7 +35908,9 @@ impl PreviewIndexSearchOutputFacetsItemCounted {
 pub struct PreviewIndexSearchOutputFacetsItemValuesItem {
     pub value: String,
     pub count: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub from: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub to: Option<f64>,
 }
 
@@ -33390,6 +35927,7 @@ pub struct PreviewIndexSearchOutputFacetsItem {
 #[non_exhaustive]
 pub struct PreviewIndexSearchOutputGroupsItem {
     pub values: serde_json::Map<String, serde_json::Value>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub count: Option<f64>,
 }
 
@@ -33419,16 +35957,21 @@ pub struct PreviewIndexSearchOutputResultsItemKeywordFieldScoresItem {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct PreviewIndexSearchOutputResultsItemKeyword {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
     pub terms: Vec<PreviewIndexSearchOutputResultsItemKeywordTermsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub field_scores: Option<Vec<PreviewIndexSearchOutputResultsItemKeywordFieldScoresItem>>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct PreviewIndexSearchOutputResultsItemVector {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub similarity: Option<f64>,
 }
 
@@ -33454,9 +35997,11 @@ pub struct PreviewIndexSearchOutputResultsItem {
     pub score: f64,
     pub record: serde_json::Map<String, serde_json::Value>,
     pub keyword: PreviewIndexSearchOutputResultsItemKeyword,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector: Option<PreviewIndexSearchOutputResultsItemVector>,
     pub highlights: Vec<PreviewIndexSearchOutputResultsItemHighlightsItem>,
     pub pinned: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub group: Option<f64>,
 }
 
@@ -33464,18 +36009,26 @@ pub struct PreviewIndexSearchOutputResultsItem {
 #[non_exhaustive]
 pub struct PreviewIndexSearchOutput {
     pub mode: PreviewIndexSearchOutputMode,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector_field: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub fusion: Option<PreviewIndexSearchOutputFusion>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub fusion_constant: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub vector_weight: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sort: Option<PreviewIndexSearchOutputSort>,
     pub tuning: PreviewIndexSearchOutputTuning,
     pub facets: Vec<PreviewIndexSearchOutputFacetsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub groups: Option<Vec<PreviewIndexSearchOutputGroupsItem>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub group_count: Option<f64>,
     pub total_count: f64,
     pub total_is_exact: bool,
     pub offset: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_offset: Option<f64>,
     pub duration_ms: f64,
     pub results: Vec<PreviewIndexSearchOutputResultsItem>,
@@ -33793,7 +36346,11 @@ pub struct PreviewTableColumnChangesInputChangesItemAdd {
     pub kind: PreviewTableColumnChangesInputChangesItemAddKind,
     pub name: String,
     pub r#type: PreviewTableColumnChangesInputChangesItemAddType,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -33801,7 +36358,11 @@ pub struct PreviewTableColumnChangesInputChangesItemAdd {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub default: Option<Option<PreviewTableColumnChangesInputChangesItemAddDefault>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub position: Option<PreviewTableColumnChangesInputChangesItemAddPosition>,
 }
 impl PreviewTableColumnChangesInputChangesItemAdd {
@@ -34100,9 +36661,17 @@ impl From<PreviewTableColumnChangesInputChangesItemAlterDefaultCurrentTime>
 pub struct PreviewTableColumnChangesInputChangesItemAlter {
     pub kind: PreviewTableColumnChangesInputChangesItemAlterKind,
     pub column: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub r#type: Option<PreviewTableColumnChangesInputChangesItemAlterType>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub not_null: Option<bool>,
     #[serde(
         default,
@@ -34311,7 +36880,11 @@ pub struct PromoteCorrectionInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub correction_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub note: Option<String>,
 }
 impl PromoteCorrectionInput {
@@ -35199,6 +37772,7 @@ pub struct PromoteCorrectionOutputEstimate {
     pub second_index: bool,
     pub chunks_to_index: f64,
     pub questions_to_score: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub price_usd: Option<f64>,
 }
 
@@ -35207,6 +37781,7 @@ pub struct PromoteCorrectionOutputEstimate {
 pub struct PromoteCorrectionOutputBeforeTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -35215,12 +37790,14 @@ pub struct PromoteCorrectionOutputBeforeTuning {
 pub struct PromoteCorrectionOutputBeforeHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct PromoteCorrectionOutputBefore {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: PromoteCorrectionOutputBeforeTuning,
     pub held_back: PromoteCorrectionOutputBeforeHeldBack,
@@ -35231,6 +37808,7 @@ pub struct PromoteCorrectionOutputBefore {
 pub struct PromoteCorrectionOutputAfterTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -35239,12 +37817,14 @@ pub struct PromoteCorrectionOutputAfterTuning {
 pub struct PromoteCorrectionOutputAfterHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct PromoteCorrectionOutputAfter {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub scorecard_id: Option<String>,
     pub tuning: PromoteCorrectionOutputAfterTuning,
     pub held_back: PromoteCorrectionOutputAfterHeldBack,
@@ -35321,25 +37901,36 @@ impl PromoteCorrectionOutputDecidedBy {
 pub struct PromoteCorrectionOutput {
     pub id: String,
     pub origin: PromoteCorrectionOutputOrigin,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub cause: Option<PromoteCorrectionOutputCause>,
     pub kind: PromoteCorrectionOutputKind,
     pub setting: PromoteCorrectionOutputSetting,
     pub target_ids: Vec<String>,
     pub file_kinds: Vec<PromoteCorrectionOutputFileKindsItem>,
     pub status: PromoteCorrectionOutputStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub estimate: PromoteCorrectionOutputEstimate,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before: Option<PromoteCorrectionOutputBefore>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after: Option<PromoteCorrectionOutputAfter>,
     pub verdict: PromoteCorrectionOutputVerdict,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_changes: Option<PromoteCorrectionOutputQuestionChanges>,
     pub waits_for_click: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub wait_reason: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_by: Option<PromoteCorrectionOutputDecidedBy>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decision_note: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tried_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
 }
 
@@ -35368,7 +37959,11 @@ pub struct PromoteMemoryInput {
     pub memory_id: String,
     pub stored_memory_id: String,
     pub scope: PromoteMemoryInputScope,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
 }
 impl PromoteMemoryInput {
@@ -35490,6 +38085,7 @@ impl PromoteMemoryOutputPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct PromoteMemoryOutputPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: PromoteMemoryOutputPlanState,
 }
@@ -35564,12 +38160,14 @@ pub struct PromoteMemoryOutput {
     pub memory_id: String,
     pub r#type: PromoteMemoryOutputType,
     pub scope: PromoteMemoryOutputScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: PromoteMemoryOutputTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<PromoteMemoryOutputPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -35577,11 +38175,17 @@ pub struct PromoteMemoryOutput {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<PromoteMemoryOutputSourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -35672,12 +38276,17 @@ pub struct ProposeCorrectionsOutput {
     pub mode: ProposeCorrectionsOutputMode,
     pub status: ProposeCorrectionsOutputStatus,
     pub complete_index: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before_scorecard_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after_scorecard_id: Option<String>,
     pub correction_ids: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -35780,19 +38389,47 @@ pub struct RecallMemoriesInput {
     pub project_id: String,
     pub memory_id: String,
     pub query: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub as_of: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub r#type: Option<RecallMemoriesInputType>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub trial: Option<bool>,
 }
 impl RecallMemoriesInput {
@@ -35924,6 +38561,7 @@ impl RecallMemoriesOutputMemoriesItemPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct RecallMemoriesOutputMemoriesItemPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: RecallMemoriesOutputMemoriesItemPlanState,
 }
@@ -36088,7 +38726,9 @@ pub struct RecallMemoriesOutputMemoriesItemSourcesItem {
 #[non_exhaustive]
 pub struct RecallMemoriesOutputMemoriesItemHolds {
     pub from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
 }
 
@@ -36123,6 +38763,7 @@ pub struct RecallMemoriesOutputMemoriesItemReplacesItem {
     pub text: String,
     pub trust_level: RecallMemoriesOutputMemoriesItemReplacesItemTrustLevel,
     pub held_from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
 }
 
@@ -36157,6 +38798,7 @@ pub struct RecallMemoriesOutputMemoriesItemReplacedBy {
     pub text: String,
     pub trust_level: RecallMemoriesOutputMemoriesItemReplacedByTrustLevel,
     pub held_from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
 }
 
@@ -36293,8 +38935,11 @@ pub struct RecallMemoriesOutputMemoriesItemConflictsWithItemFile {
     pub kind: RecallMemoriesOutputMemoriesItemConflictsWithItemFileKind,
     pub text: String,
     pub recorded_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
     pub resolution: RecallMemoriesOutputMemoriesItemConflictsWithItemFileResolution,
 }
@@ -36433,12 +39078,15 @@ pub struct RecallMemoriesOutputMemoriesItem {
     pub memory_id: String,
     pub r#type: RecallMemoriesOutputMemoriesItemType,
     pub scope: RecallMemoriesOutputMemoriesItemScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub subject_owner_id: Option<String>,
     pub text: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<RecallMemoriesOutputMemoriesItemPlan>,
     pub trust_level: RecallMemoriesOutputMemoriesItemTrustLevel,
     pub trust_reasons: Vec<RecallMemoriesOutputMemoriesItemTrustReasonsItem>,
@@ -36446,19 +39094,23 @@ pub struct RecallMemoriesOutputMemoriesItem {
     pub sources: Vec<RecallMemoriesOutputMemoriesItemSourcesItem>,
     pub holds: RecallMemoriesOutputMemoriesItemHolds,
     pub replaces: Vec<RecallMemoriesOutputMemoriesItemReplacesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<RecallMemoriesOutputMemoriesItemReplacedBy>,
     pub conflicts_with: Vec<RecallMemoriesOutputMemoriesItemConflictsWithItem>,
     pub connection_strength: f64,
     pub recall_strength: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
     pub check: RecallMemoriesOutputMemoriesItemCheck,
     pub sorted_by: RecallMemoriesOutputMemoriesItemSortedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_probability: Option<f64>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct RecallMemoriesOutput {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_id: Option<String>,
     pub duration_ms: f64,
     pub memories: Vec<RecallMemoriesOutputMemoriesItem>,
@@ -36486,17 +39138,41 @@ impl RecordAnswerEventsInputOrigin {
 #[non_exhaustive]
 pub struct RecordAnswerEventsInputEventsItem {
     pub question_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub answer: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub follow_up: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub cited_chunk_ids: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub thumbs_down: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub handoff_reason: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub occurred_at: Option<String>,
 }
 impl RecordAnswerEventsInputEventsItem {
@@ -36549,7 +39225,11 @@ impl RecordAnswerEventsInputEventsItem {
 pub struct RecordAnswerEventsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub origin: Option<RecordAnswerEventsInputOrigin>,
     pub events: Vec<RecordAnswerEventsInputEventsItem>,
 }
@@ -36730,6 +39410,7 @@ impl RecoverMemoryOutputPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct RecoverMemoryOutputPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: RecoverMemoryOutputPlanState,
 }
@@ -36804,12 +39485,14 @@ pub struct RecoverMemoryOutput {
     pub memory_id: String,
     pub r#type: RecoverMemoryOutputType,
     pub scope: RecoverMemoryOutputScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: RecoverMemoryOutputTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<RecoverMemoryOutputPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -36817,11 +39500,17 @@ pub struct RecoverMemoryOutput {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<RecoverMemoryOutputSourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -36847,6 +39536,7 @@ impl RemoveMemberInput {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct RemoveMemberOutput {
+    #[serde(deserialize_with = "crate::serde_fields::boolean_constant::<_, _, true>")]
     pub removed: bool,
 }
 
@@ -36997,9 +39687,12 @@ impl RestoreDatabaseOutputCompactionFailureCode {
 pub struct RestoreDatabaseOutputCompaction {
     pub state: RestoreDatabaseOutputCompactionState,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub file_bytes_before: i64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_bytes_after: Option<i64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<RestoreDatabaseOutputCompactionFailureCode>,
 }
 
@@ -37011,11 +39704,15 @@ pub struct RestoreDatabaseOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: RestoreDatabaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub migration_version: f64,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub size: Option<RestoreDatabaseOutputSize>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compaction: Option<RestoreDatabaseOutputCompaction>,
     pub sql_write_preview: bool,
 }
@@ -37119,9 +39816,13 @@ pub struct RestoreFileOutputUnreadPartsItemFailure {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct RestoreFileOutputUnreadPartsItem {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_page: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub start_second: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_second: Option<f64>,
     pub failure: RestoreFileOutputUnreadPartsItemFailure,
 }
@@ -37133,18 +39834,23 @@ pub struct RestoreFileOutput {
     pub knowledge_base_id: String,
     pub path: String,
     pub kind: RestoreFileOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
     pub status: RestoreFileOutputStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub current_version: Option<f64>,
     pub latest_version: f64,
     pub size_bytes: f64,
     pub content_sha256: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure: Option<RestoreFileOutputFailure>,
     pub unread_parts: Vec<RestoreFileOutputUnreadPartsItem>,
     pub metadata: BTreeMap<String, String>,
     pub created_at: String,
     pub updated_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
 }
 
@@ -37198,7 +39904,9 @@ pub struct RestoreIndexOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: RestoreIndexOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub config: serde_json::Map<String, serde_json::Value>,
     pub narsil_url: String,
@@ -37254,7 +39962,9 @@ pub struct RestoreIndexSnapshotOutputIndex {
     pub name: String,
     pub created_at: String,
     pub created_by: RestoreIndexSnapshotOutputIndexCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub config: serde_json::Map<String, serde_json::Value>,
     pub narsil_url: String,
@@ -37317,14 +40027,18 @@ pub struct RestoreKnowledgeBaseOutput {
     pub name: String,
     pub language: String,
     pub chunk_tokens: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_retention_days: Option<f64>,
     pub created_at: String,
     pub created_by: RestoreKnowledgeBaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub database_id: String,
     pub live_index_id: String,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub search_pending_since: Option<String>,
 }
 
@@ -37366,6 +40080,7 @@ impl RestoreMemoryOutputSettingsKnowledgeBaseChoice {
 #[non_exhaustive]
 pub struct RestoreMemoryOutputSettingsSubjectsItem {
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub sensitive: bool,
 }
@@ -37481,14 +40196,20 @@ pub struct RestoreMemoryOutputSettings {
     pub first_pack_tokens: f64,
     pub recall_fade_days: f64,
     pub knowledge_base_choice: RestoreMemoryOutputSettingsKnowledgeBaseChoice,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub checked_knowledge_base_ids: Option<Vec<String>>,
     pub subjects: Vec<RestoreMemoryOutputSettingsSubjectsItem>,
     pub sources_for_likely: f64,
     pub agent_permissions: RestoreMemoryOutputSettingsAgentPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub dropped_list_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub message_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub personal_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_log_retention_days: Option<f64>,
     pub ready_set_size: f64,
     pub recall_depth: f64,
@@ -37575,8 +40296,11 @@ pub struct RestoreMemoryOutput {
     pub checked_knowledge_bases: RestoreMemoryOutputCheckedKnowledgeBases,
     pub created_at: String,
     pub created_by: RestoreMemoryOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_pending_since: Option<String>,
 }
 
@@ -37618,9 +40342,12 @@ pub struct RestoreProjectOutput {
     pub id: String,
     pub name: String,
     pub region: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub role: Option<RestoreProjectOutputRole>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub sirannon_url: String,
     pub narsil_url: String,
@@ -37707,6 +40434,7 @@ impl RevokeApiKeyOutputPermissionsDatabasesLevel {
 #[non_exhaustive]
 pub struct RevokeApiKeyOutputPermissionsDatabases {
     pub level: RevokeApiKeyOutputPermissionsDatabasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -37735,6 +40463,7 @@ impl RevokeApiKeyOutputPermissionsIndexesLevel {
 #[non_exhaustive]
 pub struct RevokeApiKeyOutputPermissionsIndexes {
     pub level: RevokeApiKeyOutputPermissionsIndexesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -37763,6 +40492,7 @@ impl RevokeApiKeyOutputPermissionsKnowledgeBasesLevel {
 #[non_exhaustive]
 pub struct RevokeApiKeyOutputPermissionsKnowledgeBases {
     pub level: RevokeApiKeyOutputPermissionsKnowledgeBasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -37811,13 +40541,18 @@ pub struct RevokeApiKeyOutput {
     pub name: String,
     pub display_prefix: String,
     pub permissions: RevokeApiKeyOutputPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_by_name: Option<String>,
     pub created_by: String,
     pub created_by_name: String,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_used_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub revoked_at: Option<String>,
 }
 
@@ -37865,7 +40600,9 @@ pub struct RevokeInvitationOutput {
     pub role: RevokeInvitationOutputRole,
     pub created_at: String,
     pub expires_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub accepted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub revoked_at: Option<String>,
 }
 
@@ -37875,7 +40612,11 @@ pub struct RunDatabaseSqlInput {
     pub project_id: String,
     pub database_id: String,
     pub sql: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub confirmation_token: Option<String>,
 }
 impl RunDatabaseSqlInput {
@@ -37919,6 +40660,7 @@ impl RunDatabaseSqlOutputRowsOutcome {
 #[non_exhaustive]
 pub struct RunDatabaseSqlOutputRowsResultsItemColumnsItem {
     pub name: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub declared_type: Option<String>,
 }
 
@@ -38118,9 +40860,17 @@ pub struct SaveMemoryQuestionInput {
     pub memory_id: String,
     pub question: String,
     pub stored_memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
 }
 impl SaveMemoryQuestionInput {
@@ -38176,11 +40926,17 @@ pub struct SaveMemoryQuestionOutput {
     pub id: String,
     pub question: String,
     pub stored_memory_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_text: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub team_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub flag: Option<SaveMemoryQuestionOutputFlag>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
     pub created_at: String,
 }
@@ -38190,7 +40946,11 @@ pub struct SaveMemoryQuestionOutput {
 pub struct SaveQueryInput {
     pub project_id: String,
     pub database_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub saved_query_id: Option<String>,
     pub name: String,
     pub sql: String,
@@ -38249,19 +41009,47 @@ pub struct SaveQuestionInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub question: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub chunk_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub file_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub version: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub first_position: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub last_position: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub question_log_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
 }
 impl SaveQuestionInput {
@@ -38480,6 +41268,7 @@ impl SaveQuestionOutputPassageCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct SaveQuestionOutputPassageCitationSpreadsheet {
     pub kind: SaveQuestionOutputPassageCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -38528,7 +41317,9 @@ impl SaveQuestionOutputPassageCitationWebPageKind {
 #[non_exhaustive]
 pub struct SaveQuestionOutputPassageCitationWebPage {
     pub kind: SaveQuestionOutputPassageCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -38597,6 +41388,7 @@ pub struct SaveQuestionOutputPassageCitationRecording {
     pub kind: SaveQuestionOutputPassageCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -38646,13 +41438,17 @@ impl From<SaveQuestionOutputPassageCitationRecording> for SaveQuestionOutputPass
 #[non_exhaustive]
 pub struct SaveQuestionOutputPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<SaveQuestionOutputPassageFileKind>,
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub state: SaveQuestionOutputPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<SaveQuestionOutputPassageCitation>,
 }
 
@@ -38689,8 +41485,10 @@ pub struct SaveQuestionOutputBrokenPrevious {
 #[non_exhaustive]
 pub struct SaveQuestionOutputBroken {
     pub change: SaveQuestionOutputBrokenChange,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub version: Option<f64>,
     pub detected_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub previous: Option<SaveQuestionOutputBrokenPrevious>,
 }
 
@@ -38701,9 +41499,12 @@ pub struct SaveQuestionOutput {
     pub question: String,
     pub split: SaveQuestionOutputSplit,
     pub source: SaveQuestionOutputSource,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub passage: SaveQuestionOutputPassage,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub broken: Option<SaveQuestionOutputBroken>,
     pub created_at: String,
     pub updated_at: String,
@@ -38775,8 +41576,11 @@ impl ScoreQuestionSetOutputStatus {
 pub struct ScoreQuestionSetOutputTuning {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -38785,8 +41589,11 @@ pub struct ScoreQuestionSetOutputTuning {
 pub struct ScoreQuestionSetOutputHeldBack {
     pub count: f64,
     pub passed: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
 }
 
@@ -38940,19 +41747,31 @@ pub struct ScoreQuestionSetOutput {
     pub purpose: ScoreQuestionSetOutputPurpose,
     pub status: ScoreQuestionSetOutputStatus,
     pub waiting_for_search: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub pass_id: Option<String>,
     pub depth: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub score: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub passed_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub first_count: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub mean_reciprocal_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tuning: Option<ScoreQuestionSetOutputTuning>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_back: Option<ScoreQuestionSetOutputHeldBack>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub configuration: Option<ScoreQuestionSetOutputConfiguration>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -38961,11 +41780,23 @@ pub struct ScoreQuestionSetOutput {
 pub struct SearchFoldersInput {
     pub project_id: String,
     pub knowledge_base_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub search: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub offset: Option<String>,
 }
 impl SearchFoldersInput {
@@ -39041,21 +41872,53 @@ pub struct SearchKnowledgeBaseInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub question: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub folder: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub metadata: Option<BTreeMap<String, SearchKnowledgeBaseInputMetadataValue>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub call_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub with_memories: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent_id: Option<String>,
 }
 impl SearchKnowledgeBaseInput {
@@ -39223,6 +42086,7 @@ impl SearchKnowledgeBaseOutputPassagesItemCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct SearchKnowledgeBaseOutputPassagesItemCitationSpreadsheet {
     pub kind: SearchKnowledgeBaseOutputPassagesItemCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -39271,7 +42135,9 @@ impl SearchKnowledgeBaseOutputPassagesItemCitationWebPageKind {
 #[non_exhaustive]
 pub struct SearchKnowledgeBaseOutputPassagesItemCitationWebPage {
     pub kind: SearchKnowledgeBaseOutputPassagesItemCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -39340,6 +42206,7 @@ pub struct SearchKnowledgeBaseOutputPassagesItemCitationRecording {
     pub kind: SearchKnowledgeBaseOutputPassagesItemCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -39460,6 +42327,7 @@ impl SearchKnowledgeBaseOutputPassagesItemMatchCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct SearchKnowledgeBaseOutputPassagesItemMatchCitationSpreadsheet {
     pub kind: SearchKnowledgeBaseOutputPassagesItemMatchCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -39508,7 +42376,9 @@ impl SearchKnowledgeBaseOutputPassagesItemMatchCitationWebPageKind {
 #[non_exhaustive]
 pub struct SearchKnowledgeBaseOutputPassagesItemMatchCitationWebPage {
     pub kind: SearchKnowledgeBaseOutputPassagesItemMatchCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -39577,6 +42447,7 @@ pub struct SearchKnowledgeBaseOutputPassagesItemMatchCitationRecording {
     pub kind: SearchKnowledgeBaseOutputPassagesItemMatchCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -39664,6 +42535,7 @@ pub struct SearchKnowledgeBaseOutputPassagesItem {
     pub file_path: String,
     pub file_kind: SearchKnowledgeBaseOutputPassagesItemFileKind,
     pub version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub text: String,
     pub truncated: bool,
@@ -39744,6 +42616,7 @@ impl SearchKnowledgeBaseOutputMemoriesItemPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct SearchKnowledgeBaseOutputMemoriesItemPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: SearchKnowledgeBaseOutputMemoriesItemPlanState,
 }
@@ -39908,7 +42781,9 @@ pub struct SearchKnowledgeBaseOutputMemoriesItemSourcesItem {
 #[non_exhaustive]
 pub struct SearchKnowledgeBaseOutputMemoriesItemHolds {
     pub from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
 }
 
@@ -39943,6 +42818,7 @@ pub struct SearchKnowledgeBaseOutputMemoriesItemReplacesItem {
     pub text: String,
     pub trust_level: SearchKnowledgeBaseOutputMemoriesItemReplacesItemTrustLevel,
     pub held_from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
 }
 
@@ -39977,6 +42853,7 @@ pub struct SearchKnowledgeBaseOutputMemoriesItemReplacedBy {
     pub text: String,
     pub trust_level: SearchKnowledgeBaseOutputMemoriesItemReplacedByTrustLevel,
     pub held_from: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
 }
 
@@ -40114,8 +42991,11 @@ pub struct SearchKnowledgeBaseOutputMemoriesItemConflictsWithItemFile {
     pub kind: SearchKnowledgeBaseOutputMemoriesItemConflictsWithItemFileKind,
     pub text: String,
     pub recorded_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
     pub resolution: SearchKnowledgeBaseOutputMemoriesItemConflictsWithItemFileResolution,
 }
@@ -40254,12 +43134,15 @@ pub struct SearchKnowledgeBaseOutputMemoriesItem {
     pub memory_id: String,
     pub r#type: SearchKnowledgeBaseOutputMemoriesItemType,
     pub scope: SearchKnowledgeBaseOutputMemoriesItemScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub subject_owner_id: Option<String>,
     pub text: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<SearchKnowledgeBaseOutputMemoriesItemPlan>,
     pub trust_level: SearchKnowledgeBaseOutputMemoriesItemTrustLevel,
     pub trust_reasons: Vec<SearchKnowledgeBaseOutputMemoriesItemTrustReasonsItem>,
@@ -40267,13 +43150,16 @@ pub struct SearchKnowledgeBaseOutputMemoriesItem {
     pub sources: Vec<SearchKnowledgeBaseOutputMemoriesItemSourcesItem>,
     pub holds: SearchKnowledgeBaseOutputMemoriesItemHolds,
     pub replaces: Vec<SearchKnowledgeBaseOutputMemoriesItemReplacesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<SearchKnowledgeBaseOutputMemoriesItemReplacedBy>,
     pub conflicts_with: Vec<SearchKnowledgeBaseOutputMemoriesItemConflictsWithItem>,
     pub connection_strength: f64,
     pub recall_strength: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
     pub check: SearchKnowledgeBaseOutputMemoriesItemCheck,
     pub sorted_by: SearchKnowledgeBaseOutputMemoriesItemSortedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_probability: Option<f64>,
 }
 
@@ -40284,6 +43170,7 @@ pub struct SearchKnowledgeBaseOutput {
     pub duration_ms: f64,
     pub passages: Vec<SearchKnowledgeBaseOutputPassagesItem>,
     pub memories: Vec<SearchKnowledgeBaseOutputMemoriesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_id: Option<String>,
 }
 
@@ -40312,7 +43199,11 @@ pub struct SendMemoryFeedbackInput {
     pub memory_id: String,
     pub stored_memory_id: String,
     pub verdict: SendMemoryFeedbackInputVerdict,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub recall_id: Option<String>,
 }
 impl SendMemoryFeedbackInput {
@@ -40402,15 +43293,35 @@ pub struct SettleFlaggedQuestionInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub question_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub chunk_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub file_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub version: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub first_position: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub last_position: Option<IntegerOrText>,
 }
 impl SettleFlaggedQuestionInput {
@@ -40607,7 +43518,9 @@ impl SettleFlaggedQuestionOutputAnswerAnsweredBy {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct SettleFlaggedQuestionOutputAnswer {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub answer: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub follow_up: Option<String>,
     pub cited_chunk_ids: Vec<String>,
     pub answered_by: SettleFlaggedQuestionOutputAnswerAnsweredBy,
@@ -40714,6 +43627,7 @@ impl SettleFlaggedQuestionOutputReturnedPassagesItemCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct SettleFlaggedQuestionOutputReturnedPassagesItemCitationSpreadsheet {
     pub kind: SettleFlaggedQuestionOutputReturnedPassagesItemCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -40762,7 +43676,9 @@ impl SettleFlaggedQuestionOutputReturnedPassagesItemCitationWebPageKind {
 #[non_exhaustive]
 pub struct SettleFlaggedQuestionOutputReturnedPassagesItemCitationWebPage {
     pub kind: SettleFlaggedQuestionOutputReturnedPassagesItemCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -40831,6 +43747,7 @@ pub struct SettleFlaggedQuestionOutputReturnedPassagesItemCitationRecording {
     pub kind: SettleFlaggedQuestionOutputReturnedPassagesItemCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -40894,10 +43811,14 @@ pub struct SettleFlaggedQuestionOutputReturnedPassagesItem {
     pub rank: f64,
     pub chunk_id: String,
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<SettleFlaggedQuestionOutputReturnedPassagesItemFileKind>,
     pub version: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<SettleFlaggedQuestionOutputReturnedPassagesItemCitation>,
 }
 
@@ -41000,6 +43921,7 @@ impl SettleFlaggedQuestionOutputCandidatesItemCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct SettleFlaggedQuestionOutputCandidatesItemCitationSpreadsheet {
     pub kind: SettleFlaggedQuestionOutputCandidatesItemCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -41048,7 +43970,9 @@ impl SettleFlaggedQuestionOutputCandidatesItemCitationWebPageKind {
 #[non_exhaustive]
 pub struct SettleFlaggedQuestionOutputCandidatesItemCitationWebPage {
     pub kind: SettleFlaggedQuestionOutputCandidatesItemCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -41117,6 +44041,7 @@ pub struct SettleFlaggedQuestionOutputCandidatesItemCitationRecording {
     pub kind: SettleFlaggedQuestionOutputCandidatesItemCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -41183,11 +44108,16 @@ pub struct SettleFlaggedQuestionOutputCandidatesItem {
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub probability: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<SettleFlaggedQuestionOutputCandidatesItemFileKind>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub latest_version: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<SettleFlaggedQuestionOutputCandidatesItemCitation>,
 }
 
@@ -41196,19 +44126,27 @@ pub struct SettleFlaggedQuestionOutputCandidatesItem {
 pub struct SettleFlaggedQuestionOutput {
     pub question_id: String,
     pub question: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub status: SettleFlaggedQuestionOutputStatus,
     pub signals: Vec<SettleFlaggedQuestionOutputSignalsItem>,
     pub flagged_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub judged_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub probability: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub chosen_rank: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub saved_question_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_by: Option<SettleFlaggedQuestionOutputSettledBy>,
     pub signal_details: Vec<SettleFlaggedQuestionOutputSignalDetailsItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub answer: Option<SettleFlaggedQuestionOutputAnswer>,
     pub returned_passages: Vec<SettleFlaggedQuestionOutputReturnedPassagesItem>,
     pub candidates: Vec<SettleFlaggedQuestionOutputCandidatesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub none_probability: Option<f64>,
     pub answer_read: bool,
 }
@@ -41289,11 +44227,23 @@ pub struct SettleMemoryInput {
     pub memory_id: String,
     pub stored_memory_id: String,
     pub trust_level: SettleMemoryInputTrustLevel,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub r#type: Option<SettleMemoryInputType>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub scope: Option<SettleMemoryInputScope>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub owner_id: Option<String>,
     #[serde(
         default,
@@ -41301,7 +44251,11 @@ pub struct SettleMemoryInput {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub expires_at: Option<Option<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub over_file: Option<bool>,
 }
 impl SettleMemoryInput {
@@ -41447,6 +44401,7 @@ impl SettleMemoryOutputPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct SettleMemoryOutputPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: SettleMemoryOutputPlanState,
 }
@@ -41521,12 +44476,14 @@ pub struct SettleMemoryOutput {
     pub memory_id: String,
     pub r#type: SettleMemoryOutputType,
     pub scope: SettleMemoryOutputScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: SettleMemoryOutputTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<SettleMemoryOutputPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -41534,11 +44491,17 @@ pub struct SettleMemoryOutput {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<SettleMemoryOutputSourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -41621,11 +44584,23 @@ pub struct SettleMemoryReviewInput {
     pub memory_id: String,
     pub review_id: String,
     pub trust_level: SettleMemoryReviewInputTrustLevel,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub r#type: Option<SettleMemoryReviewInputType>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub scope: Option<SettleMemoryReviewInputScope>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub owner_id: Option<String>,
 }
 impl SettleMemoryReviewInput {
@@ -41716,8 +44691,11 @@ impl SettleMemoryReviewOutputState {
 pub struct SettleMemoryReviewOutputContradictingRecordsItem {
     pub text: String,
     pub recorded_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_id: Option<String>,
 }
 
@@ -41874,6 +44852,7 @@ impl SettleMemoryReviewOutputMemoryPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct SettleMemoryReviewOutputMemoryPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: SettleMemoryReviewOutputMemoryPlanState,
 }
@@ -41948,12 +44927,14 @@ pub struct SettleMemoryReviewOutputMemory {
     pub memory_id: String,
     pub r#type: SettleMemoryReviewOutputMemoryType,
     pub scope: SettleMemoryReviewOutputMemoryScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: SettleMemoryReviewOutputMemoryTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<SettleMemoryReviewOutputMemoryPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
@@ -41961,11 +44942,17 @@ pub struct SettleMemoryReviewOutputMemory {
     pub connection_strength: f64,
     pub recall_strength: f64,
     pub sources: Vec<SettleMemoryReviewOutputMemorySourcesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_by: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub held_until: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_checked_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub forgotten_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub occurred_at: String,
     pub created_at: String,
@@ -41983,9 +44970,12 @@ pub struct SettleMemoryReviewOutput {
     pub evidence: serde_json::Map<String, serde_json::Value>,
     pub contradicting_records: Vec<SettleMemoryReviewOutputContradictingRecordsItem>,
     pub contradicted_memories: Vec<SettleMemoryReviewOutputContradictedMemoriesItem>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_trust_level: Option<SettleMemoryReviewOutputSettledTrustLevel>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_by: Option<String>,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub settled_at: Option<String>,
     pub memory: SettleMemoryReviewOutputMemory,
 }
@@ -41995,7 +44985,11 @@ pub struct SettleMemoryReviewOutput {
 pub struct SignInInput {
     pub email: String,
     pub password: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub known_device_token: Option<String>,
 }
 impl SignInInput {
@@ -42093,6 +45087,7 @@ impl SignOutInput {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct SignOutOutput {
+    #[serde(deserialize_with = "crate::serde_fields::boolean_constant::<_, _, true>")]
     pub signed_out: bool,
 }
 
@@ -42268,17 +45263,41 @@ pub struct SortMessageInput {
     pub text: String,
     pub author: String,
     pub author_kind: SortMessageInputAuthorKind,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sent_at: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub conversation_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub team_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub private: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sorting: Option<SortMessageInputSorting>,
 }
 impl SortMessageInput {
@@ -42432,6 +45451,7 @@ impl SortMessageOutputMemoriesItemPlanState {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct SortMessageOutputMemoriesItemPlan {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub due_at: Option<String>,
     pub state: SortMessageOutputMemoriesItemPlanState,
 }
@@ -42492,17 +45512,21 @@ impl SortMessageOutputMemoriesItemReviewReason {
 pub struct SortMessageOutputMemoriesItem {
     pub r#type: SortMessageOutputMemoriesItemType,
     pub scope: SortMessageOutputMemoriesItemScope,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub personal: bool,
     pub trust_level: SortMessageOutputMemoriesItemTrustLevel,
     pub text: String,
     pub subject: String,
     pub values: BTreeMap<String, Option<NumberOrBooleanOrText>>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub plan: Option<SortMessageOutputMemoriesItemPlan>,
     pub sensitive: bool,
     pub instruction_like: bool,
     pub sorted_by: SortMessageOutputMemoriesItemSortedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub review_reason: Option<SortMessageOutputMemoriesItemReviewReason>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub duplicate_of: Option<String>,
     pub conflicts_with: Vec<String>,
     pub agrees_with: Vec<String>,
@@ -42578,7 +45602,11 @@ pub struct SuggestIndexTermsInput {
     pub project_id: String,
     pub index_id: String,
     pub prefix: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub limit: Option<IntegerOrText>,
 }
 impl SuggestIndexTermsInput {
@@ -42756,6 +45784,7 @@ impl SyncMemorySourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct SyncMemorySourceOutputSignIn {
     pub status: SyncMemorySourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -42798,20 +45827,28 @@ pub struct SyncMemorySourceOutputLastError {
 pub struct SyncMemorySourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: SyncMemorySourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<SyncMemorySourceOutputSorting>,
     pub status: SyncMemorySourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<SyncMemorySourceOutputSignIn>,
     pub created_at: String,
     pub created_by: SyncMemorySourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<SyncMemorySourceOutputLastError>,
 }
 
@@ -42955,6 +45992,7 @@ impl SyncSourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct SyncSourceOutputSignIn {
     pub status: SyncSourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -42997,20 +46035,28 @@ pub struct SyncSourceOutputLastError {
 pub struct SyncSourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: SyncSourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<SyncSourceOutputSorting>,
     pub status: SyncSourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<SyncSourceOutputSignIn>,
     pub created_at: String,
     pub created_by: SyncSourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<SyncSourceOutputLastError>,
 }
 
@@ -43020,7 +46066,11 @@ pub struct TryCorrectionsInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub correction_ids: Vec<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub complete_index: Option<bool>,
 }
 impl TryCorrectionsInput {
@@ -43112,12 +46162,17 @@ pub struct TryCorrectionsOutput {
     pub mode: TryCorrectionsOutputMode,
     pub status: TryCorrectionsOutputStatus,
     pub complete_index: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub before_scorecard_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub after_scorecard_id: Option<String>,
     pub correction_ids: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_message: Option<String>,
     pub requested_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
 }
 
@@ -43194,15 +46249,20 @@ pub struct TuneMemoryOutputTuning {
     pub labelled_decisions_since_tuning: f64,
     pub labelled_decisions_per_tuning: f64,
     pub saved_questions_changed: bool,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_changes_since_scoring: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub started_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub tuned_at: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct TuneMemoryOutput {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall: Option<TuneMemoryOutputRecall>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub judgement: Option<TuneMemoryOutputJudgement>,
     pub labelled_decisions: TuneMemoryOutputLabelledDecisions,
     pub flagged_question_count: f64,
@@ -43244,6 +46304,7 @@ pub struct UndoLearnedChangeOutput {
     pub held_back_right_before: f64,
     pub held_back_right_after: f64,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub undone_at: Option<String>,
 }
 
@@ -43469,13 +46530,29 @@ impl UpdateApiKeyInputPermissionsRestrictedMemory {
 #[non_exhaustive]
 pub struct UpdateApiKeyInputPermissionsRestricted {
     pub access: UpdateApiKeyInputPermissionsRestrictedAccess,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub databases: Option<UpdateApiKeyInputPermissionsRestrictedDatabases>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub indexes: Option<UpdateApiKeyInputPermissionsRestrictedIndexes>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub knowledge_bases: Option<UpdateApiKeyInputPermissionsRestrictedKnowledgeBases>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub memory: Option<UpdateApiKeyInputPermissionsRestrictedMemory>,
 }
 impl UpdateApiKeyInputPermissionsRestricted {
@@ -43597,6 +46674,7 @@ impl UpdateApiKeyOutputPermissionsDatabasesLevel {
 #[non_exhaustive]
 pub struct UpdateApiKeyOutputPermissionsDatabases {
     pub level: UpdateApiKeyOutputPermissionsDatabasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -43625,6 +46703,7 @@ impl UpdateApiKeyOutputPermissionsIndexesLevel {
 #[non_exhaustive]
 pub struct UpdateApiKeyOutputPermissionsIndexes {
     pub level: UpdateApiKeyOutputPermissionsIndexesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -43653,6 +46732,7 @@ impl UpdateApiKeyOutputPermissionsKnowledgeBasesLevel {
 #[non_exhaustive]
 pub struct UpdateApiKeyOutputPermissionsKnowledgeBases {
     pub level: UpdateApiKeyOutputPermissionsKnowledgeBasesLevel,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub resource_ids: Option<Vec<String>>,
 }
 
@@ -43701,13 +46781,18 @@ pub struct UpdateApiKeyOutput {
     pub name: String,
     pub display_prefix: String,
     pub permissions: UpdateApiKeyOutputPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub permissions_changed_by_name: Option<String>,
     pub created_by: String,
     pub created_by_name: String,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub expires_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_used_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub revoked_at: Option<String>,
 }
 
@@ -43716,7 +46801,11 @@ pub struct UpdateApiKeyOutput {
 pub struct UpdateDatabaseInput {
     pub project_id: String,
     pub database_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sql_write_preview: Option<bool>,
 }
 impl UpdateDatabaseInput {
@@ -43842,9 +46931,12 @@ impl UpdateDatabaseOutputCompactionFailureCode {
 pub struct UpdateDatabaseOutputCompaction {
     pub state: UpdateDatabaseOutputCompactionState,
     pub started_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub finished_at: Option<String>,
     pub file_bytes_before: i64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_bytes_after: Option<i64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub failure_code: Option<UpdateDatabaseOutputCompactionFailureCode>,
 }
 
@@ -43856,11 +46948,15 @@ pub struct UpdateDatabaseOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: UpdateDatabaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub migration_version: f64,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub size: Option<UpdateDatabaseOutputSize>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub compaction: Option<UpdateDatabaseOutputCompaction>,
     pub sql_write_preview: bool,
 }
@@ -44201,9 +47297,17 @@ impl UpdateIndexInputLanguage {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateIndexInputBm25 {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub k1: Option<f64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub b: Option<f64>,
 }
 impl UpdateIndexInputBm25 {
@@ -44336,33 +47440,89 @@ impl UpdateIndexInputSearchDefaultsFusion {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateIndexInputSearchDefaults {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fields: Option<UpdateIndexInputSearchDefaultsFields>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub boosts: Option<UpdateIndexInputSearchDefaultsBoosts>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub term_match: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub tolerance: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix_length: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub exact: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub prefix: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub partial_words: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_score: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion: Option<UpdateIndexInputSearchDefaultsFusion>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub fusion_constant: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_weight: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub minimum_similarity: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub vector_candidates: Option<IntegerOrText>,
 }
 impl UpdateIndexInputSearchDefaults {
@@ -44462,7 +47622,11 @@ impl UpdateIndexInputSearchDefaults {
 pub struct UpdateIndexInput {
     pub project_id: String,
     pub index_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub language: Option<UpdateIndexInputLanguage>,
     #[serde(
         default,
@@ -44470,7 +47634,11 @@ pub struct UpdateIndexInput {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub bm25: Option<Option<UpdateIndexInputBm25>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub synonyms: Option<Vec<UpdateIndexInputSynonymsItem>>,
     #[serde(
         default,
@@ -44559,7 +47727,9 @@ pub struct UpdateIndexOutput {
     pub name: String,
     pub created_at: String,
     pub created_by: UpdateIndexOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub config: serde_json::Map<String, serde_json::Value>,
     pub narsil_url: String,
@@ -44576,13 +47746,29 @@ pub struct UpdateKnowledgeBaseInput {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub question_log_retention_days: Option<Option<IntegerOrText>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent_depth: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub automatic_corrections: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub judge_passages: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub judge_threshold: Option<NumberOrText>,
 }
 impl UpdateKnowledgeBaseInput {
@@ -44659,14 +47845,18 @@ pub struct UpdateKnowledgeBaseOutput {
     pub name: String,
     pub language: String,
     pub chunk_tokens: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_retention_days: Option<f64>,
     pub created_at: String,
     pub created_by: UpdateKnowledgeBaseOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
     pub database_id: String,
     pub live_index_id: String,
     pub sirannon_url: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub search_pending_since: Option<String>,
 }
 
@@ -44698,7 +47888,11 @@ pub struct UpdateMemoryInputSubjectsItem {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub owner_id: Option<Option<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sensitive: Option<bool>,
 }
 impl UpdateMemoryInputSubjectsItem {
@@ -44788,11 +47982,23 @@ impl UpdateMemoryInputAgentPermissionsDisputed {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateMemoryInputAgentPermissions {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub confirmed: Option<UpdateMemoryInputAgentPermissionsConfirmed>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub likely: Option<UpdateMemoryInputAgentPermissionsLikely>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub disputed: Option<UpdateMemoryInputAgentPermissionsDisputed>,
 }
 impl UpdateMemoryInputAgentPermissions {
@@ -44824,15 +48030,35 @@ impl UpdateMemoryInputAgentPermissions {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateMemoryInputCueWeightsStatementKind {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub statement: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub event: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub promise: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub procedure: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub instruction: Option<NumberOrText>,
 }
 impl UpdateMemoryInputCueWeightsStatementKind {
@@ -44876,17 +48102,41 @@ impl UpdateMemoryInputCueWeightsStatementKind {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateMemoryInputCueWeightsAuthorKind {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub staff: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub end_user: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub outsider: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub records: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub code: Option<NumberOrText>,
 }
 impl UpdateMemoryInputCueWeightsAuthorKind {
@@ -44936,15 +48186,35 @@ impl UpdateMemoryInputCueWeightsAuthorKind {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateMemoryInputCueWeights {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub statement_kind: Option<UpdateMemoryInputCueWeightsStatementKind>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub author_kind: Option<UpdateMemoryInputCueWeightsAuthorKind>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub subject_owner: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub private_channel: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub reactions_for_second_voice: Option<IntegerOrText>,
 }
 impl UpdateMemoryInputCueWeights {
@@ -44990,25 +48260,65 @@ impl UpdateMemoryInputCueWeights {
 pub struct UpdateMemoryInput {
     pub project_id: String,
     pub memory_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub knowledge_base_choice: Option<UpdateMemoryInputKnowledgeBaseChoice>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub checked_knowledge_base_ids: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub duplicate_threshold: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub confidence_threshold: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agreeing_authors_for_confirmed: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub first_pack_tokens: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub recall_fade_days: Option<NumberOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub subjects: Option<Vec<UpdateMemoryInputSubjectsItem>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sources_for_likely: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub agent_permissions: Option<UpdateMemoryInputAgentPermissions>,
     #[serde(
         default,
@@ -45040,11 +48350,23 @@ pub struct UpdateMemoryInput {
         deserialize_with = "crate::serde_fields::double_option"
     )]
     pub recall_log_retention_days: Option<Option<IntegerOrText>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub ready_set_size: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub recall_depth: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub cue_weights: Option<UpdateMemoryInputCueWeights>,
 }
 impl UpdateMemoryInput {
@@ -45187,6 +48509,7 @@ impl UpdateMemoryOutputSettingsKnowledgeBaseChoice {
 #[non_exhaustive]
 pub struct UpdateMemoryOutputSettingsSubjectsItem {
     pub subject: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub owner_id: Option<String>,
     pub sensitive: bool,
 }
@@ -45302,14 +48625,20 @@ pub struct UpdateMemoryOutputSettings {
     pub first_pack_tokens: f64,
     pub recall_fade_days: f64,
     pub knowledge_base_choice: UpdateMemoryOutputSettingsKnowledgeBaseChoice,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub checked_knowledge_base_ids: Option<Vec<String>>,
     pub subjects: Vec<UpdateMemoryOutputSettingsSubjectsItem>,
     pub sources_for_likely: f64,
     pub agent_permissions: UpdateMemoryOutputSettingsAgentPermissions,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub dropped_list_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub replaced_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub message_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub personal_retention_days: Option<f64>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub recall_log_retention_days: Option<f64>,
     pub ready_set_size: f64,
     pub recall_depth: f64,
@@ -45396,8 +48725,11 @@ pub struct UpdateMemoryOutput {
     pub checked_knowledge_bases: UpdateMemoryOutputCheckedKnowledgeBases,
     pub created_at: String,
     pub created_by: UpdateMemoryOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub deleted_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub purge_after: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting_pending_since: Option<String>,
 }
 
@@ -45428,15 +48760,35 @@ pub struct UpdateMemorySourceInput {
     pub project_id: String,
     pub memory_id: String,
     pub source_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub name: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub sorting: Option<UpdateMemorySourceInputSorting>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub settings: Option<serde_json::Map<String, serde_json::Value>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub credentials: Option<serde_json::Map<String, serde_json::Value>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub rotate_webhook_secret: Option<bool>,
 }
 impl UpdateMemorySourceInput {
@@ -45602,6 +48954,7 @@ impl UpdateMemorySourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct UpdateMemorySourceOutputSignIn {
     pub status: UpdateMemorySourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -45644,21 +48997,30 @@ pub struct UpdateMemorySourceOutputLastError {
 pub struct UpdateMemorySourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: UpdateMemorySourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<UpdateMemorySourceOutputSorting>,
     pub status: UpdateMemorySourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<UpdateMemorySourceOutputSignIn>,
     pub created_at: String,
     pub created_by: UpdateMemorySourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<UpdateMemorySourceOutputLastError>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_secret: Option<String>,
 }
 
@@ -45668,17 +49030,41 @@ pub struct UpdateSavedQuestionInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub saved_question_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub chunk_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub file_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub version: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub first_position: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub last_position: Option<IntegerOrText>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub confirm: Option<bool>,
 }
 impl UpdateSavedQuestionInput {
@@ -45891,6 +49277,7 @@ impl UpdateSavedQuestionOutputPassageCitationSpreadsheetKind {
 #[non_exhaustive]
 pub struct UpdateSavedQuestionOutputPassageCitationSpreadsheet {
     pub kind: UpdateSavedQuestionOutputPassageCitationSpreadsheetKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sheet: Option<String>,
     pub first_row: f64,
     pub last_row: f64,
@@ -45939,7 +49326,9 @@ impl UpdateSavedQuestionOutputPassageCitationWebPageKind {
 #[non_exhaustive]
 pub struct UpdateSavedQuestionOutputPassageCitationWebPage {
     pub kind: UpdateSavedQuestionOutputPassageCitationWebPageKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub address: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
 }
 
@@ -46008,6 +49397,7 @@ pub struct UpdateSavedQuestionOutputPassageCitationRecording {
     pub kind: UpdateSavedQuestionOutputPassageCitationRecordingKind,
     pub start_second: f64,
     pub end_second: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub frame: Option<f64>,
 }
 
@@ -46069,13 +49459,17 @@ impl From<UpdateSavedQuestionOutputPassageCitationRecording>
 #[non_exhaustive]
 pub struct UpdateSavedQuestionOutputPassage {
     pub file_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_path: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub file_kind: Option<UpdateSavedQuestionOutputPassageFileKind>,
     pub version: f64,
     pub first_position: f64,
     pub last_position: f64,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub heading: Option<String>,
     pub state: UpdateSavedQuestionOutputPassageState,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub citation: Option<UpdateSavedQuestionOutputPassageCitation>,
 }
 
@@ -46112,8 +49506,10 @@ pub struct UpdateSavedQuestionOutputBrokenPrevious {
 #[non_exhaustive]
 pub struct UpdateSavedQuestionOutputBroken {
     pub change: UpdateSavedQuestionOutputBrokenChange,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub version: Option<f64>,
     pub detected_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub previous: Option<UpdateSavedQuestionOutputBrokenPrevious>,
 }
 
@@ -46124,9 +49520,12 @@ pub struct UpdateSavedQuestionOutput {
     pub question: String,
     pub split: UpdateSavedQuestionOutputSplit,
     pub source: UpdateSavedQuestionOutputSource,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub question_log_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub end_user_id: Option<String>,
     pub passage: UpdateSavedQuestionOutputPassage,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub broken: Option<UpdateSavedQuestionOutputBroken>,
     pub created_at: String,
     pub updated_at: String,
@@ -46138,13 +49537,29 @@ pub struct UpdateSourceInput {
     pub project_id: String,
     pub knowledge_base_id: String,
     pub source_id: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub name: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub settings: Option<serde_json::Map<String, serde_json::Value>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub credentials: Option<serde_json::Map<String, serde_json::Value>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub rotate_webhook_secret: Option<bool>,
 }
 impl UpdateSourceInput {
@@ -46304,6 +49719,7 @@ impl UpdateSourceOutputSignInStatus {
 #[non_exhaustive]
 pub struct UpdateSourceOutputSignIn {
     pub status: UpdateSourceOutputSignInStatus,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub account: Option<String>,
 }
 
@@ -46346,21 +49762,30 @@ pub struct UpdateSourceOutputLastError {
 pub struct UpdateSourceOutput {
     pub id: String,
     pub project_id: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub knowledge_base_id: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub memory_id: Option<String>,
     pub name: String,
     pub kind: UpdateSourceOutputKind,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sorting: Option<UpdateSourceOutputSorting>,
     pub status: UpdateSourceOutputStatus,
     pub settings: serde_json::Map<String, serde_json::Value>,
     pub credential_names: Vec<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_url: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub sign_in: Option<UpdateSourceOutputSignIn>,
     pub created_at: String,
     pub created_by: UpdateSourceOutputCreatedBy,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_synced_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub next_sync_at: Option<String>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub last_error: Option<UpdateSourceOutputLastError>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub webhook_secret: Option<String>,
 }
 
@@ -46841,6 +50266,7 @@ impl From<&str> for UpdateTableRowOutputRowCellsItem {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateTableRowOutputRow {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub key: Option<Vec<Option<UpdateTableRowOutputRowKeyItem>>>,
     pub cells: Vec<Option<UpdateTableRowOutputRowCellsItem>>,
 }
@@ -46929,7 +50355,9 @@ impl From<&str> for UpdateTableRowOutputReturnedKeyItem {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct UpdateTableRowOutput {
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub row: Option<UpdateTableRowOutputRow>,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub returned_key: Option<Vec<Option<UpdateTableRowOutputReturnedKeyItem>>>,
 }
 
@@ -47062,7 +50490,11 @@ impl VerifySecondFactorInputMethod {
 #[non_exhaustive]
 pub struct VerifySecondFactorInput {
     pub challenge_token: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::serde_fields::present"
+    )]
     pub method: Option<VerifySecondFactorInputMethod>,
     pub code: String,
 }
@@ -47111,6 +50543,7 @@ pub struct VerifySecondFactorOutputSessionAccount {
     pub name: String,
     pub status: VerifySecondFactorOutputSessionAccountStatus,
     pub created_at: String,
+    #[serde(deserialize_with = "crate::serde_fields::required")]
     pub decided_at: Option<String>,
     pub is_operator: bool,
 }

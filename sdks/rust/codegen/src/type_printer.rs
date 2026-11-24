@@ -130,6 +130,9 @@ impl TypeCollector {
                 identifier,
                 value_type: self.rendered(schema, &child)?,
                 required: *required,
+                constant: resolved(schema, context.components, &child.place)?
+                    .get("const")
+                    .cloned(),
             });
         }
         let model = StructModel {

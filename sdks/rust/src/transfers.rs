@@ -333,12 +333,12 @@ impl Himring {
             added_file_of(checked_record(settled, source.size_bytes, &sha256)?)
         }
         .await;
-        guard.armed = false;
         if let Err(error) = &outcome
             && should_cancel(error)
         {
             self.cancel_quietly(&ids).await;
         }
+        guard.armed = false;
         outcome
     }
 
