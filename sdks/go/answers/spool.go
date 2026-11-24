@@ -172,12 +172,24 @@ func (store *spool) recoverFile(path string) []spooledEvent {
 		return nil
 	}
 	claimed := filepath.Join(store.directory, store.claimName())
+	now := time.Now()
+	if err := os.Chtimes(path, now, now); err != nil {
+		return nil
+	}
 	if err := os.Rename(path, claimed); err != nil {
 		if !errors.Is(err, fs.ErrNotExist) {
 			store.warn("An answer spool file left by an earlier process could not be read", map[string]any{"file_path": path, "error": err})
 		}
 		return nil
 	}
+	stopHeartbeat := keepClaimAlive(claimed)
+	defer stopHeartbeat()
+	recovered := false
+	defer func() {
+		if !recovered {
+			os.Rename(claimed, path)
+		}
+	}()
 	claimedInfo, err := os.Lstat(claimed)
 	if err != nil || !isOwnRegularFile(claimedInfo) || claimedInfo.Size() > recoveredFileMaximumBytes {
 		os.Remove(claimed)
@@ -193,6 +205,7 @@ func (store *spool) recoverFile(path string) []spooledEvent {
 		return nil
 	}
 	os.Remove(claimed)
+	recovered = true
 	return events
 }
 

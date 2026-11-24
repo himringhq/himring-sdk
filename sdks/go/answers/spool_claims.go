@@ -37,3 +37,25 @@ func (store *spool) claimIsLive(name string, modifiedAt time.Time) bool {
 	owner := spoolOwner{Host: parts[0], PID: pid, Instance: parts[2]}
 	return !isOrphaned(owner, true, modifiedAt, hostFingerprint(store.host), time.Now())
 }
+
+func keepClaimAlive(path string) func() {
+	stop := make(chan struct{})
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		ticker := time.NewTicker(SpoolHeartbeat)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-stop:
+				return
+			case now := <-ticker.C:
+				os.Chtimes(path, now, now)
+			}
+		}
+	}()
+	return func() {
+		close(stop)
+		<-done
+	}
+}
