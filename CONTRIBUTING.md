@@ -1,6 +1,6 @@
 # Contributing to the Himring SDKs
 
-This repository holds the public clients of the [Himring](https://himring.ai) API: the TypeScript SDK, the Python SDK, the Go SDK, the CLI, the MCP server, and the hooks for LiveKit and Pipecat agents. Every client is generated from the same OpenAPI documents, so a change usually starts in the spec or in a generator and then shows up in each client.
+This repository holds the public clients of the [Himring](https://himring.ai) API: the TypeScript SDK, the Python SDK, the Go SDK, the Rust SDK, the CLI, the MCP server, and the hooks for LiveKit and Pipecat agents. Every client is generated from the same OpenAPI documents, so a change usually starts in the spec or in a generator and then shows up in each client.
 
 ## Code of conduct
 
@@ -12,6 +12,7 @@ This project follows the [Contributor Covenant](./CODE_OF_CONDUCT.md). You can r
 - pnpm 11, which corepack installs from the `packageManager` field of `package.json`
 - [uv](https://docs.astral.sh/uv/), which installs the Python that each Python project needs
 - [Go](https://go.dev/dl/) 1.26 or later, for the Go SDK
+- [rustup](https://rustup.rs), which installs the Rust toolchain that `sdks/rust/rust-toolchain.toml` pins
 - Git
 
 Clone the repository and install the Node packages from the root:
@@ -20,7 +21,7 @@ Clone the repository and install the Node packages from the root:
 pnpm install
 ```
 
-The Python targets call `uv run --frozen`, so uv creates each virtual environment from its `uv.lock` the first time that a target calls it.
+The Python targets call `uv run --frozen`, so uv creates each virtual environment from its `uv.lock` the first time that a target calls it. The Rust targets call `cargo` with `--locked`, so cargo builds from the committed `Cargo.lock` and fails when the lockfile would have to change.
 
 ## How the repository fits together
 
@@ -30,6 +31,7 @@ The Python targets call `uv run --frozen`, so uv creates each virtual environmen
 | `sdks/typescript/` | `sdk-typescript` | `@himring/sdk`, with its generator in `codegen/` and its generated code in `src/generated/` |
 | `sdks/python/` | `sdk-python` | `himring`, with its generator in `codegen/` and its generated code in `src/himring/_generated/` |
 | `sdks/go/` | `sdk-go` | The `github.com/himringhq/himring-sdk/sdks/go` module, with its generator in `codegen/` and its generated code in the `*_gen.go` files |
+| `sdks/rust/` | `sdk-rust` | The `himring` crate, with its generator in `codegen/` and its generated code in `src/generated/` |
 | `packages/cli/` | `cli` | `@himring/cli`, the `himring` command |
 | `packages/mcp-server/` | `mcp-server` | `@himring/mcp-server`, the `himring-mcp` command |
 | `packages/agent-hooks-python/` | `agent-hooks-python` | `himring-agent-hooks`, for LiveKit and Pipecat agents |
@@ -51,6 +53,7 @@ Each SDK has a `generate` target, which writes the generated code from the docum
 pnpm exec nx run sdk-typescript:generate
 pnpm exec nx run sdk-python:generate
 pnpm exec nx run sdk-go:generate
+pnpm exec nx run sdk-rust:generate
 ```
 
 ### Tests against the contract server
@@ -73,22 +76,23 @@ pnpm exec nx affected -t validate generate:check lint typecheck build test --bas
 | --- | --- |
 | `validate` | Checks that `spec/` matches the pinned `@himring/openapi` release |
 | `generate:check` | Checks that the generated code matches the spec |
-| `lint` | Biome for TypeScript, ruff for Python, and `gofmt` with `go mod tidy -diff` for Go |
-| `format` | Applies the Biome, ruff, and `gofmt` fixes and formatting |
-| `typecheck` | `tsc` from TypeScript 7 for TypeScript, pyright for Python, and `go vet` for Linux, macOS, and Windows for Go |
-| `build` | tsup for the npm packages, with `tsc` writing the declarations of `@himring/sdk`, `uv build` for the Python packages, and `go build` for the Go module |
-| `test` | Vitest for TypeScript, pytest for Python, and `go test -race` for Go |
+| `lint` | Biome for TypeScript, ruff for Python, `gofmt` with `go mod tidy -diff` for Go, and rustfmt with clippy for Rust |
+| `format` | Applies the Biome, ruff, `gofmt`, and rustfmt fixes and formatting |
+| `typecheck` | `tsc` from TypeScript 7 for TypeScript, pyright for Python, `go vet` for Linux, macOS, and Windows for Go, and `cargo check` for Rust |
+| `build` | tsup for the npm packages, with `tsc` writing the declarations of `@himring/sdk`, `uv build` for the Python packages, `go build` for the Go module, and `cargo package` for the crate |
+| `test` | Vitest for TypeScript, pytest for Python, `go test -race` for Go, and `cargo test` for Rust |
 
 ## Code style
 
 - Biome formats and lints TypeScript with single quotes, semicolons only where they're required, and a 120-character line.
 - Ruff formats and lints Python with a 100-character line, and pyright checks its types.
 - `gofmt` formats Go, and `go vet` checks it.
+- Rustfmt formats Rust with its default 100-character line, and clippy lints it with the pedantic group, warnings as errors, and no `unsafe` code.
 - Files carry no comments, so names hold the information that a comment would.
 - TypeScript has no `any`, no non-null assertion, and no `@ts-ignore` or `@ts-expect-error`, and Python has no `Any` and no `type: ignore`.
 - The JSON fields that the clients send and return, the CLI's JSON output, and the MCP server's tool arguments and results are in lowercase snake_case, which is the case of the API.
 - Each hand-written source file stays under 400 lines.
-- Install a Node package with `pnpm add -E` from inside the project that needs it, a Python package with `uv add` from inside the Python project, and a Go module with `go get` from inside `sdks/go`.
+- Install a Node package with `pnpm add -E` from inside the project that needs it, a Python package with `uv add` from inside the Python project, a Go module with `go get` from inside `sdks/go`, and a crate with `cargo add` from inside `sdks/rust`.
 
 ## Pull requests
 

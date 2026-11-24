@@ -26,6 +26,7 @@ jobs:
       typescript: ${{ steps.projects.outputs.typescript }}
       python: ${{ steps.projects.outputs.python }}
       go: ${{ steps.projects.outputs.go }}
+      rust: ${{ steps.projects.outputs.rust }}
 
     steps:
       - name: Checkout the full history with actions/checkout v7.0.1
@@ -66,28 +67,32 @@ jobs:
           echo "base=$base" >> "$GITHUB_OUTPUT"
           echo "head=$head" >> "$GITHUB_OUTPUT"
 
-      - name: List the affected spec, TypeScript, Python, and Go projects
+      - name: List the affected spec, TypeScript, Python, Go, and Rust projects
         id: projects
         env:
           BASE: ${{ steps.range.outputs.base }}
           HEAD: ${{ steps.range.outputs.head }}
           PYTHON_PROJECTS: sdk-python,agent-hooks-python
           GO_PROJECTS: sdk-go
+          RUST_PROJECTS: sdk-rust
         run: |
           affected=(pnpm exec nx show projects --affected --base="$BASE" --head="$HEAD" --json)
           spec="$("${affected[@]}" --projects=spec)"
-          typescript="$("${affected[@]}" --exclude="spec,$PYTHON_PROJECTS,$GO_PROJECTS")"
+          typescript="$("${affected[@]}" --exclude="spec,$PYTHON_PROJECTS,$GO_PROJECTS,$RUST_PROJECTS")"
           python="$("${affected[@]}" --projects="$PYTHON_PROJECTS")"
           go="$("${affected[@]}" --projects="$GO_PROJECTS")"
+          rust="$("${affected[@]}" --projects="$RUST_PROJECTS")"
           echo "Affected spec: $spec"
           echo "Affected TypeScript projects: $typescript"
           echo "Affected Python projects: $python"
           echo "Affected Go projects: $go"
+          echo "Affected Rust projects: $rust"
           {
             echo "spec=$spec"
             echo "typescript=$typescript"
             echo "python=$python"
             echo "go=$go"
+            echo "rust=$rust"
           } >> "$GITHUB_OUTPUT"
 
   spec:
@@ -121,6 +126,14 @@ jobs:
     uses: ./.github/workflows/check-go.yml
     with:
       projects: ${{ needs.changes.outputs.go }}
+
+  rust:
+    name: Rust
+    needs: changes
+    if: ${{ needs.changes.outputs.rust != '[]' }}
+    uses: ./.github/workflows/check-rust.yml
+    with:
+      projects: ${{ needs.changes.outputs.rust }}
 
   security:
     name: Audit workflows with zizmor and scan for secrets with gitleaks

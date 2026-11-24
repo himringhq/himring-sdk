@@ -12,6 +12,8 @@ __pycache__/
 .ruff_cache/
 build/
 
+target/
+
 .env
 .env.*
 .DS_Store

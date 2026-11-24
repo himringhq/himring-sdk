@@ -79,6 +79,25 @@ updates:
     commit-message:
       prefix: "deps(go)"
 
+  - package-ecosystem: "cargo"
+    directories:
+      - "/sdks/rust"
+      - "/sdks/rust/codegen"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 0
+    cooldown:
+      default-days: 7
+    groups:
+      rust-sdk-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      rust-sdk:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps(rust)"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
