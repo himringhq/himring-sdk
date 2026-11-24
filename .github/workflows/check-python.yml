@@ -3,10 +3,8 @@ name: Check the Python projects
 on:
   workflow_call:
     inputs:
-      base:
-        required: true
-        type: string
-      head:
+      projects:
+        description: The JSON array of affected projects that this workflow checks
         required: true
         type: string
 
@@ -50,17 +48,13 @@ jobs:
 
       - name: Check that the generated Python SDK matches the spec
         env:
-          BASE: ${{ inputs.base }}
-          HEAD: ${{ inputs.head }}
-          PYTHON_PROJECTS: sdk-python,agent-hooks-python
-        run: pnpm exec nx affected -t generate:check --projects="$PYTHON_PROJECTS" --base="$BASE" --head="$HEAD" --outputStyle=static
+          AFFECTED_PROJECTS: ${{ inputs.projects }}
+        run: pnpm exec nx run-many -t generate:check --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static
 
       - name: Lint, typecheck, build, and test the affected Python projects
         env:
-          BASE: ${{ inputs.base }}
-          HEAD: ${{ inputs.head }}
-          PYTHON_PROJECTS: sdk-python,agent-hooks-python
-        run: pnpm exec nx affected -t lint typecheck build test --projects="$PYTHON_PROJECTS" --base="$BASE" --head="$HEAD" --outputStyle=static
+          AFFECTED_PROJECTS: ${{ inputs.projects }}
+        run: pnpm exec nx run-many -t lint typecheck build test --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static
 
   oldest-python:
     name: Test the Python packages on the oldest Python that each supports
@@ -93,15 +87,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Test the Python SDK on Python 3.10
+        if: ${{ contains(fromJSON(inputs.projects), 'sdk-python') }}
         env:
-          BASE: ${{ inputs.base }}
-          HEAD: ${{ inputs.head }}
           UV_PYTHON: '3.10'
-        run: pnpm exec nx affected -t test --projects=sdk-python --base="$BASE" --head="$HEAD" --skip-nx-cache --outputStyle=static
+        run: pnpm exec nx run sdk-python:test --skip-nx-cache --outputStyle=static
 
       - name: Test the agent hooks on Python 3.11
+        if: ${{ contains(fromJSON(inputs.projects), 'agent-hooks-python') }}
         env:
-          BASE: ${{ inputs.base }}
-          HEAD: ${{ inputs.head }}
           UV_PYTHON: '3.11'
-        run: pnpm exec nx affected -t test --projects=agent-hooks-python --base="$BASE" --head="$HEAD" --skip-nx-cache --outputStyle=static
+        run: pnpm exec nx run agent-hooks-python:test --skip-nx-cache --outputStyle=static
