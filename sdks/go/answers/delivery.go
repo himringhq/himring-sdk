@@ -101,12 +101,13 @@ func retryDelay(err error, attempt int) time.Duration {
 	return rand.N(ceiling)
 }
 
-func pauseUnlessClosing(wait time.Duration, closing context.Context) {
+func pauseUnlessClosing(wait time.Duration, base context.Context, closing context.Context) {
 	timer := time.NewTimer(wait)
 	defer timer.Stop()
 	select {
 	case <-timer.C:
 	case <-closing.Done():
+	case <-base.Done():
 	}
 }
 
@@ -163,6 +164,6 @@ func deliverBatch(base context.Context, target *Recorder, batch []pendingEvent, 
 		if time.Now().Add(wait).After(policy.deadline()) {
 			return deliveryOutcome{kind: outcomeDeadlinePassed}
 		}
-		pauseUnlessClosing(wait, policy.closing)
+		pauseUnlessClosing(wait, base, policy.closing)
 	}
 }

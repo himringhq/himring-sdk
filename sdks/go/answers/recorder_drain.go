@@ -2,6 +2,7 @@ package answers
 
 import (
 	"context"
+	"errors"
 	"strconv"
 	"time"
 )
@@ -36,6 +37,9 @@ func (recorder *Recorder) flushInBackground() {
 }
 
 func (recorder *Recorder) acquire(ctx context.Context) bool {
+	if ctx.Err() != nil {
+		return false
+	}
 	select {
 	case recorder.drainSlot <- struct{}{}:
 		return true
@@ -49,39 +53,58 @@ func (recorder *Recorder) release() {
 }
 
 func (recorder *Recorder) Flush(ctx context.Context) error {
-	if !recorder.acquire(ctx) {
+	if ctx == nil {
+		return errors.New("pass a context to Flush")
+	}
+	deadline := time.Now().Add(recorder.closeTimeout)
+	wait, cancel := context.WithDeadline(ctx, deadline)
+	defer cancel()
+	if !recorder.acquire(wait) {
 		return context.Cause(ctx)
 	}
 	defer recorder.release()
-	recorder.drain(ctx, time.Now().Add(recorder.closeTimeout))
-	return ctx.Err()
+	recorder.mutex.Lock()
+	closed := recorder.closed
+	recorder.mutex.Unlock()
+	if !closed {
+		recorder.drain(wait, deadline)
+	}
+	return context.Cause(ctx)
 }
 
 func (recorder *Recorder) Close(ctx context.Context) error {
-	recorder.mutex.Lock()
-	if recorder.closed {
-		recorder.mutex.Unlock()
-		<-recorder.stopped
-		return nil
+	if ctx == nil {
+		return errors.New("pass a context to Close")
 	}
-	recorder.closed = true
-	recorder.closeDeadline = time.Now().Add(recorder.closeTimeout)
+	recorder.mutex.Lock()
+	if !recorder.closed {
+		recorder.closed = true
+		recorder.closeDeadline = time.Now().Add(recorder.closeTimeout)
+		recorder.markClosed()
+		go recorder.finishClose()
+	}
 	recorder.mutex.Unlock()
-	recorder.markClosed()
 	select {
-	case <-recorder.stopped:
+	case <-recorder.closeDone:
+		return context.Cause(ctx)
 	case <-ctx.Done():
 		return context.Cause(ctx)
 	}
-	if !recorder.acquire(ctx) {
-		return context.Cause(ctx)
-	}
+}
+
+func (recorder *Recorder) finishClose() {
+	defer close(recorder.closeDone)
+	<-recorder.stopped
+	recorder.acquire(context.Background())
 	defer recorder.release()
+	ctx, cancel := context.WithDeadline(context.Background(), recorder.closeDeadline)
+	defer cancel()
 	recorder.drain(ctx, recorder.closeDeadline)
+	recorder.mutex.Lock()
+	defer recorder.mutex.Unlock()
 	if recorder.spool != nil {
 		recorder.spool.close(true, recorder.snapshot())
 	}
-	return ctx.Err()
 }
 
 func (recorder *Recorder) effectiveDeadline(deadline time.Time) func() time.Time {
@@ -109,8 +132,8 @@ func (recorder *Recorder) recoverOrphans() {
 		return
 	}
 	recorder.mutex.Lock()
+	defer recorder.mutex.Unlock()
 	recorder.lastRecoveryAt = time.Now()
-	recorder.mutex.Unlock()
 	recorder.enqueue(recorder.spool.recoverOrphans())
 }
 
@@ -140,6 +163,8 @@ func (recorder *Recorder) drain(base context.Context, deadline time.Time) {
 		}
 		recorder.settleBatch(batch, outcome)
 	}
+	recorder.mutex.Lock()
+	defer recorder.mutex.Unlock()
 	if recorder.spool != nil {
 		recorder.spool.settle(recorder.snapshot())
 	}
@@ -160,10 +185,10 @@ func (recorder *Recorder) settleBatch(batch []pendingEvent, outcome deliveryOutc
 		}
 	}
 	recorder.pending = kept
-	recorder.mutex.Unlock()
 	if recorder.spool != nil {
 		recorder.spool.markDone(ids)
 	}
+	recorder.mutex.Unlock()
 	switch outcome.kind {
 	case outcomeDelivered:
 		if len(outcome.unknownQuestionIDs) > 0 {

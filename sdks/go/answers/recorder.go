@@ -83,12 +83,16 @@ type Recorder struct {
 	lastDropWarningAt time.Time
 	closed            bool
 	closeDeadline     time.Time
+	warningsMutex     sync.Mutex
+	warnings          []recorderWarning
+	warningActive     bool
 
 	drainSlot  chan struct{}
 	wake       chan struct{}
 	closing    context.Context
 	markClosed context.CancelFunc
 	stopped    chan struct{}
+	closeDone  chan struct{}
 }
 
 func NewRecorder(options Options) (*Recorder, error) {
@@ -101,7 +105,7 @@ func NewRecorder(options Options) (*Recorder, error) {
 		logger: options.Logger, maximumBuffered: atLeastOne(options.MaximumBufferedEvents, DefaultBufferMaximum),
 		maximumAttempts: atLeastOne(options.MaximumAttempts, DefaultDeliveryAttempts), closeTimeout: DefaultCloseTimeout,
 		byteBudget: math.MaxInt, drainSlot: make(chan struct{}, 1), wake: make(chan struct{}, 1),
-		closing: closing, markClosed: markClosed, stopped: make(chan struct{}),
+		closing: closing, markClosed: markClosed, stopped: make(chan struct{}), closeDone: make(chan struct{}),
 	}
 	if recorder.logger == nil {
 		recorder.logger = slogLogger{}
@@ -117,7 +121,7 @@ func NewRecorder(options Options) (*Recorder, error) {
 			directory = defaultSpoolDirectory()
 		}
 		destination := jsonLine([]string{options.Client.BaseURL(), options.ProjectID, options.KnowledgeBaseID})
-		recorder.spool = openSpool(directory, destination[:len(destination)-1], recorder.warn, recorder.snapshot)
+		recorder.spool = openSpool(directory, destination[:len(destination)-1], recorder.warn, recorder.touchSpool)
 	}
 	interval := options.FlushInterval
 	if interval <= 0 {
@@ -152,8 +156,6 @@ func (recorder *Recorder) Conversation(identity Identity) *Conversation {
 }
 
 func (recorder *Recorder) snapshot() []spooledEvent {
-	recorder.mutex.Lock()
-	defer recorder.mutex.Unlock()
 	items := make([]spooledEvent, 0, len(recorder.pending))
 	for _, item := range recorder.pending {
 		items = append(items, spooledEvent{ID: item.ID, Event: item.Event})
@@ -163,9 +165,8 @@ func (recorder *Recorder) snapshot() []spooledEvent {
 
 func (recorder *Recorder) Record(drafts []EventDraft) {
 	recorder.mutex.Lock()
-	closed := recorder.closed
-	recorder.mutex.Unlock()
-	if closed {
+	defer recorder.mutex.Unlock()
+	if recorder.closed {
 		return
 	}
 	var items []spooledEvent
@@ -183,7 +184,6 @@ func (recorder *Recorder) Record(drafts []EventDraft) {
 }
 
 func (recorder *Recorder) enqueue(items []spooledEvent) int {
-	recorder.mutex.Lock()
 	for _, item := range items {
 		recorder.pending = append(recorder.pending, pendingEvent{ID: item.ID, Event: item.Event, Bytes: encodedSize(item.Event)})
 	}
@@ -201,7 +201,6 @@ func (recorder *Recorder) enqueue(items []spooledEvent) int {
 	if warnNow {
 		recorder.lastDropWarningAt = time.Now()
 	}
-	recorder.mutex.Unlock()
 	if recorder.spool != nil {
 		recorder.spool.markDone(dropped)
 	}
@@ -213,9 +212,10 @@ func (recorder *Recorder) enqueue(items []spooledEvent) int {
 	return count
 }
 
-func (recorder *Recorder) warn(message string, details map[string]any) {
-	defer func() {
-		recover()
-	}()
-	recorder.logger.Warn(message, details)
+func (recorder *Recorder) touchSpool() {
+	recorder.mutex.Lock()
+	defer recorder.mutex.Unlock()
+	if recorder.spool != nil {
+		recorder.spool.touch(recorder.snapshot())
+	}
 }

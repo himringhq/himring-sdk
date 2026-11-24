@@ -44,7 +44,7 @@ type spool struct {
 	directory     string
 	destination   string
 	warn          func(string, map[string]any)
-	pendingEvents func() []spooledEvent
+	heartbeat     func()
 	file          *os.File
 	filePath      string
 	writtenBytes  int
@@ -53,7 +53,7 @@ type spool struct {
 	closed        bool
 }
 
-func openSpool(directory string, destination string, warn func(string, map[string]any), pendingEvents func() []spooledEvent) *spool {
+func openSpool(directory string, destination string, warn func(string, map[string]any), heartbeat func()) *spool {
 	if err := os.MkdirAll(directory, ownerOnlyDirectoryMode); err != nil {
 		warn("The answer spool directory is unusable, so answers are kept in memory only", map[string]any{"directory": directory, "error": err})
 		return nil
@@ -68,7 +68,7 @@ func openSpool(directory string, destination string, warn func(string, map[strin
 		return nil
 	}
 	host, _ := os.Hostname()
-	opened := &spool{instance: newIdentifier(), host: host, directory: directory, destination: destination, warn: warn, pendingEvents: pendingEvents}
+	opened := &spool{instance: newIdentifier(), host: host, directory: directory, destination: destination, warn: warn, heartbeat: heartbeat}
 	setLiveInstance(opened.instance, true)
 	return opened
 }
@@ -225,7 +225,7 @@ func (store *spool) write(text string) bool {
 	}
 	if err != nil {
 		store.lineBreakOwed = true
-		go store.warn("An answer could not be written to the spool, so it is kept in memory only", map[string]any{"error": err})
+		store.warn("An answer could not be written to the spool, so it is kept in memory only", map[string]any{"error": err})
 		return false
 	}
 	store.lineBreakOwed = false
@@ -252,14 +252,13 @@ func (store *spool) startHeartbeat() {
 			case <-stop:
 				return
 			case <-ticker.C:
-				store.touch()
+				store.heartbeat()
 			}
 		}
 	}()
 }
 
-func (store *spool) touch() {
-	pending := store.pendingEvents()
+func (store *spool) touch(pending []spooledEvent) {
 	store.mutex.Lock()
 	defer store.mutex.Unlock()
 	if store.filePath == "" || store.closed {
