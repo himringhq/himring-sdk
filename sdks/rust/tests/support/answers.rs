@@ -155,7 +155,7 @@ pub async fn record_then_crash(
                 "--nocapture",
                 "--test-threads=1",
             ])
-            .env(CRASH_SETUP_VARIABLE, setup_path)
+            .env(CRASH_SETUP_VARIABLE, &setup_path)
             .stdin(Stdio::null())
             .stdout(Stdio::piped())
             .kill_on_drop(true)
@@ -173,6 +173,7 @@ pub async fn record_then_crash(
     })
     .await;
     child.kill().await.expect("the crashing recorder is killed");
+    let _ = std::fs::remove_file(&setup_path);
     assert_eq!(
         recorded.ok(),
         Some(true),

@@ -5,10 +5,10 @@ use std::sync::Arc;
 
 use himring::answers::SpoolDirectory;
 use support::answers::{
-    accepted, act_as_crashing_recorder, answer_drafts, delivered_in, expected_of,
+    TemporaryFolder, accepted, act_as_crashing_recorder, answer_drafts, delivered_in, expected_of,
     record_then_crash, recorder_at, spool_names,
 };
-use support::{ContractApi, KNOWLEDGE_BASE_ID, PROJECT_ID, client_for, identifier};
+use support::{ContractApi, KNOWLEDGE_BASE_ID, PROJECT_ID, client_for};
 
 #[test]
 #[ignore = "the recovery test starts this process and kills it after recording"]
@@ -22,7 +22,8 @@ async fn concurrent_recorders_recover_each_crashed_event_once() {
     contract
         .stub("record_answer_events", 200, accepted(64))
         .await;
-    let folder = std::env::temp_dir().join(identifier("himring-recorder-recovery"));
+    let temporary = TemporaryFolder::new();
+    let folder = temporary.spool();
     let mut answers = answer_drafts(64);
     for answer in answers.values_mut() {
         answer.push_str(&" policy".repeat(4_000));

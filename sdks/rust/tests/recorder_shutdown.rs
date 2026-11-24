@@ -7,16 +7,10 @@ use std::time::Duration;
 use himring::answers::{AnswerRecorder, AnswerRecorderOptions, SpoolDirectory};
 use serde_json::json;
 use support::answers::{
-    CollectedWarnings, NEVER_FLUSH_ON_A_TIMER, accepted, answer_drafts, delivered_in, drafts_of,
-    expected_of, recorder_at,
+    CollectedWarnings, NEVER_FLUSH_ON_A_TIMER, TemporaryFolder, accepted, answer_drafts,
+    delivered_in, drafts_of, expected_of, recorder_at,
 };
-use support::{
-    ContractApi, KNOWLEDGE_BASE_ID, PROJECT_ID, RawReply, StandInServer, client_for, identifier,
-};
-
-fn spool_directory() -> std::path::PathBuf {
-    std::env::temp_dir().join(identifier("himring-recorder-shutdown"))
-}
+use support::{ContractApi, KNOWLEDGE_BASE_ID, PROJECT_ID, RawReply, StandInServer, client_for};
 
 #[tokio::test]
 async fn cancelling_close_releases_unsent_events_for_another_recorder() {
@@ -30,7 +24,8 @@ async fn cancelling_close_releases_unsent_events_for_another_recorder() {
         )
         .await;
     let client = client_for(&contract.base_url);
-    let folder = spool_directory();
+    let temporary = TemporaryFolder::new();
+    let folder = temporary.spool();
     let recorder = AnswerRecorder::new(
         AnswerRecorderOptions::new(client.clone(), PROJECT_ID, KNOWLEDGE_BASE_ID)
             .spool_directory(SpoolDirectory::At(folder.clone()))
