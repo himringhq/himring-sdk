@@ -8,6 +8,11 @@ updates:
       default-days: 7
     ignore:
       - dependency-name: "@himring/openapi"
+      - dependency-name: "npm"
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       production:
         dependency-type: "production"

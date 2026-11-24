@@ -5,8 +5,8 @@
   "description": "Writes the changelogs, versions, tags, and GitHub releases of the npm and Python packages of this repository.",
   "type": "module",
   "devDependencies": {
-    "@types/node": "26.6.6",
-    "npm": "12.2.2",
+    "@types/node": "24.19.1",
+    "npm": "11.19.1",
     "typescript": "7.0.2"
   }
 }
