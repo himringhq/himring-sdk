@@ -138,13 +138,13 @@ func alternativeDate(text string) (time.Time, error) {
 }
 
 func decodedJSON(body []byte) (any, bool) {
+	if !json.Valid(body) {
+		return nil, false
+	}
 	decoder := json.NewDecoder(bytes.NewReader(body))
 	decoder.UseNumber()
 	var value any
 	if err := decoder.Decode(&value); err != nil {
-		return nil, false
-	}
-	if decoder.More() {
 		return nil, false
 	}
 	return value, true

@@ -112,6 +112,7 @@ func TestRejectsASignedBodyThatIsNotAMemoryEvent(t *testing.T) {
 	bodies := [][]byte{
 		[]byte("\xff\xfe not utf-8"), []byte("[]"), []byte(`{"id": "evt_1", "value": NaN}`), []byte(`{"id": "evt_1"} {"id": "evt_2"}`),
 		webhookBody(t, withDecision(nil)), webhookBody(t, emptyID), webhookBody(t, withDecision(map[string]any{"id": "dec_1", "memory_id": "mem_1"})),
+		append(webhookBody(t, webhookEvent), '}'),
 	}
 	for _, body := range bodies {
 		if reason := rejectionOf(t, body, signatureOf(body, webhookSecret, signedAt), signedAt); reason != himring.MemoryWebhookEventInvalid {

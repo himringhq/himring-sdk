@@ -62,6 +62,7 @@ func TestAnErrorEnvelopeOfTheWrongShapeIsAnInvalidResponse(t *testing.T) {
 		`{"error": {` + goneEnvelope + `, "missing_permission": {"level": "read"}}}`,
 		`{"error": {` + goneEnvelope + `, "request_id": 7}}`,
 		`{"error": {` + goneEnvelope + `}} {"error": {}}`,
+		`{"error": {` + goneEnvelope + `}}]`,
 	}
 	for _, envelope := range envelopes {
 		standIn := newStandIn(t)

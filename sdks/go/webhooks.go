@@ -1,7 +1,6 @@
 package himring
 
 import (
-	"bytes"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -137,9 +136,8 @@ func parsedMemoryWebhookEvent(body []byte) (*MemoryWebhookEvent, error) {
 	if !utf8.Valid(body) {
 		return nil, rejected(MemoryWebhookEventInvalid, "The body is not UTF-8 text.")
 	}
-	decoder := json.NewDecoder(bytes.NewReader(body))
 	var value any
-	if err := decoder.Decode(&value); err != nil || decoder.More() {
+	if err := json.Unmarshal(body, &value); err != nil {
 		return nil, rejected(MemoryWebhookEventInvalid, "The body is not JSON.")
 	}
 	event, isObject := value.(map[string]any)
