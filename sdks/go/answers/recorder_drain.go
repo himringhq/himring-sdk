@@ -132,9 +132,12 @@ func (recorder *Recorder) recoverOrphans() {
 		return
 	}
 	recorder.mutex.Lock()
-	defer recorder.mutex.Unlock()
 	recorder.lastRecoveryAt = time.Now()
-	recorder.enqueue(recorder.spool.recoverOrphans())
+	recorder.mutex.Unlock()
+	recovered := recorder.spool.recoverOrphans()
+	recorder.mutex.Lock()
+	defer recorder.mutex.Unlock()
+	recorder.enqueue(recovered)
 }
 
 func (recorder *Recorder) nextBatch() ([]pendingEvent, int) {
