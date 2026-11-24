@@ -1,0 +1,107 @@
+name: Check the Python projects
+
+on:
+  workflow_call:
+    inputs:
+      base:
+        required: true
+        type: string
+      head:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+
+jobs:
+  check:
+    name: Check the affected Python projects
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Setup uv with astral-sh/setup-uv v10.2.0
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+        with:
+          version: 0.12.21
+          enable-cache: true
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check that the generated Python SDK matches the spec
+        env:
+          BASE: ${{ inputs.base }}
+          HEAD: ${{ inputs.head }}
+          PYTHON_PROJECTS: sdk-python,agent-hooks-python
+        run: pnpm exec nx affected -t generate:check --projects="$PYTHON_PROJECTS" --base="$BASE" --head="$HEAD" --outputStyle=static
+
+      - name: Lint, typecheck, build, and test the affected Python projects
+        env:
+          BASE: ${{ inputs.base }}
+          HEAD: ${{ inputs.head }}
+          PYTHON_PROJECTS: sdk-python,agent-hooks-python
+        run: pnpm exec nx affected -t lint typecheck build test --projects="$PYTHON_PROJECTS" --base="$BASE" --head="$HEAD" --outputStyle=static
+
+  oldest-python:
+    name: Test the Python packages on the oldest Python that each supports
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Setup uv with astral-sh/setup-uv v10.2.0
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+        with:
+          version: 0.12.21
+          enable-cache: true
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test the Python SDK on Python 3.10
+        env:
+          BASE: ${{ inputs.base }}
+          HEAD: ${{ inputs.head }}
+          UV_PYTHON: '3.10'
+        run: pnpm exec nx affected -t test --projects=sdk-python --base="$BASE" --head="$HEAD" --skip-nx-cache --outputStyle=static
+
+      - name: Test the agent hooks on Python 3.11
+        env:
+          BASE: ${{ inputs.base }}
+          HEAD: ${{ inputs.head }}
+          UV_PYTHON: '3.11'
+        run: pnpm exec nx affected -t test --projects=agent-hooks-python --base="$BASE" --head="$HEAD" --skip-nx-cache --outputStyle=static

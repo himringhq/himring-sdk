@@ -1,0 +1,165 @@
+name: Publish an npm package
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: The Nx project to release, since each npm package has an independent version
+        required: true
+        type: choice
+        options:
+          - sdk-typescript
+          - cli
+          - mcp-server
+      version:
+        description: patch, minor, major, or an explicit version like 1.2.3. To finish a release that failed partway, run again with the explicit version.
+        required: true
+        type: string
+      dry-run:
+        description: Check, version, and pack the package without committing, tagging, or publishing
+        required: false
+        type: boolean
+        default: true
+      first-release:
+        description: The package has no earlier release tag
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-typescript
+  cancel-in-progress: false
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+
+jobs:
+  publish:
+    name: Release ${{ inputs.project }} to npm
+    if: ${{ github.ref == 'refs/heads/main' || inputs['dry-run'] }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the version input
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^(patch|minor|major|[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?)$ ]]; then
+            echo "::error::$VERSION is not patch, minor, major, or a semantic version like 1.2.3."
+            exit 1
+          fi
+
+      - name: Validate, lint, typecheck, build, and test the package and the projects it depends on
+        env:
+          PROJECT: ${{ inputs.project }}
+        run: |
+          case "$PROJECT" in
+            sdk-typescript) projects=spec,sdk-typescript ;;
+            cli) projects=spec,sdk-typescript,cli ;;
+            mcp-server) projects=spec,sdk-typescript,mcp-server ;;
+            *) echo "::error::$PROJECT is not an npm project of this repository."; exit 1 ;;
+          esac
+          pnpm exec nx run-many -t validate generate:check lint typecheck build test --projects="$projects" --outputStyle=static
+
+      - name: Check that the workspace packages it depends on are on npm
+        env:
+          RELEASE_PROJECT: ${{ inputs.project }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+        run: node tools/release/src/release-typescript.ts dependencies
+
+      - name: Configure the git identity of the release commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Write and stage the changelog entry
+        env:
+          RELEASE_PROJECT: ${{ inputs.project }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+        run: node tools/release/src/release-typescript.ts notes
+
+      - name: Version, commit, tag, and push with nx release
+        env:
+          PROJECT: ${{ inputs.project }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+          RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
+        run: |
+          if [[ "$DRY_RUN" != "true" ]]; then
+            if [[ -z "$RELEASE_PAT" ]]; then
+              echo "::error::The RELEASE_PAT secret is required to push the release commit and tag."
+              exit 1
+            fi
+            git remote set-url origin "https://x-access-token:${RELEASE_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+            trap 'git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"' EXIT
+          fi
+          tagged_commit="$(git rev-list -n 1 "refs/tags/${PROJECT}@v${VERSION}" 2> /dev/null || true)"
+          if [[ -n "$tagged_commit" && "$tagged_commit" == "$(git rev-parse HEAD)" ]]; then
+            echo "${PROJECT}@v${VERSION} already tags this commit, so the version step is done."
+            exit 0
+          fi
+          args=(pnpm exec nx release "$VERSION" --projects="$PROJECT" --skip-publish)
+          if [[ "$DRY_RUN" == "true" ]]; then
+            args+=(--dry-run)
+          fi
+          if [[ "$FIRST_RELEASE" == "true" ]]; then
+            args+=(--first-release)
+          fi
+          "${args[@]}"
+          if [[ "$DRY_RUN" != "true" ]]; then
+            git push --follow-tags --atomic origin HEAD
+          fi
+
+      - name: Create the GitHub release
+        if: ${{ !inputs['dry-run'] }}
+        env:
+          RELEASE_PROJECT: ${{ inputs.project }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+          GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: node tools/release/src/release-typescript.ts release
+
+      - name: Publish through npm trusted publishing, with provenance once the repository is public
+        env:
+          PROJECT: ${{ inputs.project }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+          NPM_CONFIG_PROVENANCE: ${{ github.event.repository.visibility == 'public' }}
+        run: |
+          args=(pnpm exec nx release publish --projects="$PROJECT" --verbose)
+          if [[ "$DRY_RUN" == "true" ]]; then
+            args+=(--dry-run)
+          fi
+          if [[ "$FIRST_RELEASE" == "true" ]]; then
+            args+=(--first-release)
+          fi
+          "${args[@]}"

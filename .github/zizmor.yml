@@ -1,0 +1,6 @@
+rules:
+  adhoc-packages:
+    ignore:
+      - spec-update.yml
+  self-repository:
+    disable: true

@@ -1,0 +1,26 @@
+{
+  "name": "@himring/contract-server",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A stand-in for the Himring API, built from the OpenAPI documents, that checks every request and every scripted answer against them.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "himring-contract-server": "./dist/serve.js"
+  },
+  "dependencies": {
+    "ajv": "8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "typescript": "7.0.2"
+  }
+}

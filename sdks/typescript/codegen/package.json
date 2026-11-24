@@ -1,0 +1,12 @@
+{
+  "name": "@himring/sdk-codegen",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Generates the operation table, the types, and the methods of @himring/sdk from the OpenAPI documents in spec/.",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3"
+  }
+}

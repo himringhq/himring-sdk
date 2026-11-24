@@ -1,0 +1,14 @@
+packages:
+  - spec
+  - sdks/typescript
+  - sdks/typescript/codegen
+  - packages/*
+  - tools/*
+
+minimumReleaseAge: 5760
+minimumReleaseAgeExclude:
+  - '@himring/openapi'
+
+allowBuilds:
+  esbuild: false
+  nx: true

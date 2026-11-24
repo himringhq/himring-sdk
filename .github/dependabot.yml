@@ -1,0 +1,55 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: "@himring/openapi"
+    groups:
+      production:
+        dependency-type: "production"
+      dev-dependencies:
+        dependency-type: "development"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps(dev)"
+
+  - package-ecosystem: "uv"
+    directory: "/sdks/python"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    groups:
+      python-sdk:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps(python)"
+
+  - package-ecosystem: "uv"
+    directory: "/packages/agent-hooks-python"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: "himring"
+    groups:
+      agent-hooks:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps(agent-hooks)"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "ci"

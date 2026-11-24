@@ -1,0 +1,49 @@
+{
+  "name": "@himring/cli",
+  "version": "0.1.0",
+  "description": "The Himring command-line interface, which runs every operation of the Himring API from a shell or a script.",
+  "license": "MIT",
+  "homepage": "https://himring.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/himringhq/himring-sdk.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/himringhq/himring-sdk/issues"
+  },
+  "keywords": [
+    "himring",
+    "cli",
+    "retrieval",
+    "ai-agents"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "himring": "./dist/main.js"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@himring/sdk": "workspace:*",
+    "ajv": "8.20.0",
+    "commander": "15.0.0",
+    "valibot": "1.5.0"
+  },
+  "devDependencies": {
+    "@himring/contract-server": "workspace:*",
+    "@types/node": "24.19.1",
+    "tsup": "9.0.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.3"
+  }
+}

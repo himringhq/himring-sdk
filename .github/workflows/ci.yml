@@ -1,0 +1,152 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+
+jobs:
+  changes:
+    name: Find the projects that the change affects, from the Nx project graph
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 10
+    outputs:
+      base: ${{ steps.range.outputs.base }}
+      head: ${{ steps.range.outputs.head }}
+      spec: ${{ steps.projects.outputs.spec }}
+      typescript: ${{ steps.projects.outputs.typescript }}
+      python: ${{ steps.projects.outputs.python }}
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Choose the commits to compare
+        id: range
+        env:
+          PULL_REQUEST_BASE: ${{ github.event.pull_request.base.sha }}
+          PULL_REQUEST_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSHED_OVER: ${{ github.event.before }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == pull_request ]]; then
+            base="$PULL_REQUEST_BASE"
+            head="$PULL_REQUEST_HEAD"
+          else
+            base="$PUSHED_OVER"
+            head="$GITHUB_SHA"
+            if [[ "$base" =~ ^0+$ ]]; then
+              base="$(git rev-list --max-parents=0 "$head" | tail -n 1)"
+            fi
+          fi
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "head=$head" >> "$GITHUB_OUTPUT"
+
+      - name: List the affected spec, TypeScript, and Python projects
+        id: projects
+        env:
+          BASE: ${{ steps.range.outputs.base }}
+          HEAD: ${{ steps.range.outputs.head }}
+          PYTHON_PROJECTS: sdk-python,agent-hooks-python
+        run: |
+          affected=(pnpm exec nx show projects --affected --base="$BASE" --head="$HEAD" --json)
+          spec="$("${affected[@]}" --projects=spec)"
+          typescript="$("${affected[@]}" --exclude="spec,$PYTHON_PROJECTS")"
+          python="$("${affected[@]}" --projects="$PYTHON_PROJECTS")"
+          echo "Affected spec: $spec"
+          echo "Affected TypeScript projects: $typescript"
+          echo "Affected Python projects: $python"
+          {
+            echo "spec=$spec"
+            echo "typescript=$typescript"
+            echo "python=$python"
+          } >> "$GITHUB_OUTPUT"
+
+  spec:
+    name: Spec
+    needs: changes
+    if: ${{ needs.changes.outputs.spec != '[]' }}
+    uses: ./.github/workflows/check-spec.yml
+    with:
+      base: ${{ needs.changes.outputs.base }}
+      head: ${{ needs.changes.outputs.head }}
+
+  typescript:
+    name: TypeScript
+    needs: changes
+    if: ${{ needs.changes.outputs.typescript != '[]' }}
+    uses: ./.github/workflows/check-typescript.yml
+    with:
+      base: ${{ needs.changes.outputs.base }}
+      head: ${{ needs.changes.outputs.head }}
+
+  python:
+    name: Python
+    needs: changes
+    if: ${{ needs.changes.outputs.python != '[]' }}
+    uses: ./.github/workflows/check-python.yml
+    with:
+      base: ${{ needs.changes.outputs.base }}
+      head: ${{ needs.changes.outputs.head }}
+
+  security:
+    name: Audit workflows with zizmor and scan for secrets with gitleaks
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup uv with astral-sh/setup-uv v10.2.0
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+        with:
+          version: 0.12.21
+
+      - name: Audit the workflows and the Dependabot settings with zizmor 1.31.1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: uvx --from zizmor==1.31.1 zizmor --format=github .github
+
+      - name: Install gitleaks 8.30.1 after checking its checksum
+        env:
+          GITLEAKS_VERSION: 8.30.1
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          archive="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl --fail --silent --show-error --location --output "$RUNNER_TEMP/$archive" \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${archive}"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/$archive" | sha256sum --check --strict
+          tar --extract --gzip --file "$RUNNER_TEMP/$archive" --directory "$RUNNER_TEMP" gitleaks
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+
+      - name: Scan the whole history for secrets with gitleaks
+        run: gitleaks git --redact --no-banner --exit-code 1 .

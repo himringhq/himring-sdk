@@ -1,0 +1,1 @@
+export const MAXIMUM_LOCAL_INPUT_BYTES = 8 * 1024 * 1024

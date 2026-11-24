@@ -1,0 +1,172 @@
+name: Publish a Python package
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: The Nx project to release, since each Python package has an independent version
+        required: true
+        type: choice
+        options:
+          - sdk-python
+          - agent-hooks-python
+      version:
+        description: patch, minor, major, or an explicit stable version like 1.2.3. To finish a release that failed partway, run again with the explicit version.
+        required: true
+        type: string
+      dry-run:
+        description: Check and build the package without committing, tagging, or publishing
+        required: false
+        type: boolean
+        default: true
+      first-release:
+        description: The package has no earlier release tag
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-python
+  cancel-in-progress: false
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+
+jobs:
+  release:
+    name: Version, tag, and build ${{ inputs.project }}
+    if: ${{ github.ref == 'refs/heads/main' || inputs['dry-run'] }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    outputs:
+      directory: ${{ steps.project.outputs.directory }}
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Setup uv with astral-sh/setup-uv v10.2.0
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+        with:
+          version: 0.12.21
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the version input
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^(patch|minor|major|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::$VERSION is not patch, minor, major, or a stable version like 1.2.3."
+            exit 1
+          fi
+
+      - name: Choose the project directory and the projects that it depends on
+        id: project
+        env:
+          PROJECT: ${{ inputs.project }}
+        run: |
+          case "$PROJECT" in
+            sdk-python) directory=sdks/python; projects=spec,contract-server,sdk-python ;;
+            agent-hooks-python) directory=packages/agent-hooks-python; projects=spec,contract-server,sdk-python,agent-hooks-python ;;
+            *) echo "::error::$PROJECT is not a Python project of this repository."; exit 1 ;;
+          esac
+          echo "directory=$directory" >> "$GITHUB_OUTPUT"
+          echo "projects=$projects" >> "$GITHUB_OUTPUT"
+
+      - name: Validate, lint, typecheck, test, and build the package and the projects it depends on
+        env:
+          PROJECTS: ${{ steps.project.outputs.projects }}
+        run: pnpm exec nx run-many -t validate generate:check lint typecheck test build --projects="$PROJECTS" --outputStyle=static
+
+      - name: Check that the lowest himring version that the agent hooks accept is on PyPI
+        if: ${{ inputs.project == 'agent-hooks-python' }}
+        run: |
+          floor="$(uv run --no-project python -I -c "import re, tomllib; dependencies = tomllib.load(open('packages/agent-hooks-python/pyproject.toml', 'rb'))['project']['dependencies']; print(next(match.group(1) for match in (re.match(r'himring>=([0-9.]+)', dependency) for dependency in dependencies) if match))")"
+          status="$(curl --silent --output /dev/null --write-out '%{http_code}' "https://pypi.org/pypi/himring/${floor}/json")"
+          if [[ "$status" != 200 ]]; then
+            echo "::error::himring $floor is not on PyPI, so release sdk-python first."
+            exit 1
+          fi
+
+      - name: Configure the git identity of the release commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Version, commit, tag, push, and create the GitHub release
+        env:
+          RELEASE_PROJECT: ${{ inputs.project }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+          RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
+          GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: |
+          if [[ "$DRY_RUN" != "true" ]]; then
+            if [[ -z "$RELEASE_PAT" ]]; then
+              echo "::error::The RELEASE_PAT secret is required to push the release commit and tag and to create the GitHub release."
+              exit 1
+            fi
+            git remote set-url origin "https://x-access-token:${RELEASE_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+            trap 'git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"' EXIT
+          fi
+          node tools/release/src/release-python.ts
+
+      - name: Build the distributions of the release commit
+        if: ${{ !inputs['dry-run'] }}
+        env:
+          PROJECT: ${{ inputs.project }}
+        run: pnpm exec nx run "$PROJECT:build" --skip-nx-cache --outputStyle=static
+
+      - name: Keep the built distributions with actions/upload-artifact v7.0.2
+        if: ${{ !inputs['dry-run'] }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: python-distributions
+          path: ${{ steps.project.outputs.directory }}/dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Publish ${{ inputs.project }} to PyPI through trusted publishing
+    needs: release
+    if: ${{ !inputs['dry-run'] }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download the built distributions with actions/download-artifact v8.0.1
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          name: python-distributions
+          path: dist
+
+      - name: Publish the distributions with pypa/gh-action-pypi-publish v1.14.3
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086
+        with:
+          packages-dir: dist
+          skip-existing: true

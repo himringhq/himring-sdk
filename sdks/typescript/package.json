@@ -1,0 +1,92 @@
+{
+  "name": "@himring/sdk",
+  "version": "0.1.0",
+  "description": "The TypeScript SDK of the Himring API, which lets AI agents answer from what a business knows.",
+  "license": "MIT",
+  "homepage": "https://himring.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/himringhq/himring-sdk.git",
+    "directory": "sdks/typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/himringhq/himring-sdk/issues"
+  },
+  "keywords": [
+    "himring",
+    "sdk",
+    "retrieval",
+    "rag",
+    "ai-agents"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22.12"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    },
+    "./catalogue": {
+      "import": {
+        "types": "./dist/catalogue.d.ts",
+        "default": "./dist/catalogue.js"
+      },
+      "require": {
+        "types": "./dist/cjs/catalogue.d.ts",
+        "default": "./dist/cjs/catalogue.cjs"
+      }
+    },
+    "./answers": {
+      "import": {
+        "types": "./dist/answers/index.d.ts",
+        "default": "./dist/answers/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/answers/index.d.ts",
+        "default": "./dist/cjs/answers/index.cjs"
+      }
+    },
+    "./folders": {
+      "import": {
+        "types": "./dist/folders/index.d.ts",
+        "default": "./dist/folders/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/folders/index.d.ts",
+        "default": "./dist/cjs/folders/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "generate": "node codegen/generate.ts write"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.4.0",
+    "valibot": "1.5.0"
+  },
+  "devDependencies": {
+    "@himring/contract-server": "workspace:*",
+    "@types/node": "24.19.1",
+    "tsup": "9.0.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.3"
+  }
+}

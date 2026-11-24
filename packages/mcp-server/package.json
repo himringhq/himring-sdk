@@ -1,0 +1,49 @@
+{
+  "name": "@himring/mcp-server",
+  "version": "0.1.0",
+  "description": "The Himring MCP server, which gives an AI agent the operations of the Himring API as tools over stdio.",
+  "license": "MIT",
+  "homepage": "https://himring.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/himringhq/himring-sdk.git",
+    "directory": "packages/mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/himringhq/himring-sdk/issues"
+  },
+  "keywords": [
+    "himring",
+    "mcp",
+    "model-context-protocol",
+    "ai-agents"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "himring-mcp": "./dist/main.js"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@himring/sdk": "workspace:*",
+    "@modelcontextprotocol/server": "2.3.0",
+    "ajv": "8.20.0",
+    "valibot": "1.5.0"
+  },
+  "devDependencies": {
+    "@himring/contract-server": "workspace:*",
+    "@types/node": "24.19.1",
+    "tsup": "9.0.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.3"
+  }
+}

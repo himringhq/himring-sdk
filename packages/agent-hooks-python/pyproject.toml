@@ -1,0 +1,57 @@
+[project]
+name = "himring-agent-hooks"
+version = "0.1.0"
+description = "Records the passages that Himring returned and the answer that a LiveKit or Pipecat agent gave, and sends them to Himring after the reply."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies = [
+    "himring>=0.1.0,<0.2",
+]
+
+[project.optional-dependencies]
+livekit = [
+    "livekit-agents>=1.8.11,<2",
+]
+pipecat = [
+    "pipecat-ai>=1.15.0,<2",
+]
+
+[build-system]
+requires = ["uv_build==0.12.21"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "RUF", "SIM", "UP", "S", "ANN"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S603"]
+"src/himring_agent_hooks/delivery.py" = ["S311"]
+
+[tool.pyright]
+include = ["src", "tests"]
+pythonVersion = "3.11"
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+addopts = "-ra -p no:cacheprovider"
+testpaths = ["tests"]
+tmp_path_retention_policy = "none"
+
+[tool.uv.sources]
+himring = { path = "../../sdks/python", editable = true }
+
+[dependency-groups]
+dev = [
+    "pyright==1.1.414",
+    "pytest==9.1.1",
+    "ruff==0.16.10",
+]

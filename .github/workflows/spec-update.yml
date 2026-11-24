@@ -1,0 +1,106 @@
+name: Update the spec from npm
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spec-update
+  cancel-in-progress: false
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+  SPEC_PACKAGE: '@himring/openapi'
+
+jobs:
+  update:
+    name: Open a pull request when a newer @himring/openapi is on npm
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Setup uv with astral-sh/setup-uv v10.2.0
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+        with:
+          version: 0.12.21
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Compare the pinned version with the latest version on npm
+        id: versions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest="$(npm view "$SPEC_PACKAGE" version)"
+          pinned="$(node -p "require('./spec/package.json').devDependencies['$SPEC_PACKAGE']")"
+          if ! [[ "$latest" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::npm gave $latest as the latest version of $SPEC_PACKAGE, which is not a plain release version."
+            exit 1
+          fi
+          branch="spec/himring-openapi-$latest"
+          if [[ "$latest" == "$pinned" ]]; then
+            echo "spec/ already holds $SPEC_PACKAGE $pinned."
+            echo "update=false" >> "$GITHUB_OUTPUT"
+          elif git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
+            echo "The branch $branch already exists, so its pull request is open or was closed on purpose."
+            echo "update=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "update=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          echo "pinned=$pinned" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+      - name: Pin the new version, copy its documents into spec/, and regenerate the SDKs
+        if: steps.versions.outputs.update == 'true'
+        env:
+          LATEST: ${{ steps.versions.outputs.latest }}
+        run: |
+          pnpm --filter spec add --save-exact --save-dev "$SPEC_PACKAGE@$LATEST"
+          pnpm exec nx run spec:sync
+          pnpm exec nx run-many -t generate --outputStyle=static
+
+      - name: Check, build, and test every project against the new documents
+        if: steps.versions.outputs.update == 'true'
+        run: pnpm exec nx run-many -t validate generate:check lint typecheck build test --outputStyle=static
+
+      - name: Push the branch and open the pull request
+        if: steps.versions.outputs.update == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LATEST: ${{ steps.versions.outputs.latest }}
+          PINNED: ${{ steps.versions.outputs.pinned }}
+          BRANCH: ${{ steps.versions.outputs.branch }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch --create "$BRANCH"
+          git add --all spec sdks pnpm-lock.yaml
+          git commit --message "chore(spec): update $SPEC_PACKAGE from $PINNED to $LATEST"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "chore(spec): update $SPEC_PACKAGE from $PINNED to $LATEST" \
+            --body "This pull request pins $SPEC_PACKAGE $LATEST, copies its OpenAPI documents into spec/, and regenerates the TypeScript and Python SDKs. Every project passed its validate, generate:check, lint, typecheck, build, and test targets before the workflow opened it. Approve the workflow runs on this pull request so that CI checks it too."

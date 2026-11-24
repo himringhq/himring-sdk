@@ -1,0 +1,62 @@
+{
+  "name": "agent-hooks-python",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/agent-hooks-python/src",
+  "implicitDependencies": ["sdk-python"],
+  "namedInputs": {
+    "pythonSources": [
+      "{projectRoot}/src/**/*.py",
+      "{projectRoot}/src/**/py.typed",
+      "{projectRoot}/tests/**/*.py",
+      "{projectRoot}/pyproject.toml",
+      "{projectRoot}/uv.lock",
+      "{projectRoot}/README.md",
+      "{workspaceRoot}/sdks/python/src/**/*.py"
+    ]
+  },
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "inputs": ["pythonSources"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true,
+      "options": {
+        "command": "rm -rf dist && uv build",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "inputs": ["pythonSources"],
+      "cache": true,
+      "options": {
+        "command": "uv run --frozen --all-extras pyright",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run --frozen ruff check . && uv run --frozen ruff format --check .",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run --frozen ruff check --fix . && uv run --frozen ruff format .",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "inputs": ["pythonSources"],
+      "cache": true,
+      "options": {
+        "command": "uv run --frozen --all-extras pytest",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

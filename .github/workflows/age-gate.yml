@@ -1,0 +1,40 @@
+name: Dependency age gate
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: age-gate-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  check-age:
+    name: Check that every package version that the lockfile adds is at least four days old
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+
+      - name: Run the age gate from the base branch, so that a pull request cannot loosen it
+        env:
+          MIN_AGE_DAYS: 4
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          script_path="$RUNNER_TEMP/check-age.mts"
+          if ! git show "${BASE_SHA}:.github/scripts/check-age.ts" > "$script_path" 2> /dev/null; then
+            cp .github/scripts/check-age.ts "$script_path"
+          fi
+          node "$script_path"

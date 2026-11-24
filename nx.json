@@ -1,0 +1,64 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json", "{workspaceRoot}/biome.json"],
+    "spec": ["{workspaceRoot}/spec/openapi.json", "{workspaceRoot}/spec/openapi-session.json"],
+    "production": ["default", "!{projectRoot}/**/*.test.ts", "!{projectRoot}/vitest.config.ts", "!{projectRoot}/tests/**/*"]
+  },
+  "pluginsConfig": {
+    "@nx/js": {
+      "analyzeSourceFiles": false
+    }
+  },
+  "release": {
+    "projects": ["sdk-typescript", "cli", "mcp-server"],
+    "projectsRelationship": "independent",
+    "releaseTag": {
+      "pattern": "{projectName}@v{version}"
+    },
+    "version": {
+      "conventionalCommits": false,
+      "currentVersionResolver": "disk",
+      "adjustSemverBumpsForZeroMajorVersion": false,
+      "updateDependents": "never"
+    },
+    "changelog": {
+      "automaticFromRef": true,
+      "workspaceChangelog": false,
+      "projectChangelogs": false
+    },
+    "git": {
+      "commit": true,
+      "tag": true,
+      "push": false,
+      "commitMessage": "chore(release): {projectName} {version}"
+    }
+  },
+  "targetDefaults": {
+    "generate": {
+      "inputs": ["spec", "{projectRoot}/codegen/**/*"],
+      "cache": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"],
+      "cache": true
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "lint": {
+      "cache": false
+    },
+    "format": {
+      "cache": false
+    }
+  },
+  "analytics": false
+}

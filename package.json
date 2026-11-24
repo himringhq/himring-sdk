@@ -1,0 +1,28 @@
+{
+  "name": "himring-sdk",
+  "private": true,
+  "version": "0.0.0",
+  "description": "The public SDKs, CLI, and MCP server of Himring, generated from the OpenAPI documents of the Himring API.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@11.8.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test",
+    "lint": "nx run-many -t lint",
+    "typecheck": "nx run-many -t typecheck",
+    "format": "nx run-many -t format",
+    "generate": "nx run-many -t generate",
+    "spec:sync": "nx run spec:sync"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@nx/js": "23.2.1",
+    "@types/node": "24.19.1",
+    "nx": "23.2.1",
+    "typescript": "7.0.2"
+  }
+}
