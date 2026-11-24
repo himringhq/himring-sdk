@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@himring/sdk": "workspace:*",
-    "@modelcontextprotocol/server": "2.3.0",
+    "@modelcontextprotocol/server": "2.4.0",
     "ajv": "8.20.0",
     "valibot": "1.5.0"
   },
