@@ -3,10 +3,8 @@ name: Check the TypeScript projects
 on:
   workflow_call:
     inputs:
-      base:
-        required: true
-        type: string
-      head:
+      projects:
+        description: The JSON array of affected projects that this workflow checks
         required: true
         type: string
 
@@ -48,14 +46,10 @@ jobs:
 
       - name: Check that the generated TypeScript SDK matches the spec
         env:
-          BASE: ${{ inputs.base }}
-          HEAD: ${{ inputs.head }}
-          SKIPPED_PROJECTS: spec,sdk-python,agent-hooks-python
-        run: pnpm exec nx affected -t generate:check --exclude="$SKIPPED_PROJECTS" --base="$BASE" --head="$HEAD" --outputStyle=static
+          AFFECTED_PROJECTS: ${{ inputs.projects }}
+        run: pnpm exec nx run-many -t generate:check --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static
 
       - name: Lint, typecheck, build, and test the affected TypeScript projects
         env:
-          BASE: ${{ inputs.base }}
-          HEAD: ${{ inputs.head }}
-          SKIPPED_PROJECTS: spec,sdk-python,agent-hooks-python
-        run: pnpm exec nx affected -t lint typecheck build test --exclude="$SKIPPED_PROJECTS" --base="$BASE" --head="$HEAD" --outputStyle=static
+          AFFECTED_PROJECTS: ${{ inputs.projects }}
+        run: pnpm exec nx run-many -t lint typecheck build test --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static

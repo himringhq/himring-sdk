@@ -32,7 +32,7 @@ The Python targets call `uv run --frozen`, so uv creates each virtual environmen
 | `packages/mcp-server/` | `mcp-server` | `@himring/mcp-server`, the `himring-mcp` command |
 | `packages/agent-hooks-python/` | `agent-hooks-python` | `himring-agent-hooks`, for LiveKit and Pipecat agents |
 | `tools/contract-server/` | `contract-server` | A stand-in for the Himring API, built from the documents in `spec/` |
-| `tools/release/` | `release` | The scripts that version and tag a release |
+| `tools/release/` | `release` | The scripts that version and tag a release, and stage each npm package for a maintainer to approve |
 | `.github/scripts/` | `repository-gates` | The dependency age gate and the supply-chain gate that CI runs |
 
 ### The spec
