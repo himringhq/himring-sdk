@@ -1,0 +1,82 @@
+{
+  "name": "sdk-rust",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "sdks/rust/src",
+  "implicitDependencies": ["spec", "contract-server"],
+  "namedInputs": {
+    "rustSources": [
+      "{projectRoot}/src/**/*.rs",
+      "{projectRoot}/codegen/src/**/*.rs",
+      "{projectRoot}/codegen/Cargo.toml",
+      "{projectRoot}/codegen/Cargo.lock",
+      "{projectRoot}/tests/**/*.rs",
+      "{projectRoot}/Cargo.toml",
+      "{projectRoot}/Cargo.lock",
+      "{projectRoot}/rust-toolchain.toml",
+      "{projectRoot}/README.md",
+      "{projectRoot}/LICENSE"
+    ]
+  },
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "cargo run --quiet --locked --manifest-path codegen/Cargo.toml -- write",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "generate:check": {
+      "executor": "nx:run-commands",
+      "inputs": ["spec", "rustSources"],
+      "cache": true,
+      "options": {
+        "command": "cargo run --quiet --locked --manifest-path codegen/Cargo.toml -- check",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "inputs": ["rustSources"],
+      "cache": true,
+      "options": {
+        "command": "cargo package --locked --allow-dirty",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "inputs": ["rustSources"],
+      "cache": true,
+      "options": {
+        "command": "cargo check --locked --all-targets && cargo check --locked --all-targets --manifest-path codegen/Cargo.toml",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo fmt --check && cargo fmt --check --manifest-path codegen/Cargo.toml && cargo clippy --locked --all-targets -- -D warnings && cargo clippy --locked --all-targets --manifest-path codegen/Cargo.toml -- -D warnings",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo fmt && cargo fmt --manifest-path codegen/Cargo.toml",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "inputs": ["spec", "rustSources", "{workspaceRoot}/tools/contract-server/dist/**/*"],
+      "dependsOn": [{ "projects": ["contract-server"], "target": "build" }],
+      "cache": true,
+      "options": {
+        "command": "cargo test --locked",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

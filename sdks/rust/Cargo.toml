@@ -1,0 +1,54 @@
+[package]
+name = "himring"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+description = "The Rust SDK of the Himring API, which lets AI agents answer from what a business knows."
+license = "MIT"
+homepage = "https://himring.ai"
+repository = "https://github.com/himringhq/himring-sdk"
+documentation = "https://docs.rs/himring"
+readme = "README.md"
+keywords = ["himring", "sdk", "retrieval", "rag", "ai-agents"]
+categories = ["api-bindings", "web-programming::http-client"]
+include = ["Cargo.toml", "README.md", "LICENSE", "src/**/*.rs"]
+
+[features]
+default = ["rustls"]
+rustls = ["reqwest/rustls"]
+native-tls = ["reqwest/native-tls"]
+
+[dependencies]
+bytes = "1.10.1"
+fastrand = "2.3.0"
+futures-util = { version = "0.3.31", default-features = false, features = ["std"] }
+hmac = "0.13.0"
+httpdate = "1.0.3"
+percent-encoding = "2.3.1"
+regress = "0.10.3"
+reqwest = { version = "0.13.1", default-features = false, features = ["http2", "system-proxy", "stream"] }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.145"
+serde_path_to_error = "0.1.17"
+sha2 = "0.11.0"
+time = { version = "0.3.41", features = ["formatting", "parsing"] }
+tokio = { version = "1.47.1", features = ["fs", "io-util", "macros", "rt", "sync", "time"] }
+unicode-normalization = "0.1.24"
+unicode-properties = { version = "0.1.3", default-features = false, features = ["general-category"] }
+uuid = { version = "1.18.1", features = ["v4"] }
+
+[target.'cfg(unix)'.dependencies]
+rustix = { version = "1.0.8", features = ["fs", "process", "system"] }
+
+[dev-dependencies]
+tokio = { version = "1.47.1", features = ["fs", "io-util", "macros", "net", "process", "rt-multi-thread", "sync", "time"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+must_use_candidate = "allow"

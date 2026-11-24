@@ -45,6 +45,21 @@ updates:
     commit-message:
       prefix: "deps(agent-hooks)"
 
+  - package-ecosystem: "cargo"
+    directories:
+      - "/sdks/rust"
+      - "/sdks/rust/codegen"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    groups:
+      rust-sdk:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps(rust)"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

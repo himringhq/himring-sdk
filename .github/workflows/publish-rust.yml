@@ -1,0 +1,172 @@
+name: Publish the Rust crate
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: patch, minor, major, or an explicit stable version like 1.2.3. To finish a release that failed partway, run again with the explicit version.
+        required: true
+        type: string
+      dry-run:
+        description: Check and package the crate without committing, tagging, or publishing
+        required: false
+        type: boolean
+        default: true
+      first-release:
+        description: The crate has no earlier release tag
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-rust
+  cancel-in-progress: false
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+  CARGO_TERM_COLOR: never
+
+jobs:
+  release:
+    name: Version, tag, and package sdk-rust
+    if: ${{ github.ref == 'refs/heads/main' || inputs['dry-run'] }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install the Rust toolchain that rust-toolchain.toml pins
+        working-directory: sdks/rust
+        run: rustup toolchain install
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the version input
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^(patch|minor|major|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::$VERSION is not patch, minor, major, or a stable version like 1.2.3."
+            exit 1
+          fi
+
+      - name: Validate, lint, typecheck, test, and package the crate and the projects it depends on
+        run: pnpm exec nx run-many -t validate generate:check lint typecheck test build --projects=spec,contract-server,sdk-rust --outputStyle=static
+
+      - name: Configure the git identity of the release commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Version, commit, tag, push, and create the GitHub release
+        env:
+          RELEASE_PROJECT: sdk-rust
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+          RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
+          GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: |
+          if [[ "$DRY_RUN" != "true" ]]; then
+            if [[ -z "$RELEASE_PAT" ]]; then
+              echo "::error::The RELEASE_PAT secret is required to push the release commit and tag and to create the GitHub release."
+              exit 1
+            fi
+            git remote set-url origin "https://x-access-token:${RELEASE_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+            trap 'git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"' EXIT
+          fi
+          node tools/release/src/release-rust.ts
+
+      - name: Find the release tag on the release commit
+        id: tag
+        if: ${{ !inputs['dry-run'] }}
+        run: |
+          tags="$(git tag --points-at HEAD --list 'sdk-rust@v*')"
+          if [[ "$(wc -l <<< "$tags")" != 1 || -z "$tags" ]]; then
+            echo "::error::The release commit holds the sdk-rust tags '${tags}' where one tag was due."
+            exit 1
+          fi
+          echo "tag=$tags" >> "$GITHUB_OUTPUT"
+
+  publish:
+    name: Publish himring to crates.io through trusted publishing
+    needs: release
+    if: ${{ !inputs['dry-run'] }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: crates-io
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout the release tag with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          ref: refs/tags/${{ needs.release.outputs.tag }}
+
+      - name: Install the Rust toolchain that rust-toolchain.toml pins
+        working-directory: sdks/rust
+        run: rustup toolchain install
+
+      - name: Check whether crates.io holds this version already
+        id: published
+        env:
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+        run: |
+          version="${RELEASE_TAG#sdk-rust@v}"
+          status="$(curl --silent --show-error --output "$RUNNER_TEMP/himring-index" --write-out '%{http_code}' https://index.crates.io/hi/mr/himring)"
+          if [[ "$status" == 404 ]]; then
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          elif [[ "$status" == 200 ]]; then
+            if jq --exit-status --arg version "$version" 'select(.vers == $version)' "$RUNNER_TEMP/himring-index" > /dev/null; then
+              echo "::notice::crates.io holds himring $version already, so this run publishes nothing."
+              echo "exists=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "exists=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "::error::The crates.io index answered with status $status."
+            exit 1
+          fi
+
+      - name: Package the crate and build it from the package alone
+        if: ${{ steps.published.outputs.exists == 'false' }}
+        working-directory: sdks/rust
+        run: cargo package --locked
+
+      - name: Sign in to crates.io with a short-lived token from rust-lang/crates-io-auth-action v1.0.6
+        if: ${{ steps.published.outputs.exists == 'false' }}
+        id: auth
+        uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9
+
+      - name: Publish the crate
+        if: ${{ steps.published.outputs.exists == 'false' }}
+        working-directory: sdks/rust
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+        run: cargo publish --locked

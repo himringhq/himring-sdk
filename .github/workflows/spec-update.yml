@@ -46,6 +46,10 @@ jobs:
         with:
           version: 0.12.21
 
+      - name: Install the Rust toolchain that rust-toolchain.toml pins
+        working-directory: sdks/rust
+        run: rustup toolchain install
+
       - name: Install Node dependencies
         run: pnpm install --frozen-lockfile
 
@@ -103,4 +107,4 @@ jobs:
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$BRANCH"
           gh pr create --base main --head "$BRANCH" \
             --title "chore(spec): update $SPEC_PACKAGE from $PINNED to $LATEST" \
-            --body "This pull request pins $SPEC_PACKAGE $LATEST, copies its OpenAPI documents into spec/, and regenerates the TypeScript and Python SDKs. Every project passed its validate, generate:check, lint, typecheck, build, and test targets before the workflow opened it. Approve the workflow runs on this pull request so that CI checks it too."
+            --body "This pull request pins $SPEC_PACKAGE $LATEST, copies its OpenAPI documents into spec/, and regenerates the TypeScript, Python, and Rust SDKs. Every project passed its validate, generate:check, lint, typecheck, build, and test targets before the workflow opened it. Approve the workflow runs on this pull request so that CI checks it too."
