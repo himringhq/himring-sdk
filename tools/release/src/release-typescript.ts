@@ -13,6 +13,7 @@ import {
 import { assertCleanExcept } from './lib/git-tree.ts'
 import { createGithubRelease } from './lib/github-release.ts'
 import { isPublishedOnNpm, readNpmManifest, workspaceDependenciesOf } from './lib/npm-manifest.ts'
+import { stagePackage } from './lib/npm-stage.ts'
 import { projectOf, type ReleaseOptions, readReleaseOptions, today } from './lib/release-options.ts'
 import { repositoryUrl, resolveRepositorySlug } from './lib/repo.ts'
 import { run } from './lib/run.ts'
@@ -54,7 +55,7 @@ function checkWorkspaceDependencies(projectName: string, project: TypescriptProj
     const version = workspaceVersions.get(name)
     if (version === undefined) throw new Error(`${projectName} depends on ${name}, which no project here releases.`)
     if (isPublishedOnNpm(name, version)) continue
-    const message = `${projectName} depends on ${name}@${version}, which is not on npm yet, so release ${name} first.`
+    const message = `${projectName} depends on ${name}@${version}, which is not on npm yet, so release ${name} and approve its staged version first.`
     if (!options.dryRun) throw new Error(message)
     process.stdout.write(`[dry-run] ${message}\n`)
   }
@@ -112,6 +113,20 @@ function publishGithubRelease(projectName: string, project: TypescriptProject, o
   )
 }
 
+function stageOnNpm(projectName: string, project: TypescriptProject, options: ReleaseOptions): void {
+  const { name, version } = readNpmManifest(project.directory)
+  const outcome = stagePackage(project.directory, options.dryRun)
+  const prefix = options.dryRun ? '[dry-run] ' : ''
+  if (outcome.kind === 'published-already') {
+    process.stdout.write(`${name}@${version} is published on npm already, so there is nothing to stage\n`)
+  } else if (outcome.kind === 'staged-already') {
+    process.stdout.write(`${name}@${version} is staged on npm already and waits for a maintainer to approve it\n`)
+  } else {
+    const id = outcome.stageId === undefined ? '' : ` with the stage ID ${outcome.stageId}`
+    process.stdout.write(`${prefix}Staged ${name}@${version}${id} for ${projectName}. Approve it on npmjs.com.\n`)
+  }
+}
+
 function main(): void {
   const options = readReleaseOptions(process.argv.slice(2))
   const project = projectOf(TYPESCRIPT_PROJECTS, options.project)
@@ -121,8 +136,10 @@ function main(): void {
     writeNotes(options.project, project, options)
   } else if (options.command === 'release') {
     publishGithubRelease(options.project, project, options)
+  } else if (options.command === 'stage') {
+    stageOnNpm(options.project, project, options)
   } else {
-    throw new Error(`Run this script with dependencies, notes, or release, not ${options.command ?? 'nothing'}.`)
+    throw new Error(`Run this script with dependencies, notes, release, or stage, not ${options.command ?? 'nothing'}.`)
   }
 }
 

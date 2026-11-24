@@ -42,13 +42,6 @@
         "command": "vitest run",
         "cwd": "{projectRoot}"
       }
-    },
-    "nx-release-publish": {
-      "executor": "@nx/js:release-publish",
-      "dependsOn": ["build"],
-      "options": {
-        "packageRoot": "{projectRoot}"
-      }
     }
   }
 }
