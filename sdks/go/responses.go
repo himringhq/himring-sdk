@@ -3,6 +3,7 @@ package himring
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math"
 	"net/http"
@@ -109,7 +110,7 @@ func retryAfterSecondsOf(header string, now time.Time) *int64 {
 	text := strings.TrimSpace(header)
 	if digitsPattern.MatchString(text) {
 		value, err := strconv.ParseInt(text, 10, 64)
-		if err != nil {
+		if err != nil && !errors.Is(err, strconv.ErrRange) {
 			return nil
 		}
 		return &value
