@@ -112,13 +112,14 @@ pub(crate) fn opened_without_following(path: &Path) -> std::io::Result<File> {
     use std::os::unix::fs::OpenOptionsExt;
     fs::OpenOptions::new()
         .read(true)
+        .write(true)
         .custom_flags(rustix::fs::OFlags::NOFOLLOW.bits().cast_signed())
         .open(path)
 }
 
 #[cfg(not(unix))]
 pub(crate) fn opened_without_following(path: &Path) -> std::io::Result<File> {
-    File::open(path)
+    fs::OpenOptions::new().read(true).write(true).open(path)
 }
 
 pub(crate) fn owner_of(file: &mut File) -> Option<SpoolOwner> {

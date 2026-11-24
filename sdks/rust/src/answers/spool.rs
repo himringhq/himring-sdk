@@ -293,6 +293,7 @@ impl AnswerSpool {
         );
         let path = self.directory.join(name);
         let mut file = new_private_file(&path)?;
+        fs4::FileExt::lock(&file)?;
         let owner = SpoolOwner {
             host: self.host.clone(),
             pid: current_pid(),
