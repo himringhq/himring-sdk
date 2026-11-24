@@ -45,6 +45,19 @@ updates:
     commit-message:
       prefix: "deps(agent-hooks)"
 
+  - package-ecosystem: "gomod"
+    directory: "/sdks/go"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
+    groups:
+      go-sdk:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps(go)"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

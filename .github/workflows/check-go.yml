@@ -1,0 +1,61 @@
+name: Check the Go projects
+
+on:
+  workflow_call:
+    inputs:
+      projects:
+        description: The JSON array of affected projects that this workflow checks
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  NX_NO_CLOUD: true
+  NX_DAEMON: false
+
+jobs:
+  check:
+    name: Check the affected Go projects on Go ${{ matrix.go-version }}
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ['1.26.x', '1.27.x']
+
+    steps:
+      - name: Checkout the full history with actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup pnpm with pnpm/action-setup v6.1.0
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+
+      - name: Setup Node.js with actions/setup-node v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Setup Go with actions/setup-go v7.0.0
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache-dependency-path: sdks/go/go.sum
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check that the generated Go SDK matches the spec
+        env:
+          AFFECTED_PROJECTS: ${{ inputs.projects }}
+        run: pnpm exec nx run-many -t generate:check --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static
+
+      - name: Lint, typecheck, build, and test the affected Go projects
+        env:
+          AFFECTED_PROJECTS: ${{ inputs.projects }}
+        run: pnpm exec nx run-many -t lint typecheck build test --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static

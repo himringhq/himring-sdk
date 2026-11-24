@@ -1,0 +1,82 @@
+{
+  "name": "sdk-go",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "sdks/go",
+  "implicitDependencies": ["spec", "contract-server"],
+  "namedInputs": {
+    "goSources": [
+      "{projectRoot}/**/*.go",
+      "{projectRoot}/go.mod",
+      "{projectRoot}/go.sum",
+      "{projectRoot}/README.md"
+    ]
+  },
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "go run ./codegen write",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "generate:check": {
+      "executor": "nx:run-commands",
+      "inputs": ["spec", "goSources"],
+      "cache": true,
+      "options": {
+        "command": "go run ./codegen check",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "inputs": ["goSources"],
+      "cache": true,
+      "options": {
+        "command": "go build ./...",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "inputs": ["goSources"],
+      "cache": true,
+      "options": {
+        "commands": ["go vet ./...", "GOOS=windows go vet ./...", "GOOS=darwin go vet ./..."],
+        "parallel": false,
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "unformatted=\"$(gofmt -l .)\"; if [ -n \"$unformatted\" ]; then echo \"Run gofmt on: $unformatted\"; exit 1; fi",
+          "go mod tidy -diff"
+        ],
+        "parallel": false,
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["gofmt -w .", "go mod tidy"],
+        "parallel": false,
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "inputs": ["spec", "goSources", "{workspaceRoot}/tools/contract-server/dist/**/*"],
+      "dependsOn": [{ "projects": ["contract-server"], "target": "build" }],
+      "cache": true,
+      "options": {
+        "command": "go test -race -count=1 ./...",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}
