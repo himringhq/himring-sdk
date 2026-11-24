@@ -39,10 +39,15 @@ func renderedFiles(specDirectory string) ([]generatedFile, int, error) {
 	if err != nil {
 		return nil, 0, err
 	}
+	uploadRules, err := renderUploadRules(model)
+	if err != nil {
+		return nil, 0, err
+	}
 	sources := []struct{ path, text string }{
 		{"types_gen.go", types.text},
 		{"operations_gen.go", operations},
 		{"methods_gen.go", methods},
+		{"upload_rules_gen.go", uploadRules},
 		{filepath.Join("answers", "event_rules_gen.go"), answerRules},
 	}
 	files := make([]generatedFile, 0, len(sources))

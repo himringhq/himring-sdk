@@ -5,9 +5,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io"
 	"os"
-	"regexp"
 	"sync"
 )
 
@@ -15,8 +15,6 @@ const (
 	digestWindowBytes = 8 * 1024 * 1024
 	streamChunkBytes  = 1024 * 1024
 )
-
-var sha256HexPattern = regexp.MustCompile(`^[0-9a-f]{64}$`)
 
 type UploadSource interface {
 	io.ReaderAt
@@ -57,6 +55,9 @@ func lockedSourceOf(source UploadSource) (*lockedSource, error) {
 	size := source.Size()
 	if size < 0 {
 		return nil, invalidInput("Give the upload source a size of zero or more.", "content")
+	}
+	if size > uploadSizeMaximum {
+		return nil, invalidInput(fmt.Sprintf("Send a file of at most %d bytes.", uploadSizeMaximum), "content")
 	}
 	return &lockedSource{source: source, sizeBytes: size}, nil
 }

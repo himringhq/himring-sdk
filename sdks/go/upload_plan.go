@@ -7,18 +7,16 @@ import (
 )
 
 const (
-	partsInFlight             = 4
-	sendAttempts              = 3
-	checkPollFirst            = 200 * time.Millisecond
-	checkPollMaximum          = 2 * time.Second
-	checkWaitPastDeadline     = 30 * time.Minute
-	signablePartNumberMaximum = 10_000
-	largestExactWholeNumber   = 1 << 53
-	uploadMethodSingle        = "single"
-	uploadStateOpen           = "open"
-	uploadStateChecking       = "checking"
-	uploadStateFailed         = "failed"
-	uploadClosedCode          = "upload_closed"
+	partsInFlight         = 4
+	sendAttempts          = 3
+	checkPollFirst        = 200 * time.Millisecond
+	checkPollMaximum      = 2 * time.Second
+	checkWaitPastDeadline = 30 * time.Minute
+	uploadMethodSingle    = "single"
+	uploadStateOpen       = "open"
+	uploadStateChecking   = "checking"
+	uploadStateFailed     = "failed"
+	uploadClosedCode      = "upload_closed"
 )
 
 var resignedStatuses = map[int]bool{403: true, 408: true, 429: true, 500: true, 502: true, 503: true, 504: true}
@@ -38,7 +36,7 @@ type AddedFile struct {
 }
 
 func wholeNumber(value float64) (int64, bool) {
-	if math.IsNaN(value) || math.IsInf(value, 0) || value != math.Trunc(value) || math.Abs(value) > largestExactWholeNumber {
+	if math.IsNaN(value) || math.IsInf(value, 0) || value != math.Trunc(value) || math.Abs(value) > uploadSizeMaximum {
 		return 0, false
 	}
 	return int64(value), true
