@@ -1,0 +1,11 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "The SHA-256 checksum of the API document in @himring/openapi 0.2.1"
+condition = "AND"
+paths = ['''^sdks/typescript/codegen/spec-model\.ts$''']
+regexes = ['''^ef615bd219436b663da26941e1a1c0d62dd502ab4598334e8419ae4314d21769$''']
