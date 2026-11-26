@@ -67,20 +67,21 @@ export async function putToStorage(transport: StorageTransport, put: StoragePut)
   const timeoutMs = sendTimeoutMs(transport, put.sizeBytes)
   const deadline = signalWithin(timeoutMs, put.signal)
   const streamed = put.body instanceof ReadableStream
+  const redirect = put.body instanceof Uint8Array ? 'manual' : 'error'
   try {
     const response = await transport.fetch(url, {
       method: 'PUT',
       headers: streamed ? { ...put.headers, 'content-length': String(put.sizeBytes) } : put.headers,
       body: put.body,
       signal: deadline.signal,
-      redirect: streamed ? 'error' : 'manual',
+      redirect,
       ...(streamed ? { duplex: 'half' } : {}),
     })
     await response.body?.cancel()
     return { status: response.status, retryAfterSeconds: retryAfterSecondsOf(response.headers.get('retry-after')) }
   } catch (error) {
     put.signal?.throwIfAborted()
-    if (streamed && isRejectedRedirect(error)) {
+    if (redirect === 'error' && isRejectedRedirect(error)) {
       throw new HimringApiError('refused', 'Storage redirected the signed upload request.', { cause: error })
     }
     if (deadline.timedOut()) {

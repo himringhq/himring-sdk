@@ -47,6 +47,10 @@ export class HimringApiError extends Error {
     this.requestId = details.requestId
   }
 
+  get isRejectedRedirect(): boolean {
+    return isRejectedRedirect(this.cause)
+  }
+
   get isDocumentedCode(): boolean {
     return this.code !== undefined && Object.hasOwn(HIMRING_ERROR_STATUSES, this.code)
   }

@@ -60,7 +60,7 @@ export function exitCodeForApiError(error: HimringApiError): ExitCode {
     case 'invalid_response':
       return EXIT_CODES.unexpected
     case 'refused':
-      return exitCodeForStatus(error.status)
+      return error.isRejectedRedirect ? EXIT_CODES.usage : exitCodeForStatus(error.status)
   }
 }
 
