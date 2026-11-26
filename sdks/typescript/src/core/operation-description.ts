@@ -32,6 +32,8 @@ export interface HimringKeyPermissionNeed {
 }
 
 export interface HimringOperationCatalogueEntry {
+  readonly cli: { readonly command: string; readonly workflow?: true; readonly confirm?: true } | null
+  readonly mcp: boolean
   readonly summary: string
   readonly tag: string
   readonly document: 'api' | 'session'

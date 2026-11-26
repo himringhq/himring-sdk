@@ -24,6 +24,7 @@ export const toolResultSchema = v.object({
 export type ToolResult = v.InferOutput<typeof toolResultSchema>
 
 export const toolListSchema = v.object({
+  nextCursor: v.optional(v.string()),
   tools: v.array(
     v.object({
       name: v.string(),
@@ -61,12 +62,20 @@ function jsonOrUndefined(line: string): unknown {
   }
 }
 
-function spawned(environment: NodeJS.ProcessEnv, cwd: string): ChildProcessWithoutNullStreams {
-  return spawn(process.execPath, [MCP_SERVER_ENTRY], { cwd, env: environment, stdio: ['pipe', 'pipe', 'pipe'] })
+function spawned(
+  environment: NodeJS.ProcessEnv,
+  cwd: string,
+  entry = MCP_SERVER_ENTRY,
+): ChildProcessWithoutNullStreams {
+  return spawn(process.execPath, [entry], { cwd, env: environment, stdio: ['pipe', 'pipe', 'pipe'] })
 }
 
-export async function startMcpProcess(environment: NodeJS.ProcessEnv, cwd: string): Promise<McpProcess> {
-  const child = spawned(environment, cwd)
+export async function startMcpProcess(
+  environment: NodeJS.ProcessEnv,
+  cwd: string,
+  entry = MCP_SERVER_ENTRY,
+): Promise<McpProcess> {
+  const child = spawned(environment, cwd, entry)
   const waiting = new Map<number, { resolve(result: unknown): void; reject(error: Error): void }>()
   let nextId = 1
   let buffered = ''
@@ -136,7 +145,19 @@ export async function startMcpProcess(environment: NodeJS.ProcessEnv, cwd: strin
       return v.parse(toolResultSchema, await request('tools/call', { name, arguments: args }))
     },
     async listTools() {
-      return v.parse(toolListSchema, await request('tools/list', {})).tools
+      const tools: v.InferOutput<typeof toolListSchema>['tools'] = []
+      const cursors = new Set<string>()
+      let cursor: string | undefined
+      do {
+        const page = v.parse(toolListSchema, await request('tools/list', cursor === undefined ? {} : { cursor }))
+        tools.push(...page.tools)
+        cursor = page.nextCursor
+        if (cursor !== undefined) {
+          if (cursors.has(cursor)) throw new Error('The MCP server repeated a tool list cursor.')
+          cursors.add(cursor)
+        }
+      } while (cursor !== undefined)
+      return tools
     },
     stdout: () => output,
     stderr: () => errors,

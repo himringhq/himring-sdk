@@ -1,6 +1,6 @@
 import * as v from 'valibot'
 import { retryAfterSecondsOf } from './backoff.js'
-import { HimringApiError } from './errors.js'
+import { HimringApiError, isRejectedRedirect } from './errors.js'
 
 export const ERROR_ENVELOPE_SCHEMA = v.object({
   error: v.object({
@@ -141,7 +141,7 @@ export async function sendRequest(options: TransportOptions, request: TransportR
       method: request.method,
       headers,
       signal: controller.signal,
-      redirect: 'manual',
+      redirect: request.rawBody === undefined ? 'manual' : 'error',
       ...bodyOf(request, arm),
     })
     if (!request.keepTimerUntilBodyRead) finish()
@@ -150,6 +150,9 @@ export async function sendRequest(options: TransportOptions, request: TransportR
   } catch (error) {
     finish()
     if (callerSignal?.aborted === true) throw callerSignal.reason
+    if (request.rawBody !== undefined && isRejectedRedirect(error)) {
+      throw new HimringApiError('invalid_response', 'The API redirected the upload request.', { cause: error })
+    }
     if (timedOut) {
       throw new HimringApiError('timeout', timeoutMessage(options.baseUrl, timeoutMs, idle), { cause: error })
     }

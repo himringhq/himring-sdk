@@ -7,7 +7,7 @@ import { inputPropertiesOf, type JsonSchema, requiredInputsOf } from './spec-sch
 import { isRecord } from './text-cells.js'
 import { UsageError } from './usage-error.js'
 
-export type FieldKind = 'scalar' | 'json' | 'list' | 'boolean'
+export type FieldKind = 'scalar' | 'json' | 'list' | 'boolean' | 'number' | 'integer'
 type TextFileReading = 'verbatim' | 'trimmed'
 
 export interface FieldOption {
@@ -58,7 +58,7 @@ function kindOfAnyOf(options: readonly JsonSchema[]): FieldKind {
   if (only !== undefined && present.length === 1) {
     const kind = kindOf(only)
     if (present.length === options.length) return kind
-    return kind === 'json' || kind === 'list' ? 'json' : 'scalar'
+    return kind === 'list' ? 'json' : kind
   }
   return present.length > 0 && present.every(isObjectSchema) ? 'json' : 'scalar'
 }
@@ -66,6 +66,7 @@ function kindOfAnyOf(options: readonly JsonSchema[]): FieldKind {
 function kindOf(schema: JsonSchema): FieldKind {
   const options = optionsOf(schema)
   if (options.length > 0) return kindOfAnyOf(options)
+  if (schema.type === 'integer' || schema.type === 'number') return schema.type
   if (schema.type === 'boolean') return 'boolean'
   if (schema.type === 'array') {
     return isRecord(schema.items) && schema.items.type === 'string' && schema.items.enum === undefined ? 'list' : 'json'
@@ -105,6 +106,19 @@ function parseBoolean(value: string): boolean {
   throw new InvalidArgumentError('Pass true or false.')
 }
 
+function parseNumber(value: string): number {
+  if (!/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(value)) throw new InvalidArgumentError('Pass a number.')
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) throw new InvalidArgumentError('Pass a finite number.')
+  return parsed
+}
+
+function parseInteger(value: string): number {
+  if (!/^-?(?:0|[1-9]\d*)$/.test(value) || !Number.isSafeInteger(Number(value)))
+    throw new InvalidArgumentError('Pass a safe whole number.')
+  return Number(value)
+}
+
 function parseList(value: string): string[] {
   return value
     .split(LIST_SEPARATOR)
@@ -120,6 +134,8 @@ export function addFieldOptions(command: Command, fields: readonly FieldOption[]
   for (const field of fields) {
     const placeholder = field.kind === 'json' ? '<path>' : '<value>'
     const option = new Option(`--${field.flag} ${placeholder}`, field.help)
+    if (field.kind === 'number') option.argParser(parseNumber)
+    if (field.kind === 'integer') option.argParser(parseInteger)
     if (field.kind === 'boolean') option.argParser(parseBoolean)
     if (field.kind === 'list') option.argParser(parseList)
     if (field.name === PROJECT_FIELD) option.env(PROJECT_VARIABLE)

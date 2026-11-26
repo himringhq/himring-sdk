@@ -47,12 +47,13 @@ describe('the tools and their arguments', () => {
 
   it('offers a tool for every operation in the spec except the sign-in steps, and nothing the spec lacks', async () => {
     const names = (await mcp.listTools()).map(tool => tool.name).sort()
-    const offeredFromTheSpec = SPEC_OPERATIONS.filter(
-      operation =>
-        !SIGN_IN_STEPS.includes(operation.id) && (!operation.hasFileBody || FILE_IMPORT_TOOLS.includes(operation.id)),
+    const offeredFromTheSpec = SPEC_OPERATIONS.filter(operation =>
+      typeof operation.input['x-himring-mcp'] === 'boolean'
+        ? operation.input['x-himring-mcp']
+        : !SIGN_IN_STEPS.includes(operation.id) && (!operation.hasFileBody || FILE_IMPORT_TOOLS.includes(operation.id)),
     ).map(operation => operation.id)
     expect(names).toEqual([...offeredFromTheSpec, ...TOOLS_OUTSIDE_THE_SPEC].sort())
-    for (const step of SIGN_IN_STEPS) expect(SPEC_OPERATIONS.map(operation => operation.id)).toContain(step)
+    for (const step of SIGN_IN_STEPS) expect(names).not.toContain(step)
   })
 
   it('sends typed list and number values in the wire form that the spec documents', async () => {

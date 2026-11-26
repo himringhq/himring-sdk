@@ -53,3 +53,10 @@ jobs:
         env:
           AFFECTED_PROJECTS: ${{ inputs.projects }}
         run: pnpm exec nx run-many -t lint typecheck build test --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static
+
+      - name: Compare released commands and flags with the built CLI
+        if: matrix.node-version == 24 && contains(fromJSON(inputs.projects), 'cli')
+        run: |
+          previous="$RUNNER_TEMP/released-cli"
+          bash tools/release/prepare-baseline.sh "$previous"
+          node tools/release/check-cli.mjs "$previous/cli/packages/cli/dist/main.js" packages/cli/dist/main.js spec "$previous/cli/spec"

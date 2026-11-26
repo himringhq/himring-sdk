@@ -79,17 +79,25 @@ describe('redirects', () => {
     expect(harness.storage.requests).toHaveLength(0)
   })
 
-  it('never follows a storage redirect while it sends a part', async () => {
+  it.each(['bytes', 'stream'])('refuses a storage redirect once when sending a part as %s', async kind => {
     const upload = scriptUpload(harness, PDF_BYTES)
     harness.storage.handle(upload.partPath(1), (_request, response) =>
       response.writeHead(307, { location: `${harness.storage.origin}/collect` }).end(),
     )
+    const file = new Blob([PDF_BYTES])
     const error = await refusalOf(
       harness.client.addFile({
         project_id: upload.projectId,
         knowledge_base_id: upload.facts.knowledgeBaseId,
         path: upload.facts.path,
-        content: PDF_BYTES,
+        content:
+          kind === 'bytes'
+            ? PDF_BYTES
+            : {
+                sizeBytes: file.size,
+                read: async (start, end) => new Uint8Array(await file.slice(start, end).arrayBuffer()),
+                stream: (start, end) => file.slice(start, end).stream(),
+              },
       }),
     )
     expect(kindOf(error)).toBe('refused')

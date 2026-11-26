@@ -1,4 +1,4 @@
-import { HIMRING_OPERATIONS, type HimringOperationId } from '@himring/sdk'
+import { HIMRING_OPERATION_IDS, HIMRING_OPERATIONS, type HimringOperationId } from '@himring/sdk'
 import { HIMRING_OPERATION_CATALOGUE } from '@himring/sdk/catalogue'
 import type { Command } from 'commander'
 import {
@@ -11,16 +11,20 @@ import {
 import { saveDownloadTo } from './download-target.js'
 import { dryRunOf, withoutPathFields } from './dry-run.js'
 import type { ExitCode } from './exit-codes.js'
+import { sendFileBody } from './file-body-command.js'
 import { addFieldOptions, type FieldOption, fieldOptionsOf, inputFrom } from './operation-fields.js'
-import { type CommandSpec, OPERATION_COMMANDS, RESOURCE_DESCRIPTIONS } from './operation-specs.js'
+import { OPERATION_EXAMPLES, RESOURCE_DESCRIPTIONS } from './operation-specs.js'
 import { checkInput, checkOutput } from './spec-schemas.js'
 import { isRecord } from './text-cells.js'
 import { UsageError } from './usage-error.js'
 
 const INPUT_SUGGESTION = 'Correct the options and try again.'
 
-function isCommandOperation(id: string): id is keyof typeof OPERATION_COMMANDS {
-  return Object.hasOwn(OPERATION_COMMANDS, id) && Object.hasOwn(HIMRING_OPERATIONS, id)
+interface CommandSpec {
+  resource: string
+  verb: string
+  examples: readonly string[]
+  confirm?: true
 }
 
 async function runOperation(
@@ -33,13 +37,24 @@ async function runOperation(
   return runCommand(context, async () => {
     const input = await inputFrom(context, fields, options)
     checkInput(id, input, INPUT_SUGGESTION)
-    if (options.dryRun === true) return dryRunOf(id, input, withoutPathFields(id, input))
-    if (spec.confirm === true && options.yes !== true) {
+
+    if (spec.confirm === true && options.yes !== true && options.dryRun !== true) {
       throw new UsageError(
         `${HIMRING_OPERATION_CATALOGUE[id].summary} The command needs your confirmation.`,
         'Pass --yes to go ahead.',
       )
     }
+    if (HIMRING_OPERATIONS[id].body === 'file') {
+      return sendFileBody(context, {
+        id,
+        input,
+        from: typeof options.from === 'string' ? options.from : undefined,
+        dryRun: options.dryRun === true,
+        suggestion: INPUT_SUGGESTION,
+        splitHint: 'Choose a file within the documented limit.',
+      })
+    }
+    if (options.dryRun === true) return dryRunOf(id, input, withoutPathFields(id, input))
     const result = await (await signedInClient(context)).invoke(id, input)
     if (HIMRING_OPERATIONS[id].response.kind === 'download') {
       return saveDownloadTo(result, {
@@ -75,6 +90,8 @@ function addOperationCommand(
   const fields = fieldOptionsOf(id)
   const command = group.command(spec.verb).description(entry.summary).addHelpText('after', examplesText(spec))
   addFieldOptions(command, fields)
+  if (HIMRING_OPERATIONS[id].body === 'file')
+    command.requiredOption('--from <path>', 'read the request body from a file')
   command.option('--input-file <path>', 'read the whole input as one JSON object from a file, or - for stdin')
   if (entry.changesState) command.option('--dry-run', 'check the input and show the request, without sending it')
   if (spec.confirm === true) command.option('--yes', 'confirm the change that the command makes')
@@ -95,8 +112,13 @@ function addOperationCommand(
 
 export function addOperationCommands(program: Command, contextFor: ContextFor, recordExitCode: RecordExitCode): void {
   const groups = new Map<string, Command>()
-  for (const id of Object.keys(OPERATION_COMMANDS).filter(isCommandOperation)) {
-    const spec: CommandSpec = OPERATION_COMMANDS[id]
+  const examples: Partial<Record<HimringOperationId, readonly string[]>> = OPERATION_EXAMPLES
+  for (const id of HIMRING_OPERATION_IDS) {
+    const cli = HIMRING_OPERATION_CATALOGUE[id].cli
+    if (cli === null || cli.workflow) continue
+    const [resource, verb, ...rest] = cli.command.split(' ')
+    if (!resource || !verb || rest.length > 0) throw new Error(`Invalid command for ${id}.`)
+    const spec = { ...cli, resource, verb, examples: examples[id] ?? [`himring ${cli.command} --help`] }
     addOperationCommand(groupFor(program, groups, spec.resource), id, spec, contextFor, recordExitCode)
   }
 }

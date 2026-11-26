@@ -1,0 +1,363 @@
+{
+  "accept_invitation": { "command": "invitations accept", "mcp": true },
+  "add_database_migration": { "command": "migrations add", "mcp": true },
+  "add_messages": { "command": "messages add", "mcp": true },
+  "answer_question": { "command": "knowledge-bases answer", "mcp": true },
+  "apply_table_import": { "command": "imports apply", "mcp": true },
+  "begin_second_factor_setup": {
+    "command": "auth second-factor setup",
+    "workflow": true,
+    "mcp": false
+  },
+  "cancel_upload": { "command": null, "mcp": true },
+  "change_table_columns": {
+    "command": "columns change",
+    "confirm": true,
+    "mcp": true
+  },
+  "check_table_import": { "command": "imports check", "mcp": true },
+  "compact_database": { "command": "databases compact", "mcp": true },
+  "compare_index_search": { "command": "indexes compare-search", "mcp": true },
+  "complete_upload": { "command": null, "mcp": true },
+  "confirm_second_factor_setup": {
+    "command": "auth second-factor confirm",
+    "workflow": true,
+    "mcp": false
+  },
+  "create_api_key": { "command": "api-keys create", "mcp": true },
+  "create_correction": { "command": "corrections create", "mcp": true },
+  "create_database": { "command": "databases create", "mcp": true },
+  "create_index": { "command": "indexes create", "mcp": true },
+  "create_knowledge_base": { "command": "knowledge-bases create", "mcp": true },
+  "create_memory_source": { "command": "memory-sources create", "mcp": true },
+  "create_project": { "command": "projects create", "mcp": true },
+  "create_source": { "command": "sources create", "mcp": true },
+  "create_table": { "command": "tables create", "mcp": true },
+  "create_upload": { "command": null, "mcp": true },
+  "delete_database": {
+    "command": "databases delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_file": { "command": "files delete", "confirm": true, "mcp": true },
+  "delete_index": { "command": "indexes delete", "confirm": true, "mcp": true },
+  "delete_index_record": {
+    "command": "records delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_knowledge_base": {
+    "command": "knowledge-bases delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_memory": { "command": "memory delete", "confirm": true, "mcp": true },
+  "delete_memory_saved_question": {
+    "command": "memory-questions delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_memory_source": {
+    "command": "memory-sources delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_project": {
+    "command": "projects delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_saved_query": {
+    "command": "saved-queries delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_saved_question": {
+    "command": "saved-questions delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_source": {
+    "command": "sources delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "delete_table_rows": {
+    "command": "rows delete",
+    "confirm": true,
+    "mcp": true
+  },
+  "discard_correction": {
+    "command": "corrections discard",
+    "confirm": true,
+    "mcp": true
+  },
+  "discard_table_import": { "command": "imports discard", "mcp": true },
+  "dismiss_flagged_question": {
+    "command": "flagged-questions dismiss",
+    "confirm": true,
+    "mcp": true
+  },
+  "download_index": { "command": "indexes download", "mcp": true },
+  "enable_memory": { "command": "memory enable", "mcp": true },
+  "erase_end_user": {
+    "command": "end-users erase",
+    "confirm": true,
+    "mcp": true
+  },
+  "export_index_records": { "command": "records export", "mcp": true },
+  "export_memories": { "command": "memories export", "mcp": true },
+  "export_table_rows": { "command": "rows export", "mcp": true },
+  "finish_source_sign_in": { "command": "source-sign-ins finish", "mcp": true },
+  "forget_memory": {
+    "command": "memory-decisions forget",
+    "confirm": true,
+    "mcp": true
+  },
+  "get_correction": { "command": "corrections get", "mcp": true },
+  "get_correction_pass": { "command": "correction-passes get", "mcp": true },
+  "get_database": { "command": "databases get", "mcp": true },
+  "get_download_link": { "command": "files link", "mcp": true },
+  "get_file": { "command": "files get", "mcp": true },
+  "get_flagged_question": { "command": "flagged-questions get", "mcp": true },
+  "get_index": { "command": "indexes get", "mcp": true },
+  "get_index_record": { "command": "records get", "mcp": true },
+  "get_index_stats": { "command": "indexes stats", "mcp": true },
+  "get_knowledge_base": { "command": "knowledge-bases get", "mcp": true },
+  "get_memory": { "command": "memory get", "mcp": true },
+  "get_memory_context": { "command": "recall context", "mcp": true },
+  "get_memory_scores": { "command": "memory-learning scores", "mcp": true },
+  "get_memory_source": { "command": "memory-sources get", "mcp": true },
+  "get_memory_webhook": { "command": "memory-webhooks get", "mcp": true },
+  "get_message": { "command": "messages get", "mcp": true },
+  "get_project": { "command": "projects get", "mcp": true },
+  "get_question_set": { "command": "question-set get", "mcp": true },
+  "get_saved_question": { "command": "saved-questions get", "mcp": true },
+  "get_scorecard": { "command": "scorecards get", "mcp": true },
+  "get_session": { "command": "auth session", "mcp": true },
+  "get_source": { "command": "sources get", "mcp": true },
+  "get_table_row": { "command": "rows get", "mcp": true },
+  "get_upload": { "command": null, "mcp": true },
+  "import_answer_log": {
+    "command": "answer-events import",
+    "workflow": true,
+    "mcp": true
+  },
+  "import_index_records": {
+    "command": "records import",
+    "workflow": true,
+    "mcp": true
+  },
+  "import_saved_questions": {
+    "command": "saved-questions import",
+    "workflow": true,
+    "mcp": true
+  },
+  "ingest_items": { "command": "source-items ingest", "mcp": true },
+  "insert_table_row": { "command": "rows add", "mcp": true },
+  "inspect_memory": { "command": "memories inspect", "mcp": true },
+  "invite_member": { "command": "invitations create", "mcp": true },
+  "list_api_key_permission_changes": {
+    "command": "api-keys permission-changes",
+    "mcp": true
+  },
+  "list_api_keys": { "command": "api-keys list", "mcp": true },
+  "list_correction_passes": {
+    "command": "correction-passes list",
+    "mcp": true
+  },
+  "list_corrections": { "command": "corrections list", "mcp": true },
+  "list_database_migrations": { "command": "migrations list", "mcp": true },
+  "list_database_tables": { "command": "tables list", "mcp": true },
+  "list_databases": { "command": "databases list", "mcp": true },
+  "list_file_versions": { "command": "files versions", "mcp": true },
+  "list_files": { "command": "files list", "mcp": true },
+  "list_flagged_questions": {
+    "command": "flagged-questions list",
+    "mcp": true
+  },
+  "list_folder": { "command": "files folder", "mcp": true },
+  "list_forgetting_suggestions": {
+    "command": "memory-decisions suggestions",
+    "mcp": true
+  },
+  "list_index_records": { "command": "records list", "mcp": true },
+  "list_indexes": { "command": "indexes list", "mcp": true },
+  "list_invitations": { "command": "invitations list", "mcp": true },
+  "list_knowledge_bases": { "command": "knowledge-bases list", "mcp": true },
+  "list_learned_changes": { "command": "memory-learning list", "mcp": true },
+  "list_members": { "command": "members list", "mcp": true },
+  "list_memories": { "command": "memories list", "mcp": true },
+  "list_memory_decisions": { "command": "memory-decisions list", "mcp": true },
+  "list_memory_owners": { "command": "memory-owners list", "mcp": true },
+  "list_memory_reviews": { "command": "memory-reviews list", "mcp": true },
+  "list_memory_saved_questions": {
+    "command": "memory-questions list",
+    "mcp": true
+  },
+  "list_memory_sources": { "command": "memory-sources list", "mcp": true },
+  "list_memory_webhook_deliveries": {
+    "command": "memory-webhooks deliveries",
+    "mcp": true
+  },
+  "list_messages": { "command": "messages list", "mcp": true },
+  "list_metadata_keys": { "command": "metadata keys", "mcp": true },
+  "list_metadata_values": { "command": "metadata values", "mcp": true },
+  "list_operations": { "command": "operations list", "mcp": true },
+  "list_projects": { "command": "projects list", "mcp": true },
+  "list_questions": { "command": "questions list", "mcp": true },
+  "list_saved_queries": { "command": "saved-queries list", "mcp": true },
+  "list_saved_questions": { "command": "saved-questions list", "mcp": true },
+  "list_scorecard_results": { "command": "scorecards results", "mcp": true },
+  "list_scorecards": { "command": "scorecards list", "mcp": true },
+  "list_source_items": { "command": "source-items list", "mcp": true },
+  "list_source_syncs": { "command": "sources syncs", "mcp": true },
+  "list_sources": { "command": "sources list", "mcp": true },
+  "list_table_rows": { "command": "rows list", "mcp": true },
+  "list_version_blocks": { "command": "files blocks", "mcp": true },
+  "preview_create_table": { "command": "tables preview", "mcp": true },
+  "preview_index_search": { "command": "indexes preview-search", "mcp": true },
+  "preview_table_column_changes": { "command": "columns preview", "mcp": true },
+  "promote_correction": {
+    "command": "corrections promote",
+    "confirm": true,
+    "mcp": true
+  },
+  "promote_memory": {
+    "command": "memories promote",
+    "confirm": true,
+    "mcp": true
+  },
+  "propose_corrections": { "command": "corrections propose", "mcp": true },
+  "propose_database_change": {
+    "command": "change-proposals create",
+    "mcp": true
+  },
+  "recall_memories": { "command": "recall search", "mcp": true },
+  "record_answer_events": { "command": "answer-events record", "mcp": true },
+  "recover_memory": { "command": "memory-decisions recover", "mcp": true },
+  "remove_member": {
+    "command": "members remove",
+    "confirm": true,
+    "mcp": true
+  },
+  "remove_memory_webhook": {
+    "command": "memory-webhooks remove",
+    "confirm": true,
+    "mcp": true
+  },
+  "restore_database": { "command": "databases restore", "mcp": true },
+  "restore_file": { "command": "files restore", "mcp": true },
+  "restore_index": { "command": "indexes restore", "mcp": true },
+  "restore_index_snapshot": { "command": null, "mcp": false },
+  "restore_knowledge_base": {
+    "command": "knowledge-bases restore",
+    "mcp": true
+  },
+  "restore_memory": { "command": "memory restore", "mcp": true },
+  "restore_project": { "command": "projects restore", "mcp": true },
+  "review_flagged_questions": {
+    "command": "flagged-questions review",
+    "mcp": true
+  },
+  "revoke_api_key": {
+    "command": "api-keys revoke",
+    "confirm": true,
+    "mcp": true
+  },
+  "revoke_invitation": {
+    "command": "invitations revoke",
+    "confirm": true,
+    "mcp": true
+  },
+  "run_database_sql": { "command": "sql run", "mcp": true },
+  "save_index_record": { "command": "records save", "mcp": true },
+  "save_memory_question": { "command": "memory-questions save", "mcp": true },
+  "save_query": { "command": "saved-queries save", "mcp": true },
+  "save_question": { "command": "saved-questions save", "mcp": true },
+  "score_question_set": { "command": "scorecards score", "mcp": true },
+  "search_folders": { "command": "files folders", "mcp": true },
+  "search_knowledge_base": { "command": "knowledge-bases search", "mcp": true },
+  "send_memory_feedback": {
+    "command": "memory-decisions feedback",
+    "mcp": true
+  },
+  "set_memory_webhook": {
+    "command": "memory-webhooks set",
+    "confirm": true,
+    "mcp": true
+  },
+  "settle_flagged_question": {
+    "command": "flagged-questions settle",
+    "mcp": true
+  },
+  "settle_memory": {
+    "command": "memory-decisions settle",
+    "confirm": true,
+    "mcp": true
+  },
+  "settle_memory_review": {
+    "command": "memory-reviews settle",
+    "confirm": true,
+    "mcp": true
+  },
+  "sign_in": { "command": "auth sign-in", "workflow": true, "mcp": false },
+  "sign_out": { "command": "auth sign-out", "workflow": true, "mcp": false },
+  "sign_up": { "command": "auth sign-up", "workflow": true, "mcp": false },
+  "sign_upload_parts": { "command": null, "mcp": true },
+  "sort_message": { "command": "memories sort", "mcp": true },
+  "start_memory_source_sign_in": {
+    "command": "memory-sources sign-in",
+    "mcp": true
+  },
+  "start_source_sign_in": { "command": "sources sign-in", "mcp": true },
+  "suggest_index_terms": { "command": "indexes suggest", "mcp": true },
+  "sync_memory_source": { "command": "memory-sources sync", "mcp": true },
+  "sync_source": { "command": "sources sync", "mcp": true },
+  "try_corrections": { "command": "corrections try", "mcp": true },
+  "tune_memory": { "command": "memory-learning tune", "mcp": true },
+  "undo_learned_change": {
+    "command": "memory-learning undo",
+    "confirm": true,
+    "mcp": true
+  },
+  "update_api_key": { "command": "api-keys update", "mcp": true },
+  "update_database": {
+    "command": "databases update",
+    "confirm": true,
+    "mcp": true
+  },
+  "update_index": { "command": "indexes update", "mcp": true },
+  "update_knowledge_base": {
+    "command": "knowledge-bases update",
+    "confirm": true,
+    "mcp": true
+  },
+  "update_memory": { "command": "memory update", "confirm": true, "mcp": true },
+  "update_memory_source": {
+    "command": "memory-sources update",
+    "confirm": true,
+    "mcp": true
+  },
+  "update_saved_question": { "command": "saved-questions update", "mcp": true },
+  "update_source": {
+    "command": "sources update",
+    "confirm": true,
+    "mcp": true
+  },
+  "update_table_row": {
+    "command": "rows update",
+    "confirm": true,
+    "mcp": true
+  },
+  "upload_table_import": {
+    "command": "imports upload",
+    "workflow": true,
+    "mcp": false
+  },
+  "verify_second_factor": {
+    "command": "auth verify",
+    "workflow": true,
+    "mcp": false
+  }
+}
