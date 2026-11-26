@@ -128,12 +128,24 @@ func spoolFiles(t testing.TB, directory string) []string {
 	return names
 }
 
+type interruptedDelivery struct{}
+
+func (interruptedDelivery) RoundTrip(request *http.Request) (*http.Response, error) {
+	fmt.Println("sending")
+	<-request.Context().Done()
+	return nil, request.Context().Err()
+}
+
 func runCrashingRecorder() {
 	var setup recorderSetup
 	if err := json.Unmarshal([]byte(os.Getenv(recorderSetupVariable)), &setup); err != nil {
 		os.Exit(2)
 	}
-	client, err := himring.New(himring.WithAPIKey(apiKey), himring.WithBaseURL(setup.BaseURL))
+	client, err := himring.New(
+		himring.WithAPIKey(apiKey),
+		himring.WithBaseURL(setup.BaseURL),
+		himring.WithHTTPClient(&http.Client{Transport: interruptedDelivery{}}),
+	)
 	if err != nil {
 		os.Exit(3)
 	}
@@ -145,8 +157,8 @@ func runCrashingRecorder() {
 		os.Exit(4)
 	}
 	recorder.Record(setup.Drafts)
-	fmt.Println("recorded")
-	select {}
+	recorder.Flush(context.Background())
+	os.Exit(5)
 }
 
 func recordThenCrash(t testing.TB, setup recorderSetup) {
@@ -167,7 +179,7 @@ func recordThenCrash(t testing.TB, setup recorderSetup) {
 	line, err := bufio.NewReader(stdout).ReadString('\n')
 	child.Process.Kill()
 	child.Wait()
-	if err != nil || strings.TrimSpace(line) != "recorded" {
+	if err != nil || strings.TrimSpace(line) != "sending" {
 		t.Fatalf("the recorder process printed %q before it crashed: %v", line, err)
 	}
 }
