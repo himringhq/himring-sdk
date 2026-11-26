@@ -17,8 +17,10 @@ export function clientInterfacesOf(
   operation: Record<string, unknown>,
   released: boolean,
 ): ClientInterfaces {
-  const entry =
-    released && isRecord(legacy) ? legacy[id] : { cli: operation['x-himring-cli'], mcp: operation['x-himring-mcp'] }
+  const archived = released && isRecord(legacy) ? legacy[id] : undefined
+  const entry = isRecord(archived)
+    ? { cli: archived.command === null ? null : archived, mcp: archived.mcp }
+    : { cli: operation['x-himring-cli'], mcp: operation['x-himring-mcp'] }
   if (!isRecord(entry) || typeof entry.mcp !== 'boolean') throw new Error(`Missing MCP exposure for ${id}.`)
   const cli = entry.cli
   if (cli === null) return { cli, mcp: entry.mcp }
@@ -26,6 +28,7 @@ export function clientInterfacesOf(
     !isRecord(cli) ||
     typeof cli.command !== 'string' ||
     !COMMAND.test(cli.command) ||
+    (cli.workflow !== true && cli.command.split(' ').length !== 2) ||
     (cli.workflow !== undefined && cli.workflow !== true) ||
     (cli.confirm !== undefined && cli.confirm !== true)
   ) {

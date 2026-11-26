@@ -24,7 +24,7 @@ The documents carry values that a client needs beyond the JSON Schema, under `x-
 
 The spec update workflow accepts an exact published OpenAPI version. A maintainer can retry the same version after an interruption. Once the updated spec has merged, release the TypeScript SDK before the CLI and MCP server so that both can install its exact version. Use the existing release workflows for Python, Go, and Rust.
 
-After the packages are available, use `bash tools/release/check-installation.sh` with the seven exact versions in this order: OpenAPI, TypeScript, CLI, MCP, Python, Go, and Rust. The script installs the packages in a temporary directory and reads the deployed operation catalogue through each client. Set `HIMRING_API_URL` to check a review deployment.
+From an SDK checkout, install the workspace dependencies with `pnpm install --frozen-lockfile`. After the packages are available, use `bash tools/release/check-installation.sh` with the seven exact versions in this order: OpenAPI, TypeScript, CLI, MCP, Python, Go, and Rust. The script installs the packages in a temporary directory and reads the deployed operation catalogue through each client. Set `HIMRING_API_URL` to check a review deployment.
 
 ## Work on the code
 

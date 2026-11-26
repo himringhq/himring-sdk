@@ -4,6 +4,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { isDeepStrictEqual } from 'node:util'
 
+import { loadSpecModel } from '../../sdks/typescript/codegen/spec-model.ts'
+
 const [baseline, candidate] = process.argv.slice(2)
 if (!baseline || !candidate) throw new Error('Pass the released and candidate spec directories.')
 const scratch = mkdtempSync(join(tmpdir(), 'himring-api-diff-'))
@@ -27,6 +29,14 @@ function comparableDocument(directory, file) {
 }
 
 try {
+  const offered = new Set(
+    loadSpecModel(candidate)
+      .operations.filter(op => op.mcp)
+      .map(op => op.id),
+  )
+  for (const op of loadSpecModel(baseline).operations) {
+    if (op.mcp && !offered.has(op.id)) throw new Error(`Removed MCP tool ${op.id}.`)
+  }
   for (const file of ['openapi.json', 'openapi-session.json']) {
     const before = comparableDocument(baseline, file)
     const after = comparableDocument(candidate, file)

@@ -9,6 +9,8 @@ import { QUESTION_SET_EXAMPLES, QUESTION_SET_RESOURCE_DESCRIPTIONS } from './que
 import { SOURCE_EXAMPLES, SOURCE_RESOURCE_DESCRIPTIONS } from './source-specs.js'
 
 export const RESOURCE_DESCRIPTIONS: Readonly<Record<string, string>> = {
+  devices: 'Issue device credentials and manage access to synced resources.',
+  uploads: 'Manage multipart uploads and get signed URLs for their parts.',
   operations: 'List the operations of the Himring API.',
   auth: 'Sign up, sign in, set up your second factor, and sign out.',
   projects: 'Create, read, delete, and restore projects.',

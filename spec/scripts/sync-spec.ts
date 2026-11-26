@@ -65,12 +65,18 @@ async function check(source: string, version: string): Promise<void> {
     if (!published.equals(committed)) {
       problems.push(`spec/${file} differs from ${SPEC_PACKAGE}@${version}. Run ${SYNC_COMMAND} and commit the result.`)
     }
-    problems.push(...(await validatorProblems(committedPath, file)))
   }
   if (problems.length > 0) throw new SpecSyncError(problems.join('\n'))
 }
 
-const MODES = ['write', 'check'] as const
+async function validateDocuments(): Promise<void> {
+  const problems = (
+    await Promise.all(DOCUMENT_FILES.map(file => validatorProblems(join(SPEC_DIRECTORY, file), file)))
+  ).flat()
+  if (problems.length > 0) throw new SpecSyncError(problems.join('\n'))
+}
+
+const MODES = ['write', 'check', 'candidate'] as const
 type Mode = (typeof MODES)[number]
 
 function isMode(value: string | undefined): value is Mode {
@@ -79,15 +85,23 @@ function isMode(value: string | undefined): value is Mode {
 
 const mode = process.argv[2]
 if (!isMode(mode)) {
-  console.error('Run with write or check, as in node scripts/sync-spec.ts check.')
+  console.error('Run with write, check, or candidate, as in node scripts/sync-spec.ts check.')
   process.exitCode = 2
 } else {
   try {
-    const version = await pinnedVersion()
-    const source = await installedPackageDirectory(version)
-    if (mode === 'write') await write(source)
-    else await check(source, version)
-    console.log(`spec/ holds the documents of ${SPEC_PACKAGE}@${version}.`)
+    if (mode === 'candidate') {
+      await validateDocuments()
+      console.log('Both candidate OpenAPI documents are valid.')
+    } else {
+      const version = await pinnedVersion()
+      const source = await installedPackageDirectory(version)
+      if (mode === 'write') await write(source)
+      else {
+        await check(source, version)
+        await validateDocuments()
+      }
+      console.log(`spec/ holds the documents of ${SPEC_PACKAGE}@${version}.`)
+    }
   } catch (error) {
     console.error(error instanceof Error ? error.message : error)
     process.exitCode = 1

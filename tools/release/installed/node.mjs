@@ -5,6 +5,8 @@ import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
 import { environmentOf, startMcpProcess } from '../../../packages/mcp-server/tests/support/mcp-process.ts'
 
+import { commandsOf } from '../cli-help.mjs'
+
 const requireInstalled = createRequire(resolve('package.json'))
 const { createHimringClient, HIMRING_OPERATION_IDS } = requireInstalled('@himring/sdk')
 const documents = ['openapi.json', 'openapi-session.json'].map(file => requireInstalled(`@himring/openapi/${file}`))
@@ -16,6 +18,7 @@ const expected = documents.flatMap(doc =>
       path: path.replace(/\{(\w+)\}/g, ':$1'),
       access: op['x-himring-access'],
       mcp: op['x-himring-mcp'],
+      cli: op['x-himring-cli'],
     })),
   ),
 )
@@ -34,6 +37,10 @@ function checkCatalogue(result) {
 checkCatalogue(await client.listOperations({}))
 const environment = environmentOf({ HIMRING_API_URL: url, HIMRING_CONFIG_DIR: process.cwd() })
 const cli = resolve('node_modules/.bin/himring')
+const commands = commandsOf(cli)
+for (const op of expected) {
+  if (op.cli !== null) assert(commands.has(op.cli.command), op.id)
+}
 checkCatalogue(
   JSON.parse(
     execFileSync(cli, ['operations', 'list', '--output', 'json'], {
