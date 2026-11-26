@@ -20,6 +20,12 @@ The Himring API publishes its OpenAPI documents to npm as [`@himring/openapi`](h
 
 The documents carry values that a client needs beyond the JSON Schema, under `x-himring-` keys: the byte limit of each file upload, the extension of each download, the API key permissions of each operation, and the file kinds that Himring reads. The SDKs, the CLI, and the MCP server read those values from the documents and copy none of them.
 
+## Verify a release
+
+The spec update workflow accepts an exact published OpenAPI version. A maintainer can retry the same version after an interruption. Once the updated spec has merged, release the TypeScript SDK before the CLI and MCP server so that both can install its exact version. Use the existing release workflows for Python, Go, and Rust.
+
+After the packages are available, use `bash tools/release/check-installation.sh` with the seven exact versions in this order: OpenAPI, TypeScript, CLI, MCP, Python, Go, and Rust. The script installs the packages in a temporary directory and reads the deployed operation catalogue through each client. Set `HIMRING_API_URL` to check a review deployment.
+
 ## Work on the code
 
 You need Node.js 24, pnpm 11, [uv](https://docs.astral.sh/uv/), Go 1.26 or later, and [rustup](https://rustup.rs). Install the Node packages from the root:

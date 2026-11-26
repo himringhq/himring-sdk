@@ -8,15 +8,6 @@ import { operationInputOf } from './operation-input.js'
 import { failed, succeeded } from './tool-results.js'
 import { plainToolSchemaOf, toolSchemaOf } from './tool-schema.js'
 
-const OPERATIONS_FOR_PEOPLE_ONLY: ReadonlySet<string> = new Set<HimringOperationId>([
-  'sign_up',
-  'sign_in',
-  'verify_second_factor',
-  'begin_second_factor_setup',
-  'confirm_second_factor_setup',
-  'sign_out',
-])
-
 const FILE_NAME_FIELD = 'file_name'
 
 export interface OperationToolOptions {
@@ -85,7 +76,7 @@ function registerDownloadTool(server: McpServer, options: OperationToolOptions, 
 export function registerOperationTools(server: McpServer, options: OperationToolOptions): void {
   for (const id of HIMRING_OPERATION_IDS) {
     const operation = HIMRING_OPERATIONS[id]
-    if (OPERATIONS_FOR_PEOPLE_ONLY.has(id) || operation.body === 'file') continue
+    if (!HIMRING_OPERATION_CATALOGUE[id].mcp || operation.body === 'file') continue
     if (operation.response.kind === 'download') registerDownloadTool(server, options, id)
     else registerJsonTool(server, options, id)
   }

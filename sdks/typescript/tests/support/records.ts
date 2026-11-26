@@ -6,7 +6,8 @@ export type FileRecordReply = NonNullable<GetUploadOutput['file']>
 export type SignedPartReply = CreateUploadOutput['parts'][number]
 
 const RECORDED_AT = '2026-11-24T09:00:00.000Z'
-const DEADLINE_AT = '2026-11-25T09:00:00.000Z'
+const DAY_MS = 24 * 60 * 60 * 1000
+const DEADLINE_AT = new Date(Date.now() + DAY_MS).toISOString()
 
 export function sha256Hex(bytes: Uint8Array | string): string {
   return createHash('sha256').update(bytes).digest('hex')

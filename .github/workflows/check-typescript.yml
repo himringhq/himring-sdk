@@ -53,3 +53,12 @@ jobs:
         env:
           AFFECTED_PROJECTS: ${{ inputs.projects }}
         run: pnpm exec nx run-many -t lint typecheck build test --projects="$(jq --raw-output 'join(",")' <<< "$AFFECTED_PROJECTS")" --outputStyle=static
+
+      - name: Compare released commands and flags with the built CLI
+        if: matrix.node-version == 24 && contains(fromJSON(inputs.projects), 'cli')
+        run: |
+          previous="$RUNNER_TEMP/released-cli"
+          cli_version="$(npm view @himring/cli version)"
+          spec_version="$(npm view @himring/openapi version)"
+          npm install --prefix "$previous" --ignore-scripts --no-audit --no-fund "@himring/cli@$cli_version" "@himring/openapi@$spec_version"
+          node tools/release/check-cli.mjs "$previous/node_modules/.bin/himring" packages/cli/dist/main.js spec "$previous/node_modules/@himring/openapi"

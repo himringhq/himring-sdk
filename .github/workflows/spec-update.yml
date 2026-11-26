@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '17 6 * * *'
   workflow_dispatch:
+    inputs:
+      version:
+        description: Exact published OpenAPI version to import
+        type: string
+        required: true
 
 permissions:
   contents: read
@@ -20,6 +25,7 @@ env:
 jobs:
   update:
     name: Open a pull request when a newer @himring/openapi is on npm
+    if: github.ref == 'refs/heads/main'
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 30
     permissions:
@@ -63,19 +69,27 @@ jobs:
         id: versions
         env:
           GH_TOKEN: ${{ github.token }}
+          REQUESTED_VERSION: ${{ inputs.version }}
         run: |
-          latest="$(npm view "$SPEC_PACKAGE" version)"
+          latest="$REQUESTED_VERSION"
+          if [[ -z "$latest" ]]; then latest="$(npm view "$SPEC_PACKAGE" version)"; fi
           pinned="$(node -p "require('./spec/package.json').devDependencies['$SPEC_PACKAGE']")"
           if ! [[ "$latest" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "::error::npm gave $latest as the latest version of $SPEC_PACKAGE, which is not a plain release version."
             exit 1
           fi
           branch="spec/himring-openapi-$latest"
+          if [[ "$(printf '%s\n' "$latest" "$pinned" | sort -V | tail -n 1)" != "$latest" ]]; then
+            echo "::error::Refusing a downgrade from $pinned to $latest."
+            exit 1
+          fi
           if [[ "$latest" == "$pinned" ]]; then
             echo "spec/ already holds $SPEC_PACKAGE $pinned."
             echo "update=false" >> "$GITHUB_OUTPUT"
           elif git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
-            echo "The branch $branch already exists, so its pull request is open or was closed on purpose."
+            if [[ "$(gh pr list --head "$branch" --base main --state all --json number --jq 'length')" == 0 ]]; then
+              gh pr create --draft --base main --head "$branch" --title "chore(spec): pin $SPEC_PACKAGE $latest" --body "Regenerates the clients from $SPEC_PACKAGE $latest."
+            fi
             echo "update=false" >> "$GITHUB_OUTPUT"
           else
             echo "update=true" >> "$GITHUB_OUTPUT"
@@ -111,6 +125,6 @@ jobs:
           git add --all spec sdks pnpm-lock.yaml
           git commit --message "chore(spec): update $SPEC_PACKAGE from $PINNED to $LATEST"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$BRANCH"
-          gh pr create --base main --head "$BRANCH" \
+          gh pr create --draft --base main --head "$BRANCH" \
             --title "chore(spec): update $SPEC_PACKAGE from $PINNED to $LATEST" \
             --body "This pull request pins $SPEC_PACKAGE $LATEST, copies its OpenAPI documents into spec/, and regenerates the TypeScript, Python, Go, and Rust SDKs. Every project passed its validate, generate:check, lint, typecheck, build, and test targets before the workflow opened it. Approve the workflow runs on this pull request so that CI checks it too."

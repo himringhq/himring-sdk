@@ -1,0 +1,25 @@
+package main
+
+import (
+	"context"
+	"os"
+	"slices"
+	"strings"
+
+	himring "github.com/himringhq/himring-sdk/sdks/go"
+)
+
+func main() {
+	client, err := himring.New(himring.WithBaseURL(os.Getenv("HIMRING_API_URL")))
+	if err != nil { panic(err) }
+	answer, err := client.ListOperations(context.Background(), himring.ListOperationsInput{})
+	if err != nil { panic(err) }
+	deployed := make(map[string]bool)
+	for _, op := range answer.Operations { deployed[op.ID] = true }
+	expected, err := os.ReadFile("../operations.txt")
+	if err != nil { panic(err) }
+	ids := himring.OperationIDs()
+	slices.Sort(ids)
+	if !slices.Equal(ids, strings.Fields(string(expected))) { panic("Go SDK differs from OpenAPI") }
+	for _, id := range ids { if !deployed[id] { panic(id) } }
+}

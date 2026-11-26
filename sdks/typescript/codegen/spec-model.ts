@@ -1,5 +1,7 @@
+import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { type ClientInterfaces, clientInterfacesOf } from './client-interfaces.ts'
 
 export const SPEC_DIRECTORY = join(import.meta.dirname, '..', '..', '..', 'spec')
 export const DOCUMENT_FILES = { api: 'openapi.json', session: 'openapi-session.json' } as const
@@ -27,7 +29,7 @@ export type ResponseModel =
   | { kind: 'json'; status: number; schema: JsonSchema }
   | { kind: 'download'; status: number; contentTypes: string[]; fileExtension: string }
 
-export interface OperationModel {
+export interface OperationModel extends ClientInterfaces {
   id: string
   document: DocumentName
   method: 'GET' | 'POST' | 'DELETE'
@@ -60,6 +62,11 @@ export interface SpecModel {
 
 export class SpecModelError extends Error {
   override readonly name = 'SpecModelError'
+}
+
+const LEGACY_DOCUMENT_DIGESTS = {
+  api: 'ef615bd219436b663da26941e1a1c0d62dd502ab4598334e8419ae4314d21769',
+  session: 'a0c29f8035b3b2bf8100511aac2d7bb18f991022205b653574b87d0182cd7962',
 }
 
 const JSON_MEDIA_TYPE = 'application/json'
@@ -183,6 +190,7 @@ function operationOf(
   path: string,
   methodKey: string,
   raw: unknown,
+  legacy: boolean,
   method: OperationModel['method'],
 ): OperationModel {
   const place = `${DOCUMENT_FILES[document]} ${methodKey.toUpperCase()} ${path}`
@@ -207,6 +215,7 @@ function operationOf(
   }
   const dataAccess = operation['x-himring-data-access']
   return {
+    ...clientInterfacesOf(id, operation, legacy),
     id,
     document,
     method,
@@ -286,7 +295,10 @@ export function loadSpecModel(directory = SPEC_DIRECTORY): SpecModel {
   const serverUrls = new Map<DocumentName, string>()
   for (const document of ['api', 'session'] as const) {
     const file = DOCUMENT_FILES[document]
-    const parsed = recordAt(JSON.parse(readFileSync(join(directory, file), 'utf8')), file)
+    const contents = readFileSync(join(directory, file))
+    const digest = createHash('sha256').update(contents).digest('hex')
+    const legacy = digest === LEGACY_DOCUMENT_DIGESTS[document]
+    const parsed = recordAt(JSON.parse(contents.toString('utf8')), file)
     const documentComponents = recordAt(parsed.components, `${file} components`)
     components[document] = documentComponents
     fileKinds.set(document, fileKindsOf(documentComponents, file))
@@ -295,7 +307,7 @@ export function loadSpecModel(directory = SPEC_DIRECTORY): SpecModel {
       for (const [methodKey, raw] of Object.entries(recordAt(item, `${file} ${path}`))) {
         const method = methodOf(methodKey)
         if (method === undefined) throw new SpecModelError(`${file} ${path} has the method ${methodKey}.`)
-        operations.push(operationOf(document, path, methodKey, raw, method))
+        operations.push(operationOf(document, path, methodKey, raw, legacy, method))
       }
     }
     for (const code of errorCodesOf(parsed, file)) {
@@ -307,9 +319,15 @@ export function loadSpecModel(directory = SPEC_DIRECTORY): SpecModel {
     }
   }
   const ids = new Set<string>()
+  const commands = new Set<string>()
   for (const operation of operations) {
     if (ids.has(operation.id)) throw new SpecModelError(`The documents hold ${operation.id} twice.`)
     ids.add(operation.id)
+    const command = operation.cli?.command
+    if (command !== undefined) {
+      if (commands.has(command)) throw new SpecModelError(`Duplicate CLI command: ${command}.`)
+      commands.add(command)
+    }
   }
   const api = components.api
   const session = components.session

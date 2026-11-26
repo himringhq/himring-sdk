@@ -61,12 +61,20 @@ function jsonOrUndefined(line: string): unknown {
   }
 }
 
-function spawned(environment: NodeJS.ProcessEnv, cwd: string): ChildProcessWithoutNullStreams {
-  return spawn(process.execPath, [MCP_SERVER_ENTRY], { cwd, env: environment, stdio: ['pipe', 'pipe', 'pipe'] })
+function spawned(
+  environment: NodeJS.ProcessEnv,
+  cwd: string,
+  entry = MCP_SERVER_ENTRY,
+): ChildProcessWithoutNullStreams {
+  return spawn(process.execPath, [entry], { cwd, env: environment, stdio: ['pipe', 'pipe', 'pipe'] })
 }
 
-export async function startMcpProcess(environment: NodeJS.ProcessEnv, cwd: string): Promise<McpProcess> {
-  const child = spawned(environment, cwd)
+export async function startMcpProcess(
+  environment: NodeJS.ProcessEnv,
+  cwd: string,
+  entry = MCP_SERVER_ENTRY,
+): Promise<McpProcess> {
+  const child = spawned(environment, cwd, entry)
   const waiting = new Map<number, { resolve(result: unknown): void; reject(error: Error): void }>()
   let nextId = 1
   let buffered = ''

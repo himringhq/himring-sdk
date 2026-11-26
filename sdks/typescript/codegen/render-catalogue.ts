@@ -33,6 +33,8 @@ export function renderCatalogue(model: SpecModel): string {
   for (const operation of model.operations) {
     const components = model.components[operation.document]
     const entry = {
+      cli: operation.cli,
+      mcp: operation.mcp,
       summary: operation.summary,
       tag: operation.tag,
       document: operation.document,

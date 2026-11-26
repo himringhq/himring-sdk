@@ -130,5 +130,7 @@ function registerFileBodyTool(server: McpServer, client: HimringClient, uploadDi
 }
 
 export function registerFileBodyTools(server: McpServer, client: HimringClient, uploadDirectory: string): void {
-  for (const tool of FILE_BODY_TOOLS) registerFileBodyTool(server, client, uploadDirectory, tool)
+  for (const tool of FILE_BODY_TOOLS) {
+    if (HIMRING_OPERATION_CATALOGUE[tool.id].mcp) registerFileBodyTool(server, client, uploadDirectory, tool)
+  }
 }

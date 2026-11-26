@@ -1,0 +1,14 @@
+use std::{collections::BTreeSet, error::Error};
+use himring::{Himring, operations, types::ListOperationsInput};
+
+#[tokio::main(flavor = "current_thread")]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let client = Himring::builder().base_url(std::env::var("HIMRING_API_URL")?).build()?;
+    let answer = client.list_operations(ListOperationsInput::new()).await?;
+    let deployed: BTreeSet<_> = answer.operations.iter().map(|op| op.id.as_str()).collect();
+    let ids: BTreeSet<_> = operations().iter().map(|op| op.operation_id).collect();
+    let expected = std::fs::read_to_string("../operations.txt")?;
+    assert_eq!(ids, expected.lines().collect());
+    assert!(ids.is_subset(&deployed));
+    Ok(())
+}
