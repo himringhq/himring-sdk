@@ -1,5 +1,5 @@
 import { retryAfterSecondsOf } from '../core/backoff.js'
-import { HimringApiError } from '../core/errors.js'
+import { HimringApiError, isRejectedRedirect } from '../core/errors.js'
 import type { UploadBody } from './upload-sources.js'
 
 export interface StorageTransport {
@@ -73,13 +73,16 @@ export async function putToStorage(transport: StorageTransport, put: StoragePut)
       headers: streamed ? { ...put.headers, 'content-length': String(put.sizeBytes) } : put.headers,
       body: put.body,
       signal: deadline.signal,
-      redirect: 'manual',
+      redirect: streamed ? 'error' : 'manual',
       ...(streamed ? { duplex: 'half' } : {}),
     })
     await response.body?.cancel()
     return { status: response.status, retryAfterSeconds: retryAfterSecondsOf(response.headers.get('retry-after')) }
   } catch (error) {
     put.signal?.throwIfAborted()
+    if (streamed && isRejectedRedirect(error)) {
+      throw new HimringApiError('refused', 'Storage redirected the signed upload request.', { cause: error })
+    }
     if (deadline.timedOut()) {
       throw new HimringApiError(
         'timeout',

@@ -52,6 +52,10 @@ export class HimringApiError extends Error {
   }
 }
 
+export function isRejectedRedirect(error: unknown): boolean {
+  return error instanceof TypeError && error.cause instanceof Error && error.cause.message === 'unexpected redirect'
+}
+
 export function isHimringApiError(error: unknown): error is HimringApiError {
   return error instanceof HimringApiError
 }
